@@ -18,9 +18,7 @@ pipeline {
         stage('準備') {
             steps {
                 script {
-                    // 分割 GAME_NAME 为数组
                     def gameNames = params.GAME_NAME.split(' ')
-                    // 打印分割后的数组，用于调试
                     echo "游戲名稱数组: ${gameNames}"
                 }
             }
@@ -31,9 +29,7 @@ pipeline {
                 script {
                     def gameNames = params.GAME_NAME.split(' ')
                     gameNames.each { gameName ->
-                        // 使用游戲名稱动态构建 SVN 目标 URL
                         def svnTargetUrl = "${env.SVN_BASE_URL}${gameName}/trunk"
-                        // 动态构建的目录路径也使用游戲名稱
                         def gamePath = "/Users/tmd/Documents/tmd/${gameName}"
                         dir(gamePath) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
