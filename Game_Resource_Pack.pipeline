@@ -19,7 +19,7 @@ pipeline {
         stage('打包資訊') {
             steps {
                 script {
-                    echo "滿貫人員: ${params.NAME}"
+                    echo "觸發人員: ${params.NAME}"
                     echo "遊戲名稱: ${params.GAME_NAME}"
                     echo "滿貫大亨版本: ${params.GAME_VERSION}"
                     echo "是否要加密: ${params.ENCRYPT}"
