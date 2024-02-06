@@ -31,23 +31,21 @@ pipeline {
             }
         }
 
-        stages {
-            stage('加密') {
-                when {
-                    expression { params.ENCODE == true }
-                }
-                steps {
-                    echo "加密..."
-                }
+        stage('加密') {
+            when {
+                expression { params.ENCODE == true }
             }
+            steps {
+                echo "加密..."
+            }
+        }
 
-            stage('不加密') {
-                when {
-                    expression { params.ENCODE == false }
-                }
-                steps {
-                    echo "不加密..."
-                }
+        stage('不加密') {
+            when {
+                expression { params.ENCODE == false }
+            }
+            steps {
+                echo "不加密..."
             }
         }
 
