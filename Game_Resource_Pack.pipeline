@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SVN = '/opt/homebrew/bin/svn'
-        SVN_TARGET_URL = 'http://192.168.1.183/svn/AliceSlot/trunk'
+        SVN_BASE_URL = 'http://192.168.1.183/svn/'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
     }
 
@@ -17,15 +17,30 @@ pipeline {
     stages {
         stage('準備') {
             steps {
-                echo "觸發人員: ${params.NAME}, 遊戲名稱: ${params.GAME_NAME}, 版本: ${params.GAME_VERSION}, 加密: ${params.ENCODE}"
+                script {
+                    // 分割 GAME_NAME 为数组
+                    def gameNames = params.GAME_NAME.split(' ')
+                    // 打印分割后的数组，用于调试
+                    echo "游戲名稱数组: ${gameNames}"
+                }
             }
         }
 
         stage('SVN') {
             steps {
-                dir('/Users/tmd/Documents/tmd/AliceSlot') {
-                    withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                        sh "${SVN} switch ${SVN_TARGET_URL} --username $SVN_USER --password $SVN_PASSWORD"
+                script {
+                    def gameNames = params.GAME_NAME.split(' ')
+                    gameNames.each { gameName ->
+                        // 使用游戲名稱动态构建 SVN 目标 URL
+                        def svnTargetUrl = "${env.SVN_BASE_URL}${gameName}/trunk"
+                        // 动态构建的目录路径也使用游戲名稱
+                        def gamePath = "/Users/tmd/Documents/tmd/${gameName}"
+                        dir(gamePath) {
+                            withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+                                echo "切换到 SVN URL: ${svnTargetUrl}"
+                                sh "${SVN} switch ${svnTargetUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                            }
+                        }
                     }
                 }
             }
