@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: '新版本號')
+    }
+    
+    stages {
+        stage('準備中') {
+            steps {
+                script {
+                    echo "你的名字: ${params.NAME}"
+                    echo "新版本號: ${params.NEW_IOS_VERSION}"
+                }
+            }
+        }
+        stage('遠端連線跳板機') {
+            steps {
+                script {
+                    echo "遠端連線跳板機"
+                }
+            }
+        }
+        stage('更改版號') {
+            steps {
+                script {
+                    echo "更改版號中"
+
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo '操作成功'
+        }
+        failure {
+            echo '操作失败'
+        }
+    }
+}

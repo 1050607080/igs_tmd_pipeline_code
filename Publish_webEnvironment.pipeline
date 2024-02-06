@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        string(name: 'ENVIRONMENT_TYPE', defaultValue: 'production', description: '環境的類型')
+        booleanParam(name: 'DEPLOY_TO_CDN', defaultValue: true, description: '是否發布到CDN')
+        booleanParam(name: 'DEPLOY_TO_GCP', defaultValue: true, description: '是否發布到GCP')
+    }
+    
+    stages {
+        stage('配置環境') {
+            steps {
+                script {
+                    echo "環境類型: ${params.ENVIRONMENT_TYPE}"
+                    // 在這裡添加修改 webEnvironment.xml 的腳本或命令
+                }
+            }
+        }
+        
+        stage('部署') {
+            steps {
+                script {
+                    if (params.DEPLOY_TO_CDN) {
+                        echo "發布到 CDN"
+                        // 在這裡添加發布到 CDN 的腳本或命令
+                    }
+                    if (params.DEPLOY_TO_GCP) {
+                        echo "發布到 GCP"
+                        // 在這裡添加發布到 GCP 的腳本或命令
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            emailext(
+                subject: '部署成功',
+                body: "${currentBuild.currentResult}，環境類型：${params.ENVIRONMENT_TYPE}，部署位置：${(params.DEPLOY_TO_CDN ? 'CDN' : '')}${(params.DEPLOY_TO_CDN && params.DEPLOY_TO_GCP ? '和' : '')}${(params.DEPLOY_TO_GCP ? 'GCP' : '')}。",
+                to: "${params.NAME}@igs.com.tw"
+            )
+        }
+        failure {
+            emailext(
+                subject: '部署失敗',
+                body: "錯誤訊息：${currentBuild.currentResult}，環境類型：${params.ENVIRONMENT_TYPE}，嘗試部署位置：${(params.DEPLOY_TO_CDN ? 'CDN' : '')}${(params.DEPLOY_TO_CDN && params.DEPLOY_TO_GCP ? '和' : '')}${(params.DEPLOY_TO_GCP ? 'GCP' : '')}。",
+                to: "${params.NAME}@igs.com.tw"
+            )
+        }
+    }
+}

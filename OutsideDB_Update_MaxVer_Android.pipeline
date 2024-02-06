@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        string(name: 'STORE_VERSION', defaultValue: '1.1.180', description: '商店版新版本號')
+        string(name: 'OFFICAL_VERSION', defaultValue: '1.1.180', description: '官方版新版本號')
+    }
+    
+    stages {
+        stage('準備中') {
+            steps {
+                script {
+                    echo "你的名字: ${params.NAME}"
+                    echo "商店版新版本號: ${params.STORE_VERSION}"
+                    echo "官方版新版本號: ${params.OFFICAL_VERSION}"
+                }
+            }
+        }
+        stage('遠端連線跳板機') {
+            steps {
+                script {
+                    echo "資料庫類型 ${params.DB_TYPE} 遠端連線跳板機"
+                }
+            }
+        }
+        stage('更改版號') {
+            steps {
+                script {
+                    echo "更改版號中"
+
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo '操作成功'
+        }
+        failure {
+            echo '操作失败'
+        }
+    }
+}

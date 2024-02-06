@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        choice(name: 'BUILD_FLAVOR', choices: ['release', 'debug'], description: '選擇編譯版本')
+    }
+    
+    stages {
+        stage('準備編譯') {
+            steps {
+                script {
+                    echo "你的名字: ${params.NAME}"
+                    if (params.BUILD_FLAVOR == 'release') {
+                        echo "進行Release版本編譯，將會上傳到商店"
+                    } else {
+                        echo "進行Debug版本編譯，將存在本地端"
+                    }
+                }
+            }
+        }
+        stage('編譯中') {
+            steps {
+                script {
+                    if (params.BUILD_FLAVOR == 'release') {
+                        echo "進行Release版本編譯中"
+                    } else {
+                        echo "進行Debug版本編譯中"
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}"
+            emailext(
+                subject: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
+                body: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
+                to: 'weitsunglin@igs.com.tw'
+            )
+        }
+        failure {
+            echo "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}"
+            emailext(
+                subject: "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}",
+                body: "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}",
+                to: 'weitsunglin@igs.com.tw'
+            )
+        }
+    }
+}
