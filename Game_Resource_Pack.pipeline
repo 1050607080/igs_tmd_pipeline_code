@@ -31,12 +31,23 @@ pipeline {
         stage('SVN切平台資源') {
             steps {
                 script {
+                    def platform = ''
                     if (params.INANNA == 'Gt_MobileSDK') {
                         echo 'Building for Gt_MobileSDK...'
+                        platform = 'Gt_MobileSDK'
                     } else if (params.INANNA == 'ReleaseAndroid') {
                         echo 'Building for Android...'
+                        platform = 'ReleaseAndroid'
                     } else if (params.INANNA == 'ReleaseIOS') {
                         echo 'Building for iOS...'
+                        platform = 'ReleaseIOS'
+                    }
+                    def svnTargetUrl = "${env.SVN_BASE_URL}Inanna/branches/${platform}"
+                    dir("/Users/tmd/Documents/tmd/Inanna") {
+                        withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+                            echo "切換到 SVN URL: ${svnTargetUrl}"
+                            sh "${SVN} switch ${svnTargetUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                        }
                     }
                 }
             }
