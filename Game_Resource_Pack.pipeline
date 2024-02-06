@@ -23,7 +23,6 @@ pipeline {
                 script {
                     def gameNames = params.GAME_NAME.split(' ')
                     echo "需要打包的遊戲項目: ${gameNames}"
-                    
                 }
             }
         }
@@ -89,6 +88,15 @@ pipeline {
             }
             steps {
                 echo "不需加密..."
+                dir(PROJ_ANDROID_URL) {
+                    
+                }
+            }
+        }
+
+        stage('修正打包路徑') {
+            steps {
+                echo "修正build-cfg-original.json..."
                 dir(PROJ_ANDROID_URL) {
                     
                 }
