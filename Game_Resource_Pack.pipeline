@@ -111,6 +111,15 @@ pipeline {
                 }
             }
         }
+
+         stage('清理環境') {
+            steps {
+                echo "開始清理剛剛異動的內容..."
+                dir(PROJ_ANDROID_URL) {
+                    
+                }
+            }
+        }
     }
 
     post {
