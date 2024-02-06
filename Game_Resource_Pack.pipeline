@@ -4,78 +4,65 @@ pipeline {
     environment {
         SVN = '/opt/homebrew/bin/svn'
         SVN_TARGET_URL = 'http://192.168.1.183/svn/AliceSlot/trunk'
-        // SVN_TARGET_URL = 'http://192.168.1.183/svn/AliceSlot/branches/Release'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
     }
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         string(name: 'GAME_NAME', defaultValue: 'Inanna AliceSlot', description: '遊戲名稱')
-        string(name: 'GAME_VERSION', defaultValue: '1.66.1', description: '滿貫大亨版本')
-        booleanParam(name: 'ENCODE', defaultValue: true, description: '是否將lua加密成dat')
+        string(name: 'GAME_VERSION', defaultValue: '1.66.1', description: '版本')
+        booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
     }
 
     stages {
-        stage('打包資訊') {
+        stage('準備') {
             steps {
-                script {
-                    echo "觸發人員: ${params.NAME}"
-                    echo "遊戲名稱: ${params.GAME_NAME}"
-                    echo "滿貫大亨版本: ${params.GAME_VERSION}"
-                    echo "是否要加密: ${params.ENCRYPT}"
-                }
+                echo "觸發人員: ${params.NAME}, 遊戲名稱: ${params.GAME_NAME}, 版本: ${params.GAME_VERSION}, 加密: ${params.ENCODE}"
             }
         }
 
-        stage('SVN 切換分支') {
+        stage('SVN') {
             steps {
-                script {
-                    echo "正在從 SVN 檢出修訂版號 ${params.GAME_VERSION}..."
-                    sh '/opt/homebrew/bin/svn --version'
-                    dir('/Users/tmd/Documents/tmd/AliceSlot') {
-                        withCredentials([usernamePassword(credentialsId: '97731a4e-685d-4356-8c2b-d902c44ed6e9', usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                            sh "/opt/homebrew/bin/svn switch ${env.SVN_TARGET_URL} --username $SVN_USER --password $SVN_PASSWORD"
-                        }
+                dir('/Users/tmd/Documents/tmd/AliceSlot') {
+                    withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+                        sh "${SVN} switch ${SVN_TARGET_URL} --username $SVN_USER --password $SVN_PASSWORD"
                     }
                 }
             }
         }
 
-        stage('加密處理') {
-            steps {
-                script {
-                    if (params.ENCODE) {
-                        echo "進行加密處理..."
-                    } else {
-                        echo "跳過加密處理"
-                    }
+        stages {
+            stage('加密') {
+                when {
+                    expression { params.ENCODE == true }
+                }
+                steps {
+                    echo "加密..."
+                }
+            }
+
+            stage('不加密') {
+                when {
+                    expression { params.ENCODE == false }
+                }
+                steps {
+                    echo "不加密..."
                 }
             }
         }
 
-        stage('開始打包') {
+        stage('打包') {
             steps {
-                script {
-                    echo "開始打包"
-                }
+                echo "開始打包..."
             }
         }
     }
 
     post {
-        success {
-            echo '遊戲資源打包成功'
+        always {
             emailext(
-                subject: '遊戲資源打包成功',
-                body: "${currentBuild.currentResult}",
-                to: "${params.NAME}@igs.com.tw"
-            )
-        }
-        failure {
-            echo '遊戲資源打包失敗'
-            emailext(
-                subject: '遊戲資源打包失敗',
-                body: "失敗原因：${currentBuild.currentResult}",
+                subject: "遊戲資源打包${currentBuild.currentResult}",
+                body: "打包結果：${currentBuild.currentResult}",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
