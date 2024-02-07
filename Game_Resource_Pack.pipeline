@@ -23,16 +23,10 @@ pipeline {
                     def gameNames = params.GAME_NAME.split(' ')
                     echo "建置人員: ${params.NAME}"
                     echo "建置版本: ${params.GAME_VERSION}"
-                    echo "是否加密: ${params.ENCODE}"
-
-                    /*def api = load "/Users/tmd/Documents/WebServiceTool/Jenkins/Copy/ApiAdpactor.groovy"
-					def content = api.QueryVersion(params.GAME_VERSION)
-                    echo  "content: ${content}"
-					versionMap = readJSON text: content*/
-                    
-                    
+                    echo "是否加密: ${params.ENCODE}"                    
+                    echo "gameNames: ${gameNames}"   
                     dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
-                        def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${gameNames}", returnStdout: true).trim()
+                        def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} , returnStdout: true).trim()
                         echo "Python script output: ${output}"
                     }
                 }
