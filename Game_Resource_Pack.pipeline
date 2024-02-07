@@ -25,10 +25,15 @@ pipeline {
                     echo "建置版本: ${params.GAME_VERSION}"
                     echo "是否加密: ${params.ENCODE}"
 
-                    def api = load "/Users/tmd/Documents/WebServiceTool/Jenkins/Copy/ApiAdpactor.groovy"
+                    /*def api = load "/Users/tmd/Documents/WebServiceTool/Jenkins/Copy/ApiAdpactor.groovy"
 					def content = api.QueryVersion(params.GAME_VERSION)
-                    //echo  "content: ${content}"
-					versionMap = readJSON text: content
+                    echo  "content: ${content}"
+					versionMap = readJSON text: content*/
+                    
+                    
+                    dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
+                        sh 'python read_google_sheet.py'
+                    }
                 }
             }
         }
