@@ -15,7 +15,12 @@ def main():
     print("games",sys.argv[2])
 
     version = sys.argv[1]
-    games = sys.argv[2].split(" ")
+    games_string = sys.argv[2]
+    games = games_string.split(" ")
+
+    # 使用 for 循环遍历 games 列表
+    for game in games:
+        print(game)
 
     # 認證並構建服務
     creds = Credentials.from_service_account_file(  SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'], )
