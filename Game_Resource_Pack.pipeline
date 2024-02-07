@@ -21,7 +21,9 @@ pipeline {
             steps {
                 script {
                     def gameNames = params.GAME_NAME.split(' ')
-                    echo "需要打包的遊戲項目: ${gameNames}"
+                    echo "建置人員: ${params.NAME}"
+                    echo "建置版本: ${params.GAME_VERSION}"
+                    echo "是否加密: ${params.ENCODE}"
                 }
             }
         }
@@ -108,8 +110,8 @@ pipeline {
     post {
         always {
             emailext(
-                subject: "遊戲資源打包${currentBuild.currentResult}",
-                body: "打包結果：${currentBuild.currentResult}",
+                subject: "遊戲資源打包: ${currentBuild.currentResult}",
+                body: "打包結果: ${currentBuild.currentResult}",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
