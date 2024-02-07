@@ -32,7 +32,7 @@ pipeline {
                     
                     
                     dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
-                        sh 'python read_google_sheet.py'
+                        sh 'python3 read_google_sheet.py'
                     }
                 }
             }
