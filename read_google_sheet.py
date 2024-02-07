@@ -16,7 +16,7 @@ def main():
             scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'],
         )
 
-    service = build('sheets', 'v4', credentials=creds)
+    service = build('sheets', 'v4', credentials = creds)
 
     # 調用 Sheets API
     sheet = service.spreadsheets()

@@ -32,7 +32,8 @@ pipeline {
                     
                     
                     dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
-                        sh 'python3 read_google_sheet.py'
+                        def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION}", returnStdout: true).trim()
+                        echo "Python script output: ${output}"
                     }
                 }
             }
