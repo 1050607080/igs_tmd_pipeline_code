@@ -6,7 +6,6 @@ pipeline {
         SVN_BASE_URL = 'http://192.168.1.183/svn/'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
-        GAME_SVN_URLS = ""
     }
 
     parameters {
@@ -29,8 +28,6 @@ pipeline {
                     dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
                         def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.GAME_NAME}", returnStdout: true).trim()
                         echo "Python script output: ${output}"
-                        env.GAME_SVN_URLS = output.split('\n')
-                        echo env.GAME_SVN_URLS
                     }
                 }
             }
