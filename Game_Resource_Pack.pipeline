@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-         {
+    environment {
         SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
         SVN_BASE_URL = 'http://192.168.1.183/svn/'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
