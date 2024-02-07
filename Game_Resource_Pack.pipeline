@@ -24,6 +24,11 @@ pipeline {
                     echo "建置人員: ${params.NAME}"
                     echo "建置版本: ${params.GAME_VERSION}"
                     echo "是否加密: ${params.ENCODE}"
+
+                    def api = load "/Users/tmd/Documents/WebServiceTool/Jenkins/Copy/ApiAdpactor.groovy"
+					def content = api.QueryVersion(params.GAME_VERSION)
+                    echo  "content: ${content}"
+					versionMap = readJSON text: content
                 }
             }
         }
