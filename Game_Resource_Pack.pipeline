@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SVN = '/opt/homebrew/bin/svn'
+        SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
         SVN_BASE_URL = 'http://192.168.1.183/svn/'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
@@ -10,16 +10,14 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        //choice(name: 'INANNA', choices: ['Gt_MobileSDK', 'ReleaseAndroid','ReleaseIOS'], description: '選擇編譯平台(win,android,ios)')
         string(name: 'GAME_VERSION', defaultValue: '1.66.1', description: '遊戲版本')
-        string(name: 'GAME_NAME', defaultValue: 'AliceSlot', description: '遊戲名稱')
+        string(name: 'GAME_NAME', defaultValue: 'Inanna AliceSlot', description: '遊戲名稱')
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
     }
 
-
     stages {
 
-        stage('打包準備') {
+        stage('印出打包訊息') {
             steps {
                 script {
                     def gameNames = params.GAME_NAME.split(' ')
@@ -31,24 +29,7 @@ pipeline {
         stage('SVN切平台資源') {
             steps {
                 script {
-                    /*def platform = ''
-                    if (params.INANNA == 'Gt_MobileSDK') {
-                        echo 'Building for Gt_MobileSDK...'
-                        platform = 'Gt_MobileSDK'
-                    } else if (params.INANNA == 'ReleaseAndroid') {
-                        echo 'Building for Android...'
-                        platform = 'ReleaseAndroid'
-                    } else if (params.INANNA == 'ReleaseIOS') {
-                        echo 'Building for iOS...'
-                        platform = 'ReleaseIOS'
-                    }
-                    def svnTargetUrl = "${env.SVN_BASE_URL}Inanna/branches/${platform}"
-                    dir("/Users/tmd/Documents/tmd/Inanna") {
-                        withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                            echo "切換到 SVN URL: ${svnTargetUrl}"
-                            sh "${SVN} switch ${svnTargetUrl} --username $SVN_USER --password $SVN_PASSWORD"
-                        }
-                    }*/
+                    echo "SVN切平台資源"
                 }
             }
         }
@@ -56,48 +37,49 @@ pipeline {
         stage('SVN切遊戲資源') {
             steps {
                 script {
-                    def gameNames = params.GAME_NAME.split(' ')
+                    echo "SVN切遊戲資源"
+                    /*def gameNames = params.GAME_NAME.split(' ')
                     gameNames.each { gameName ->
                         def svnTargetUrl = "${env.SVN_BASE_URL}${gameName}/branches/Release"
                         def gamePath = "/Users/tmd/Documents/tmd/${gameName}"
                         dir(gamePath) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                                echo "切換到 SVN URL: ${svnTargetUrl}"
-                                sh "${SVN} switch ${svnTargetUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                                echo "切換到 SVN_INSTALL_PATH URL: ${svnTargetUrl}"
+                                sh "${SVN_INSTALL_PATH} switch ${svnTargetUrl} --username $SVN_USER --password $SVN_PASSWORD"
                             }
                         }
-                    }
+                    }*/
                 }
             }
         }
 
-       stage('需要加密') {
+       stage('資源需要加密') {
             when {
                 expression { params.ENCODE == true }
             }
             steps {
-                echo "需要加密..."
+                echo "加密成DAT..."
                 dir(PROJ_ANDROID_URL) {
                     
                 }
             }
         }
 
-        stage('不需加密') {
+        stage('資源不需加密') {
             when {
                 expression { params.ENCODE == false }
             }
             steps {
-                echo "不需加密..."
+                echo "不需加密DAT..."
                 dir(PROJ_ANDROID_URL) {
                     
                 }
             }
         }
 
-        stage('修正打包路徑') {
+        stage('修改打包路徑') {
             steps {
-                echo "修正build-cfg-original.json..."
+                echo "修改build-cfg-original.json..."
                 dir(PROJ_ANDROID_URL) {
                     
                 }
