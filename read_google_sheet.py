@@ -1,3 +1,4 @@
+import sys
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 
@@ -10,6 +11,8 @@ SHEET_ID = '1ICIYmy5YIlE_mMYcVBTGuSsYbUwnsY8VTVuPRAyIJCQ'
 RANGE_NAME = '1.66.1!B1:B10'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
 
 def main():
+    param1 = sys.argv[1]
+    print("param1",param1)
     # 認證並構建服務
     creds = Credentials.from_service_account_file(
             SERVICE_ACCOUNT_FILE,
