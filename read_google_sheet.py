@@ -8,11 +8,13 @@ SERVICE_ACCOUNT_FILE = "/Users/tmd/Documents/WebServiceTool/TMD_BuildTool/Google
 # 指定想要訪問的 Google Sheets ID 和範圍
 # 您可以在 Google Sheets URL 中找到 SHEET_ID
 SHEET_ID = '1ICIYmy5YIlE_mMYcVBTGuSsYbUwnsY8VTVuPRAyIJCQ'
-RANGE_NAME = '1.66.1!B1:B10'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
+RANGE_NAME = '1.66.1!B:C'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
 
 def main():
     param1 = sys.argv[1]
+    param2 = sys.argv[2]
     print("param1",param1)
+    print("param2",param2)
     # 認證並構建服務
     creds = Credentials.from_service_account_file(
             SERVICE_ACCOUNT_FILE,
