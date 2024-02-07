@@ -27,7 +27,7 @@ pipeline {
 
                     def api = load "/Users/tmd/Documents/WebServiceTool/Jenkins/Copy/ApiAdpactor.groovy"
 					def content = api.QueryVersion(params.GAME_VERSION)
-                    echo  "content: ${content}"
+                    //echo  "content: ${content}"
 					versionMap = readJSON text: content
                 }
             }
