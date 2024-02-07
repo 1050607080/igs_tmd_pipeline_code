@@ -29,7 +29,7 @@ def main():
         for row in values:
             # 排除特定行，輸出svn路徑
             if row[0] in sys.argv:
-                print(row[1])
+                print(row)
 
 
 if __name__ == '__main__':
