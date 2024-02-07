@@ -33,10 +33,7 @@ pipeline {
 
                         SVN_URLS = output.split('\n')
                         for(url in SVN_URLS) {
-                            def gameName = url[0]
-                            def gameUrl = url[1]
-                            echo "gameName: ${gameName}"
-                            echo "gameUrl: ${gameUrl}"
+                            echo "Game URL: ${url}"
                         }
                     }
                 }
