@@ -10,7 +10,8 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'INANNA', choices: ['Gt_MobileSDK', 'ReleaseAndroid','ReleaseIOS'], description: '選擇編譯平台(win,android,ios)')
+        //choice(name: 'INANNA', choices: ['Gt_MobileSDK', 'ReleaseAndroid','ReleaseIOS'], description: '選擇編譯平台(win,android,ios)')
+        string(name: 'GAME_VERSION', defaultValue: '1.66.1', description: '遊戲版本')
         string(name: 'GAME_NAME', defaultValue: 'AliceSlot', description: '遊戲名稱')
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
     }
@@ -30,7 +31,7 @@ pipeline {
         stage('SVN切平台資源') {
             steps {
                 script {
-                    def platform = ''
+                    /*def platform = ''
                     if (params.INANNA == 'Gt_MobileSDK') {
                         echo 'Building for Gt_MobileSDK...'
                         platform = 'Gt_MobileSDK'
@@ -47,7 +48,7 @@ pipeline {
                             echo "切換到 SVN URL: ${svnTargetUrl}"
                             sh "${SVN} switch ${svnTargetUrl} --username $SVN_USER --password $SVN_PASSWORD"
                         }
-                    }
+                    }*/
                 }
             }
         }
