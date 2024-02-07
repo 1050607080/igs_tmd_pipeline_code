@@ -11,11 +11,18 @@ SHEET_ID = '1ICIYmy5YIlE_mMYcVBTGuSsYbUwnsY8VTVuPRAyIJCQ'
 RANGE_NAME = '1.66.1!B:C'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
 
 def main():
+    # print("version",sys.argv[1])
+    # print("games",sys.argv[2])
+
+    version = sys.argv[1]
+    games = sys.argv[2].split(" ")
 
     # 認證並構建服務
     creds = Credentials.from_service_account_file(  SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'], )
 
     service = build('sheets', 'v4', credentials = creds)
+
+    RANGE_NAME = f'{version}!B:C'  # 例如 '1.66.1!B:C'
 
     # 調用 Sheets API
     sheet = service.spreadsheets()
@@ -25,8 +32,7 @@ def main():
     if values:
         for row in values:
             # 排除特定行
-            if row != ['本地路徑', '分支']:
-                # 打印列值，根據您的需要修改
+            if row[0] in games:
                 print(row)
 
 
