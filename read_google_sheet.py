@@ -11,10 +11,6 @@ SHEET_ID = '1ICIYmy5YIlE_mMYcVBTGuSsYbUwnsY8VTVuPRAyIJCQ'
 RANGE_NAME = '1.66.1!B:C'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
 
 def main():
-
-   for i, arg in enumerate(sys.argv):
-    print(f"参数 {i}: {arg}")
-
     print("-------------------------")
     # 認證並構建服務
     creds = Credentials.from_service_account_file(
@@ -36,6 +32,7 @@ def main():
         for row in values:
             # 打印列值，根據您的需要修改
             print(row)
+    print("-------------------------")
 
 if __name__ == '__main__':
     main()
