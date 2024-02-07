@@ -34,6 +34,17 @@ pipeline {
                         SVN_URLS = output.split('\n')
                         for(url in SVN_URLS) {
                             echo "Game URL: ${url}"
+
+                            // 移除字符串中的括号和单引号，然后按照逗号分割
+                            def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
+                            def elements = cleanedOutput.split(",")
+                            
+                            // 现在 elements 是一个包含游戏名称和 URL 的列表
+                            def gameName = elements[0]
+                            def gameUrl = elements[1]
+                            
+                            echo "Game Name: ${gameName}"
+                            echo "Game URL: ${gameUrl}"
                         }
                     }
                 }
