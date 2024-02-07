@@ -22,14 +22,14 @@ def main():
 
     # 調用 Sheets API
     sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SHEET_ID, range=RANGE_NAME).execute()
+    result = sheet.values().get(spreadsheetId=SHEET_ID, range = RANGE_NAME).execute()
     values = result.get('values', [])
 
     if values:
         for row in values:
-            # 排除特定行
+            # 排除特定行，輸出svn路徑
             if row[0] in sys.argv:
-                print(row)
+                print(row[1])
 
 
 if __name__ == '__main__':
