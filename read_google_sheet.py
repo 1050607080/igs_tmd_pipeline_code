@@ -11,9 +11,11 @@ SHEET_ID = '1ICIYmy5YIlE_mMYcVBTGuSsYbUwnsY8VTVuPRAyIJCQ'
 RANGE_NAME = '1.66.1!B:C'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
 
 def main():
-    print("version",sys.argv[1])
-    print("games",sys.argv[2])
+    # 使用 for 循环遍历 games 列表
+    for a in sys.argv:
+        print(a)
 
+    print("--------------")
     version = sys.argv[1]
     games_string = sys.argv[2]
     games = games_string.split(" ")
