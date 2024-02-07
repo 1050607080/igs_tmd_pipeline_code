@@ -33,7 +33,7 @@ pipeline {
 
                         SVN_URLS = output.split('\n')
                         for(url in SVN_URLS) {
-                            echo "SVN_URL: ${url}"
+                            echo "SVN_URL: ${url[0]}"
                         }
                     }
                 }
