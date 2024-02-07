@@ -11,18 +11,7 @@ SHEET_ID = '1ICIYmy5YIlE_mMYcVBTGuSsYbUwnsY8VTVuPRAyIJCQ'
 RANGE_NAME = '1.66.1!B:C'  # 或者您想要讀取的特定範圍，例如 'Sheet1!A1:E5'
 
 def main():
-    # 使用 for 循环遍历 games 列表
-    for a in sys.argv:
-        print(a)
-
-    print("--------------")
     version = sys.argv[1]
-    games_string = sys.argv[2]
-    games = games_string.split(" ")
-
-    # 使用 for 循环遍历 games 列表
-    for game in games:
-        print(game)
 
     # 認證並構建服務
     creds = Credentials.from_service_account_file(  SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'], )
@@ -39,7 +28,7 @@ def main():
     if values:
         for row in values:
             # 排除特定行
-            if row[0] in games:
+            if row[0] in sys.argv:
                 print(row)
 
 
