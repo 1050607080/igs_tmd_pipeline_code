@@ -108,7 +108,7 @@ pipeline {
                     }
                     """
                  
-                    writeFile file: PROJ_ANDROID_URL+build-cfg-original.json, text: jsonContent   
+                    writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent   
                     echo "JSON file has been generated at: ${PROJ_ANDROID_URL}"
                 }
             }
