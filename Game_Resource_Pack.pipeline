@@ -55,19 +55,24 @@ pipeline {
             steps {
                 script {
                     echo "SVN切遊戲資源"
-                    SVN_URLS.each { url ->
-                        // 假设 url 已经是正确格式的字符串
-                        def gameUrl = url.trim() // 确保是一个字符串，且去除多余空白
+                    SVN_URLS.each { urlString ->
+                        def gameUrl = urlString.trim()
 
-                        // 解析游戏名称（如果需要）
-                        // 示例中直接使用 gameUrl 进行 SVN 切换
-                        def gamePath = "/Users/tmd/Documents/tmd/${gameName}" // 确保 gameName 已正确定义
+                        // 从 URL 中提取游戏名称
+                        def pattern = /svn\/(.+?)\// // 假设游戏名称位于 "svn/" 和第一个 "/" 之间
+                        def matcher = (gameUrl =~ pattern)
+                        if (matcher.matches()) {
+                            def gameName = matcher[0][1]
+                            def gamePath = "/Users/tmd/Documents/tmd/${gameName}"
 
-                        dir(gamePath) {
-                            withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                                echo "切換到 SVN URL: ${gameUrl}"
-                                sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                            dir(gamePath) {
+                                withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+                                    echo "切换到 SVN URL: ${gameUrl}"
+                                    sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                                }
                             }
+                        } else {
+                            echo "无法从 URL 中提取游戏名称: ${gameUrl}"
                         }
                     }
                 }
