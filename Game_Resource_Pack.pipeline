@@ -86,8 +86,7 @@ pipeline {
                 echo "修改build-cfg-original.json..."
                 script {
                     // JSON 内容
-                    def jsonContent = """
-                    {
+                    def jsonContent = "{
                         "copy_resources": [
                             {
                                 "from": "../../../Cocos2d-x/cocos/scripting/lua-bindings/script",
@@ -105,8 +104,7 @@ pipeline {
                                 "zip": true
                             }
                         ]
-                    }
-                    """
+                    }"
                  
                     writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent   
                     echo "JSON file has been generated at: ${PROJ_ANDROID_URL}"
@@ -127,6 +125,7 @@ pipeline {
             steps {
                 echo "開始清理剛剛異動的內容..."
                 dir(PROJ_ANDROID_URL) {
+                    //清理build-cfg-original.json
                     
                 }
             }
