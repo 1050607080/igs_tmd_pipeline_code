@@ -132,28 +132,30 @@ pipeline {
                 }
                 echo "tmd resources 切回trunk"
 
-                for(url in SVN_URLS) {
-                    def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
-                    def elements = cleanedOutput.split(",")
-                    
-                    def gameName = elements[0]
+                script {
+                    for(url in SVN_URLS) {
+                        def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
+                        def elements = cleanedOutput.split(",")
+                        
+                        def gameName = elements[0]
 
-                    def switch_url = "http://192.168.1.183/svn/"+gameName
+                        def switch_url = "http://192.168.1.183/svn/"+gameName
 
-                    script {
+
                         if (gameName == "Cocos2d-x") {
                             switch_url = switch_url+"/3.17/trunk"
                         } else {
                             switch_url = switch_url+"/trunk"
                         }
-                    }
 
-                    echo "Game Name: ${gameName}"
 
-                    dir(TMD_RESOURCES_URL+gameName+"/") {
-                        withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                            echo "${gameName} 切回trunk"
-                            sh(script: "${SVN_INSTALL_PATH} switch ${switch_url} --username \$SVN_USER --password \$SVN_PASSWORD")
+                        echo "Game Name: ${gameName}"
+
+                        dir(TMD_RESOURCES_URL+gameName+"/") {
+                            withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+                                echo "${gameName} 切回trunk"
+                                sh(script: "${SVN_INSTALL_PATH} switch ${switch_url} --username \$SVN_USER --password \$SVN_PASSWORD")
+                            }
                         }
                     }
                 }
