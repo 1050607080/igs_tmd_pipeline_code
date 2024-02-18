@@ -139,10 +139,13 @@ pipeline {
                     def gameName = elements[0]
 
                     def switch_url = "http://192.168.1.183/svn/"+gameName
-                    if (gameName == "Cocos2d-x") {
-                        switch_url = switch_url+"/3.17/trunk"
-                    } else {
-                        switch_url = switch_url+"/trunk"
+
+                    script {
+                        if (gameName == "Cocos2d-x") {
+                            switch_url = switch_url+"/3.17/trunk"
+                        } else {
+                            switch_url = switch_url+"/trunk"
+                        }
                     }
 
                     echo "Game Name: ${gameName}"
