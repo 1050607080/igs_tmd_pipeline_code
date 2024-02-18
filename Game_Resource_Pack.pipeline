@@ -58,8 +58,8 @@ pipeline {
                         dir(PROJ_ANDROID_URL) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切换到 SVN URL: ${gameUrl}"
-                                // 使用环境变量而不是 Groovy 字符串插值
-                                sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username ${env.SVN_USER} --password ${env.SVN_PASSWORD}"
+                                // 注意：这里不使用 Groovy 字符串插值传递密码
+                                sh(script: "${SVN_INSTALL_PATH} switch ${gameUrl} --username \$SVN_USER --password \$SVN_PASSWORD")
                             }
                         }
                     }
