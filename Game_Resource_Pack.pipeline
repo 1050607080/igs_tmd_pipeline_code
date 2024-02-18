@@ -54,8 +54,9 @@ pipeline {
                         echo "Game Name: ${gameName}"
                         echo "Game URL: ${gameUrl}"
                         
+                        def switching_svn_path = PROJ_ANDROID_URL+ gameName+"/"
 
-                        dir(PROJ_ANDROID_URL+ gameName+"/") {
+                        dir(switching_svn_path) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切换到 SVN URL: ${gameUrl}"
                                 sh(script: "${SVN_INSTALL_PATH} switch ${gameUrl} --username \$SVN_USER --password \$SVN_PASSWORD")
