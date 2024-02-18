@@ -32,20 +32,6 @@ pipeline {
                         echo "Python script output: ${output}"
 
                         SVN_URLS = output.split('\n')
-                        /*for(url in SVN_URLS) {
-                            echo "Game URL: ${url}"
-
-                            // 移除字符串中的括号和单引号，然后按照逗号分割
-                            def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
-                            def elements = cleanedOutput.split(",")
-                            
-                            // 现在 elements 是一个包含游戏名称和 URL 的列表
-                            def gameName = elements[0]
-                            def gameUrl = elements[1]
-                            
-                            echo "Game Name: ${gameName}"
-                            echo "Game URL: ${gameUrl}"
-                        }*/
                     }
                 }
             }
@@ -68,10 +54,12 @@ pipeline {
                         echo "Game Name: ${gameName}"
                         echo "Game URL: ${gameUrl}"
                         
+
                         dir(PROJ_ANDROID_URL) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切换到 SVN URL: ${gameUrl}"
-                                sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                                // 使用环境变量而不是 Groovy 字符串插值
+                                sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username ${env.SVN_USER} --password ${env.SVN_PASSWORD}"
                             }
                         }
                     }
