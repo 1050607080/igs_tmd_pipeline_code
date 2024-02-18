@@ -126,11 +126,11 @@ pipeline {
                 echo "開始清理剛剛異動的內容..."
                 dir(PROJ_ANDROID_URL) {
                     //清理build-cfg-original.json
-
-                    def filePath = PROJ_ANDROID_URL+"build-cfg-original.json"
-                    def svnRevertCmd = "${SVN_INSTALL_PATH} svn revert ${filePath}" 
-                    sh(svnRevertCmd)
-                    echo "Reverted changes in file: ${filePath}"
+                    script {
+                        def filePath = PROJ_ANDROID_URL + "build-cfg-original.json"
+                        def svnRevertCmd = "${SVN_INSTALL_PATH} svn revert ${filePath}"
+                        sh(svnRevertCmd)
+                    }
                 }
             }
         }
