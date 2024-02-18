@@ -128,7 +128,7 @@ pipeline {
                     //清理build-cfg-original.json
                     script {
                         def filePath = PROJ_ANDROID_URL + "build-cfg-original.json"
-                        def svnRevertCmd = "${SVN_INSTALL_PATH} svn revert ${filePath}"
+                        def svnRevertCmd = "${SVN_INSTALL_PATH} revert ${filePath}"
                         sh(svnRevertCmd)
                     }
                 }
