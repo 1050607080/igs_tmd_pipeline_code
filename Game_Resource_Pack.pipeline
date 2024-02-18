@@ -55,24 +55,25 @@ pipeline {
             steps {
                 script {
                     echo "SVN切遊戲資源"
-                    SVN_URLS.each { urlString ->
-                        def gameUrl = urlString.trim()
+                    for(url in SVN_URLS) {
+                        echo "Game URL: ${url}"
 
-                        // 从 URL 中提取游戏名称
-                        def pattern = /svn\/(.+?)\// // 假设游戏名称位于 "svn/" 和第一个 "/" 之间
-                        def matcher = (gameUrl =~ pattern)
-                        if (matcher.matches()) {
-                            def gameName = matcher[0][1]
-                            def gamePath = "/Users/tmd/Documents/tmd/${gameName}"
-
-                            dir(gamePath) {
-                                withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                                    echo "切换到 SVN URL: ${gameUrl}"
-                                    sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username $SVN_USER --password $SVN_PASSWORD"
-                                }
+                        // 移除字符串中的括号和单引号，然后按照逗号分割
+                        def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
+                        def elements = cleanedOutput.split(",")
+                        
+                        // 现在 elements 是一个包含游戏名称和 URL 的列表
+                        def gameName = elements[0]
+                        def gameUrl = elements[1]
+                        
+                        echo "Game Name: ${gameName}"
+                        echo "Game URL: ${gameUrl}"
+                        
+                        dir(gamePath) {
+                            withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+                                echo "切换到 SVN URL: ${gameUrl}"
+                                sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username $SVN_USER --password $SVN_PASSWORD"
                             }
-                        } else {
-                            echo "无法从 URL 中提取游戏名称: ${gameUrl}"
                         }
                     }
                 }
