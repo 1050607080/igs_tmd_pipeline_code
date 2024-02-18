@@ -56,16 +56,13 @@ pipeline {
                 script {
                     echo "SVN切遊戲資源"
                     SVN_URLS.each { url ->
-                        // 直接使用 URL 字符串
-                        def gameUrl = url.trim()
-                        
-                        // 解析游戏名称
-                        // 假设游戏名称总是紧跟在 `/svn/` 之后
-                        def gameName = gameUrl.split('/svn/')[1].split('/')[0]
-                        
-                        // 构建游戏路径
-                        def gamePath = "/Users/tmd/Documents/tmd/${gameName}"
-                        
+                        // 假设 url 已经是正确格式的字符串
+                        def gameUrl = url.trim() // 确保是一个字符串，且去除多余空白
+
+                        // 解析游戏名称（如果需要）
+                        // 示例中直接使用 gameUrl 进行 SVN 切换
+                        def gamePath = "/Users/tmd/Documents/tmd/${gameName}" // 确保 gameName 已正确定义
+
                         dir(gamePath) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切換到 SVN URL: ${gameUrl}"
