@@ -8,6 +8,7 @@ pipeline {
         SVN_BASE_URL = 'http://192.168.1.183/svn/'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
+        TMD_URL = '/Users/tmd/Documents/tmd/
     }
 
     parameters {
@@ -52,11 +53,9 @@ pipeline {
                         def gameUrl = elements[1]
                         
                         echo "Game Name: ${gameName}"
-                        echo "Game URL: ${gameUrl}"
-                        
-                        def switching_svn_path = PROJ_ANDROID_URL+ gameName+"/"
+                        echo "Game URL: ${gameUrl}"                 
 
-                        dir(switching_svn_path) {
+                        dir(TMD_URL+gameName+"/") {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切换到 SVN URL: ${gameUrl}"
                                 sh(script: "${SVN_INSTALL_PATH} switch ${gameUrl} --username \$SVN_USER --password \$SVN_PASSWORD")
