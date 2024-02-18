@@ -11,7 +11,6 @@ pipeline {
             steps {
                 script {
                     echo "名字: ${params.NAME}"
-                    // 不再需要指定包类型，因为我们会编译所有类型
                     echo "版本: ${params.BUILD_FLAVOR}"
                 }
             }
