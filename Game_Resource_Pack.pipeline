@@ -56,7 +56,6 @@ pipeline {
                 script {
                     echo "SVN切遊戲資源"
                     for(url in SVN_URLS) {
-                        echo "Game URL: ${url}"
 
                         // 移除字符串中的括号和单引号，然后按照逗号分割
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
@@ -69,7 +68,7 @@ pipeline {
                         echo "Game Name: ${gameName}"
                         echo "Game URL: ${gameUrl}"
                         
-                        dir(gamePath) {
+                        dir(PROJ_ANDROID_URL) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切换到 SVN URL: ${gameUrl}"
                                 sh "${SVN_INSTALL_PATH} switch ${gameUrl} --username $SVN_USER --password $SVN_PASSWORD"
