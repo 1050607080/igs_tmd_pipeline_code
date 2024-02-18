@@ -8,7 +8,7 @@ pipeline {
         SVN_BASE_URL = 'http://192.168.1.183/svn/'
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
-        TMD_URL = "/Users/tmd/Documents/tmd/"
+        TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
     }
 
     parameters {
@@ -20,18 +20,12 @@ pipeline {
 
     stages {
 
-        stage('印出打包訊息') {
+        stage('版本路徑撈取') {
             steps {
-                script {
-                    def gameNames = params.GAME_NAME.split(' ')
-                    echo "建置人員: ${params.NAME}"
-                    echo "建置版本: ${params.GAME_VERSION}"
-                    echo "是否加密: ${params.ENCODE}"                    
-                    echo "gameNames: ${gameNames}"   
+                script { 
                     dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
                         def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.GAME_NAME}", returnStdout: true).trim()
                         echo "Python script output: ${output}"
-
                         SVN_URLS = output.split('\n')
                     }
                 }
@@ -41,21 +35,17 @@ pipeline {
         stage('SVN切遊戲資源') {
             steps {
                 script {
-                    echo "SVN切遊戲資源"
                     for(url in SVN_URLS) {
-
-                        // 移除字符串中的括号和单引号，然后按照逗号分割
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
                         def elements = cleanedOutput.split(",")
-                        
-                        // 现在 elements 是一个包含游戏名称和 URL 的列表
+
                         def gameName = elements[0]
                         def gameUrl = elements[1]
-                        
-                        echo "Game Name: ${gameName}"
-                        echo "Game URL: ${gameUrl}"                 
 
-                        dir(TMD_URL+gameName+"/") {
+                        echo "Game Name: ${gameName}"
+                        echo "Game URL: ${gameUrl}" 
+
+                        dir(TMD_RESOURCES_URL+gameName+"/") {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 echo "切换到 SVN URL: ${gameUrl}"
                                 sh(script: "${SVN_INSTALL_PATH} switch ${gameUrl} --username \$SVN_USER --password \$SVN_PASSWORD")
@@ -66,6 +56,7 @@ pipeline {
             }
         }
 
+        
 
        stage('資源需要加密') {
             when {
@@ -94,8 +85,34 @@ pipeline {
         stage('修改打包路徑') {
             steps {
                 echo "修改build-cfg-original.json..."
-                dir(PROJ_ANDROID_URL) {
+                script {
+                    // JSON 内容
+                    def jsonContent = """
+                    {
+                        "copy_resources": [
+                            {
+                                "from": "../../../Cocos2d-x/cocos/scripting/lua-bindings/script",
+                                "to": "cocos",
+                                "zip": false
+                            },
+                            {
+                                "from": "../../../Inanna/InannaResource",
+                                "to": "InannaResource",
+                                "zip": true
+                            },
+                            {
+                                "from": "../../../Inanna/InannaLua",
+                                "to": "InannaLua",
+                                "zip": true
+                            }
+                        ]
+                    }
+                    """
+                 
+                    // 写入文件
+                    writeFile file: TMD_RESOURCES_URL, text: jsonContent
                     
+                    echo "JSON file has been generated at: ${TMD_RESOURCES_URL}"
                 }
             }
         }
