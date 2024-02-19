@@ -170,14 +170,12 @@ pipeline {
          stage('還原此次異動') {
             steps {
                 echo "清理build-cfg-original.json"
-                /*
-                dir(PROJ_ANDROID_URL) {
+                /*dir(PROJ_ANDROID_URL) {
                     script {
                         def svnRevertCmd = "${SVN_INSTALL_PATH} revert ${PROJ_ANDROID_URL + "build-cfg-original.json"}"
                         sh(svnRevertCmd)
                     }
-                }
-                */
+                }*/
 
                 echo "tmd resources 切回trunk"
                 script {
