@@ -76,8 +76,7 @@ def custom_pngquant( app_android_root ):
     except Exception:
         print("Configuration file \"%s\" is not existed or broken!" % path)
     pngList = cfg["png_needCompress"]
-    # for res in pngList:
-    #     print("KK", res)
+
 
     for res in resources:
         original = os.path.join( app_android_root, res['from'] )
@@ -86,9 +85,7 @@ def custom_pngquant( app_android_root ):
                 for filename in filenames:
                     for res in pngList:
                         if res in filename:
-                            # print( "custom_pngquant", filename, dirpath )
                             os.system(".\\pngquant\\pngquant --ext=.png --force " + dirpath + "\\" + filename )
-                            # os.system(".\\pngquant\\pngquant --force " + dirpath + "\\" + filename )
 
 
 def check_BOM_UTF8( fileName ):
@@ -119,15 +116,10 @@ def copy_resources( app_android_root ):
     tmpFolder    = os.path.join( app_android_root, folder + "tmp/" )
     tmpPath      = os.path.normpath( tmpFolder )
 
-    #resourceZIP  = os.path.join(app_android_root, folder + "CopyToServer.zip")
-    # print( "rootFolder: " + rootFolder )
-    # print( "tmpFolder: " + tmpFolder )
-    # print( "tmpPath: " + tmpPath )
 
     if os.path.isdir( tmpFolder ):
         shutil.rmtree( tmpFolder )
-    #if os.path.exists(resourceZIP):
-    #    os.remove(resourceZIP)
+
     
     # copy file to folder tmp
     for res in resources:
@@ -257,11 +249,7 @@ def package_Split(app_android_root):
                                if toPath == path:
                                  # 複製文件
                                  shutil.copy( item, path )                                 
-                                 #print("Copy resource copy src: " + item )
-                                 #print("Copy resource copy path: " + path )
                             except:
-                                #print("Copy resource copy_tree src: " + item )
-                                #print("Copy resource copy_tree path: " + path )
                                 # 複製資料夾
                                 copy_tree( dir_src, path )
 
@@ -306,7 +294,6 @@ def package_Split(app_android_root):
         md5Value = {}
         for zipF in zipFileList:
             moduleZip = zipF + ".zip"
-            #print("Zip resource C: " + moduleZip + " zipPath " + zipPath)
             if isWindows():
                 if args.mode != "debug":
                     #注意空格是區分參數
@@ -324,10 +311,8 @@ def package_Split(app_android_root):
                                 SetWriteTime(dataPath)
                         else:
                             SetWriteTime(dataPath)
-                        #print( "dataPath: " + dataPath )
                         n = dataPath[dataPath.index(zipPath)+len(zipPath)+1:]
                         n = n[n.index(os.sep)+1:]                 
-                        #print( "n :", n )
                         f.write(dataPath,n)
             f.close()
                 

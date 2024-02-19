@@ -12,6 +12,3 @@ else
     echo "Unknown mode: $MODE"
     exit 1
 fi
-
-# 由于Jenkins构建通常不是交互式的，建议移除下面这行
-# read -p "Press [Enter] key to continue..."
