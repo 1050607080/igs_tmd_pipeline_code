@@ -22,25 +22,6 @@ pipeline {
 
     stages {
 
-       /* stage('設定環境變數') {
-            steps {
-                /*withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
-                    sh 'echo $PYTHON'
-                    sh 'echo $SVN'
-                    sh '${PYTHON} --version'
-                    sh '${SVN} --version'
-                }*/
-            }
-        }*/
-
-        stage('檢查環境變數') {
-            steps {
-                script { 
-                    echo "檢查環境變數"
-                }
-            }
-        }
-
         stage('版本路徑撈取') {
             steps {
                 script { 
