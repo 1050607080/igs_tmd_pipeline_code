@@ -145,6 +145,7 @@ pipeline {
                         //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResource.py'
                         //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateAllVersion.py'
                         sh "${env.PYTHON} --version"
+                        sh "${env.PYTHON} CreateDownloadResource.py"
                     }
                 }
             }
