@@ -83,10 +83,11 @@ pipeline {
         }
 
         stage('修改打包路徑') {
-            steps {
-                echo "修改build-cfg-original.json..."
+            steps {      
                 script {
-                    def resourcesArray = []
+                    echo "修改build-cfg-original.json..."
+
+                    /*def resourcesArray = []
                     
                     for(url in SVN_URLS) {
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
@@ -127,7 +128,7 @@ pipeline {
                     echo "Final JSON Content: \n${jsonContent}"
 
                     writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent
-                    echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"
+                    echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"*/
                 }
             }
         }
