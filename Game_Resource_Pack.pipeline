@@ -65,7 +65,10 @@ pipeline {
             }
             steps {
                 dir( PROJ_ANDROID_URL ) {
-                    script { BUILD_SHELL_FILE = "Build_Release_Encode.sh" }
+                    script { 
+                        BUILD_SHELL_FILE = "Build_Release_Encode.sh" 
+                        sh 'chmod +x /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/Build_Release_Encode.sh'
+                        }
                 }
             }
         }
@@ -76,7 +79,10 @@ pipeline {
             }
             steps {
                 dir( PROJ_ANDROID_URL ) {
-                    script{ BUILD_SHELL_FILE = "Build_Release_Decode.sh" }
+                    script{ 
+                        BUILD_SHELL_FILE = "Build_Release_Decode.sh" 
+                        sh 'chmod +x /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/Build_Release_Decode.sh'
+                        }
                 }
             }
         }
