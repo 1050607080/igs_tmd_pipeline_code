@@ -146,11 +146,11 @@ pipeline {
                         switch(params.MODE) {
                             case "debug":
                                 echo "debug"
-                                sh 'BUILD_SHELL_FILE debug'
+                                sh "${BUILD_SHELL_FILE} debug"
                                 break
                             case "release":
                                 echo "release"
-                                sh 'BUILD_SHELL_FILE release'
+                                sh "${BUILD_SHELL_FILE} release"
                                 break
                             default:
                                 error("Unknown environment: ${params.ENVIRONMENT}")
