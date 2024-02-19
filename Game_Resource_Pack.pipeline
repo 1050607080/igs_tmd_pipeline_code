@@ -156,13 +156,6 @@ pipeline {
                                 error("Unknown environment: ${params.ENVIRONMENT}")
                         }
                     }
-
-                    /*withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python']) {
-                        sh '${PYTHON} --version'
-                        /*sh '${PYTHON} CreateDownloadResourceEncode.py'
-                        sh '${PYTHON} CreateAllVersionEncode.py'*/
-                        sh 'Build_Release_Encode.sh'
-                    }*/
                 }
             }
         }
@@ -186,9 +179,9 @@ pipeline {
                         def switch_url = "http://192.168.1.183/svn/"+gameName
 
                         if (gameName == "Cocos2d-x") {
-                            switch_url = switch_url+"/3.17/trunk"
+                            switch_url = switch_url + "/3.17/trunk"
                         } else {
-                            switch_url = switch_url+"/trunk"
+                            switch_url = switch_url + "/trunk"
                         }
 
                         echo "Game Name: ${gameName}"
