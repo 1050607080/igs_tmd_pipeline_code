@@ -165,7 +165,7 @@ pipeline {
                 dir(PROJ_ANDROID_URL) {
                     script{
                         sh "${env.PYTHON} --version"
-                        sh "${env.PYTHON} CreateDownloadResourceEncode.py"
+                        //sh "${env.PYTHON} CreateDownloadResourceEncode.py"
                     }
                 }
             }
