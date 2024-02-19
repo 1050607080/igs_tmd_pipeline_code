@@ -161,9 +161,9 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
-                    script{
+                    /*script{
                         //sh "${env.PYTHON} --version"
-                    }
+                    }*/
                 }
             }
         }
