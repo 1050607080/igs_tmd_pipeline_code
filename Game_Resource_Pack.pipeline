@@ -136,7 +136,7 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
-                   sh "./${BUILD_BAT_FILE}"
+                   sh "BUILD_BAT_FILE"
                 }
             }
         }
