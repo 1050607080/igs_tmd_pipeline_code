@@ -82,7 +82,7 @@ pipeline {
                     script{ 
                         BUILD_SHELL_FILE = "Build_Release_Decode.sh" 
                         sh 'chmod +x /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/Build_Release_Decode.sh'
-                        }
+                    }
                 }
             }
         }
@@ -108,7 +108,8 @@ pipeline {
                                 "zip": false
                             }
                             """.trim())
-                        } else if (gameName == "Inanna"){
+                        } 
+                        else if (gameName == "Inanna"){
                             resourcesArray.add("""
                             {
                                 "from": "../../../${gameName}/${gameName}Resource",
@@ -183,7 +184,8 @@ pipeline {
 
                         if (gameName == "Cocos2d-x") {
                             switch_url = switch_url + "/3.17/trunk"
-                        } else {
+                        } 
+                        else {
                             switch_url = switch_url + "/trunk"
                         }
 
