@@ -8,7 +8,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 svn_executable = "/opt/homebrew/bin/svn"  # Example absolute path to svn executable
-svnCommand = f"{svn_executable} info {{dir}} -R --xml"
+svnCommand = "{} info {{dir}} -R --xml".format(svn_executable)
 
 def GetAllVersion(root):
     print("SvnInfo Path:",root)
