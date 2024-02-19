@@ -24,8 +24,11 @@ pipeline {
 
         stage('設定環境變數') {
             steps {
-                script { 
-                    echo "設定環境變數"
+                withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
+                    sh 'echo $PYTHON'
+                    sh 'echo $SVN'
+                    sh '${PYTHON} --version'
+                    sh '${SVN} --version'
                 }
             }
         }
@@ -159,7 +162,7 @@ pipeline {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
                     script{
-                        sh "${env.PYTHON} --version"
+                        //sh "${env.PYTHON} --version"
                     }
                 }
             }
