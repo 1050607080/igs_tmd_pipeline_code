@@ -9,6 +9,7 @@ pipeline {
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
+        BUILD_BAT_FILE = 'build.bat'
     }
 
     parameters {
@@ -63,7 +64,7 @@ pipeline {
             steps {
                 echo "加密成DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    
+                    BUILD_BAT_FILE = "build_Release_Encode.bat"
                 }
             }
         }
@@ -75,11 +76,11 @@ pipeline {
             steps {
                 echo "不需加密DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    
+                    BUILD_BAT_FILE = "build_Release_noEncode.bat"
                 }
             }
         }
-        
+
         stage('修改打包路徑') {
             steps {
                 echo "修改build-cfg-original.json..."
@@ -134,7 +135,7 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
-                    
+                    bat(BUILD_BAT_FILE)
                 }
             }
         }
@@ -185,7 +186,7 @@ pipeline {
         always {
             emailext(
                 subject: "遊戲資源打包: ${currentBuild.currentResult}",
-                body: "打包結果: ${currentBuild.currentResult}",
+                body: "打包結果: ${currentBuild.currentResult}，資源輸出位置(192.168.123.123): SouthPark\ClientCocos\bin\release\tmp\",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
