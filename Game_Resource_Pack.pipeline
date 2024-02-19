@@ -9,8 +9,7 @@ pipeline {
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
-        BUILD_SHELL_FILE = "build.sh"
-        //PYTHON = '/Library/Frameworks/Python.framework/Versions/2.7/bin/python' 
+        //BUILD_SHELL_FILE = ""
     }
 
     parameters {
@@ -68,7 +67,7 @@ pipeline {
             steps {
                 echo "加密成DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    //script { BUILD_SHELL_FILE = "build_Release_Encode.sh" }
+                    //script { BUILD_SHELL_FILE = "Build_Release_Encode.sh" }
                     
                 }
             }
@@ -81,7 +80,7 @@ pipeline {
             steps {
                 echo "不需加密DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    //script{ BUILD_SHELL_FILE = "build_Release_noEncode.sh" }
+                    //script{ BUILD_SHELL_FILE = "Build_Release_Decode.sh" }
                 }
             }
         }
@@ -142,10 +141,10 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
-                    withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
+                    withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python']) {
                         sh '${PYTHON} --version'
-                        sh '${SVN} --version'
                         sh '${PYTHON} CreateDownloadResourceEncode.py'
+                        sh '${PYTHON} CreateAllVersionEncode.py'
                     }
                 }
             }
@@ -169,13 +168,11 @@ pipeline {
                         def gameName = elements[0]
                         def switch_url = "http://192.168.1.183/svn/"+gameName
 
-
                         if (gameName == "Cocos2d-x") {
                             switch_url = switch_url+"/3.17/trunk"
                         } else {
                             switch_url = switch_url+"/trunk"
                         }
-
 
                         echo "Game Name: ${gameName}"
 

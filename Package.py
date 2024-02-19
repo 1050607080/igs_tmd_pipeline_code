@@ -1,7 +1,5 @@
 #-*- coding=utf-8 -*-
 import os
-import io
-import cmd
 import json as simplejson
 import hashlib
 import sys;
@@ -9,7 +7,8 @@ from xml.etree import ElementTree as ET
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-svnCommand = "svn info {dir} -R --xml"
+svn_executable = "/opt/homebrew/bin/svn"  # Example absolute path to svn executable
+svnCommand = f"{svn_executable} info {{dir}} -R --xml"
 
 def GetAllVersion(root):
     print("SvnInfo Path:",root)
