@@ -214,7 +214,7 @@ def encode_Lua( app_android_root  ):
     tmpFolder = os.path.join( app_android_root, folder + "tmp/" )
     # encode .lua to .luac
     if args.platform == "win":
-        cmdStr = "call cocos "
+        cmdStr = "cocos"
     else:
         cmdStr = "python " + os.path.normpath( os.path.join( app_android_root, "../../../Cocos2d-x/tools/cocos2d-console/bin/cocos.py " ))
     luacompileStr = "luacompile -s " + tmpFolder + " -d " + tmpFolder + " -e -k " + ENCRYPT_KEY + " -b " + SIGNATURE
