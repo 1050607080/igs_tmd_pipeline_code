@@ -8,7 +8,7 @@ import argparse
 import ntpath
 import codecs
 import platform
-import Package
+import PackageJenkins
 import glob
 import time
 from datetime import datetime
@@ -194,18 +194,18 @@ def copy_resources( app_android_root ):
 
             print( "tmpPath: " + tmpPath )
             print( "zipFileName: " + os.path.normpath( zipFileName ) )
-            Package.CreateJsonDataMD5( item, os.path.normpath( zipFileName ), tmpPath )
-            Package.CreateJsonFile( item, jsonPath )
-            Package.CreateJsonFile( item, os.path.join( toPath, "LocalVersion.json" ) )
+            PackageJenkins.CreateJsonDataMD5( item, os.path.normpath( zipFileName ), tmpPath )
+            PackageJenkins.CreateJsonFile( item, jsonPath )
+            PackageJenkins.CreateJsonFile( item, os.path.join( toPath, "LocalVersion.json" ) )
         else:
             item = {}
             print("Create version json file: " + jsonPath)
-            totalSize = Package.CreateJsonData( item, '', original, None )
+            totalSize = PackageJenkins.CreateJsonData( item, '', original, None )
             #print("Save totalSize : " , totalSize )
 
             print("Save version file to : " + jsonPath )
-            Package.CreateJsonFile( item, jsonPath )
-            Package.CreateJsonFile( item, os.path.join( toPath, "LocalVersion.json" ) )
+            PackageJenkins.CreateJsonFile( item, jsonPath )
+            PackageJenkins.CreateJsonFile( item, os.path.join( toPath, "LocalVersion.json" ) )
             print(" ------------------ ")
 
     
@@ -369,13 +369,13 @@ def package_Split(app_android_root):
             ZipSize = os.path.getsize( moduleZip )
             totalSize = totalSize + ZipSize
         
-            Package.CreateJsonDataMD5( md5Value, os.path.normpath( moduleZip ), tmpPath )
+            PackageJenkins.CreateJsonDataMD5( md5Value, os.path.normpath( moduleZip ), tmpPath )
         
         md5Value[FILE_TOTAL_SIZE] = totalSize
         jsonFile      = os.path.normpath(os.path.join(zipPath,"Version.json"))
         localJSONFile = os.path.normpath(os.path.join(zipPath,"LocalVersion.json"))
-        Package.CreateJsonFile( md5Value, jsonFile )
-        Package.CreateJsonFile( md5Value, localJSONFile )
+        PackageJenkins.CreateJsonFile( md5Value, jsonFile )
+        PackageJenkins.CreateJsonFile( md5Value, localJSONFile )
 
 def isWindows():
     return platform.system() == "Windows"
