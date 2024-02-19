@@ -144,9 +144,7 @@ pipeline {
                         //sh "./${BUILD_SHELL_FILE}"
                         //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResource.py'
                         //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateAllVersion.py'
-                        withEnv(["PATH=/usr/local/bin:${env.PYTHON}"]) {
-                            sh 'python --version'
-                        }
+                        sh 'env.PYTHON --version'
                     }
                 }
             }
