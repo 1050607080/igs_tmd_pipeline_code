@@ -9,7 +9,7 @@ pipeline {
         CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
-        //BUILD_SHELL_FILE = ""
+        BUILD_SHELL_FILE = ""
     }
 
     parameters {
@@ -17,6 +17,7 @@ pipeline {
         string(name: 'GAME_VERSION', defaultValue: 'android', description: '遊戲版本')
         string(name: 'GAME_NAME', defaultValue: 'Cocos2d-x Inanna AliceSlot', description: '遊戲名稱')
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
+        choice(name: 'MODE', choices: ['debug', 'release'], description: '打包模式')
     }
 
     stages {
@@ -67,7 +68,7 @@ pipeline {
             steps {
                 echo "加密成DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    //script { BUILD_SHELL_FILE = "Build_Release_Encode.sh" }
+                    script { BUILD_SHELL_FILE = "Build_Release_Encode.sh" }
                     
                 }
             }
@@ -80,7 +81,7 @@ pipeline {
             steps {
                 echo "不需加密DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    //script{ BUILD_SHELL_FILE = "Build_Release_Decode.sh" }
+                    script{ BUILD_SHELL_FILE = "Build_Release_Decode.sh" }
                 }
             }
         }
@@ -141,11 +142,25 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
+
                     withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python']) {
                         sh '${PYTHON} --version'
                         /*sh '${PYTHON} CreateDownloadResourceEncode.py'
                         sh '${PYTHON} CreateAllVersionEncode.py'*/
                         sh 'Build_Release_Encode.sh'
+                    }
+
+                    switch(params.MODE) {
+                        case "debug":
+                            echo "debug"
+                             sh 'BUILD_SHELL_FILE debug'
+                            break
+                        case "release":
+                            echo "release"
+                             sh 'BUILD_SHELL_FILE release'
+                            break
+                        default:
+                            error("Unknown environment: ${params.ENVIRONMENT}")
                     }
                 }
             }
