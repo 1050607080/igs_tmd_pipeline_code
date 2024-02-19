@@ -139,7 +139,7 @@ pipeline {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
                     script{
-                        sh 'python --version'
+                        //sh 'python --version'
                         sh 'pytho3 --version'
                         sh "./${BUILD_SHELL_FILE}"
                     }
