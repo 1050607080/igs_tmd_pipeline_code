@@ -60,7 +60,7 @@ def CreateJsonFile(data, filename):
         fd.write(jsondata)
         fd.close()
     except:
-        print 'ERROR writing', filename
+        print ('ERROR writing', filename)
         pass
     
 def SetJsonElement(item, key, value):
@@ -98,7 +98,7 @@ def GetMd5( item, fileName ):
     try:
         fd = open( fileName,"rb" )
     except IOError:
-        print "Reading file has problem:", fileName
+        print ("Reading file has problem:", fileName)
         return
     x = fd.read()
     fd.close()
