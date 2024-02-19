@@ -25,23 +25,15 @@ pipeline {
         stage('設定環境變數') {
             steps {
                 script { 
-                    env.PATH = "${SVN_INSTALL_PATH}:${env.PATH}"
+                    echo "設定環境變數"
                 }
             }
         }
-
 
         stage('檢查環境變數') {
             steps {
                 script { 
                     echo "檢查環境變數"
-                    // echo "PATH: ${env.PATH}"
-                    //sh 'echo $PATH'
-                    //sh 'which svn'
-                    /*env.getEnvironment().each {
-                        echo "${it.key}: ${it.value}"
-                    }*/
-                    //sh 'svn --version'
                 }
             }
         }
@@ -114,7 +106,6 @@ pipeline {
             steps {      
                 script {
                     echo "修改build-cfg-original.json..."
-
                     /*
                     def resourcesArray = []
                     
@@ -169,7 +160,6 @@ pipeline {
                 dir(PROJ_ANDROID_URL) {
                     script{
                         sh "${env.PYTHON} --version"
-                        //sh "${env.PYTHON} CreateDownloadResourceEncode.py"
                     }
                 }
             }
@@ -184,8 +174,8 @@ pipeline {
                         sh(svnRevertCmd)
                     }
                 }
-                echo "tmd resources 切回trunk"
 
+                echo "tmd resources 切回trunk"
                 script {
                     for(url in SVN_URLS) {
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
