@@ -15,7 +15,7 @@ pipeline {
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         string(name: 'GAME_VERSION', defaultValue: 'android', description: '遊戲版本')
-        string(name: 'GAME_NAME', defaultValue: 'Cocos2d-x Inanna AliceSlot', description: '遊戲名稱')
+        string(name: 'GAME_NAME', defaultValue: 'Cocos2d-x Inanna FishHunter', description: '遊戲名稱')
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
         choice(name: 'MODE', choices: ['debug', 'release'], description: '打包模式')
     }
