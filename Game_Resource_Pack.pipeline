@@ -142,26 +142,27 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
+                    script{
+                        switch(params.MODE) {
+                            case "debug":
+                                echo "debug"
+                                sh 'BUILD_SHELL_FILE debug'
+                                break
+                            case "release":
+                                echo "release"
+                                sh 'BUILD_SHELL_FILE release'
+                                break
+                            default:
+                                error("Unknown environment: ${params.ENVIRONMENT}")
+                        }
+                    }
 
-                    withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python']) {
+                    /*withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python']) {
                         sh '${PYTHON} --version'
                         /*sh '${PYTHON} CreateDownloadResourceEncode.py'
                         sh '${PYTHON} CreateAllVersionEncode.py'*/
                         sh 'Build_Release_Encode.sh'
-                    }
-
-                    switch(params.MODE) {
-                        case "debug":
-                            echo "debug"
-                             sh 'BUILD_SHELL_FILE debug'
-                            break
-                        case "release":
-                            echo "release"
-                             sh 'BUILD_SHELL_FILE release'
-                            break
-                        default:
-                            error("Unknown environment: ${params.ENVIRONMENT}")
-                    }
+                    }*/
                 }
             }
         }
