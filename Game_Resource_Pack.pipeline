@@ -10,7 +10,7 @@ pipeline {
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
         BUILD_SHELL_FILE = "build.sh"
-        //PYTHONHOME = '/Library/Frameworks/Python.framework/Versions/2.7/bin/python' 
+        PYTHON = '/Library/Frameworks/Python.framework/Versions/2.7/bin/python' 
     }
 
     parameters {
@@ -142,8 +142,11 @@ pipeline {
                         //sh 'python --version'
                         //sh 'pytho3 --version'
                         //sh "./${BUILD_SHELL_FILE}"
-                        sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResource.py'
-                        sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateAllVersion.py'
+                        //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResource.py'
+                        //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateAllVersion.py'
+                        withEnv(["PATH=/usr/local/bin:${env.PYTHON}"]) {
+                            sh 'python --version'
+                        }
                     }
                 }
             }
