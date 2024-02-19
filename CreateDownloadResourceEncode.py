@@ -213,8 +213,11 @@ def copy_resources( app_android_root ):
 def encode_Lua( app_android_root  ):
     tmpFolder = os.path.join( app_android_root, folder + "tmp/" )
     # encode .lua to .luac
-    cmdStr = "/Library/Frameworks/Python.framework/Versions/2.7/bin/python " + os.path.normpath( os.path.join( app_android_root, "../../../Cocos2d-x/tools/cocos2d-console/bin/cocos.py " ))
-    luacompileStr = "luacompile -s " + tmpFolder + " -d " + tmpFolder + " -e -k " + ENCRYPT_KEY + " -b " + SIGNATURE
+    if args.platform == "win":
+        cmdStr = "call cocos "
+    else:
+        cmdStr = "/Library/Frameworks/Python.framework/Versions/2.7/bin/python " + os.path.normpath( os.path.join( app_android_root, "../../../Cocos2d-x/tools/cocos2d-console/bin/cocos.py " ))
+        luacompileStr = "luacompile -s " + tmpFolder + " -d " + tmpFolder + " -e -k " + ENCRYPT_KEY + " -b " + SIGNATURE
 
     if args.byteCode == "false":
         luacompileStr = luacompileStr + " --disable-compile"

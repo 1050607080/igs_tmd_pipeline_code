@@ -143,8 +143,9 @@ pipeline {
                 dir(PROJ_ANDROID_URL) {
                     withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python']) {
                         sh '${PYTHON} --version'
-                        sh '${PYTHON} CreateDownloadResourceEncode.py'
-                        sh '${PYTHON} CreateAllVersionEncode.py'
+                        /*sh '${PYTHON} CreateDownloadResourceEncode.py'
+                        sh '${PYTHON} CreateAllVersionEncode.py'*/
+                        sh 'Build_Release_Encode.sh'
                     }
                 }
             }

@@ -1,5 +1,5 @@
 #!/bin/bash
 echo "Start Build_Release_Encode.sh"
-python CreateDownloadResourceDecode.py -m release -p win -b false
-python CreateAllVersionDecode.py -m release
+/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResourceDecode.py -m release -p ios -b false
+/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateAllVersionDecode.py -m release
 read -p "Press [Enter] key to continue..."
