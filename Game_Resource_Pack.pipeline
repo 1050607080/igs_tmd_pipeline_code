@@ -19,13 +19,12 @@ pipeline {
     }
 
     stages {
-
         stage('版本路徑撈取') {
             steps {
                 script { 
-                    dir("/Users/tmd/Desktop/home_brew_jenkins_data/") {
+                    dir( "/Users/tmd/Desktop/home_brew_jenkins_data/" ) {
                         def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.GAME_NAME}", returnStdout: true).trim()
-                        echo "Python script output: ${output}"
+                        echo "版本路徑撈取: ${output}"
                         SVN_URLS = output.split('\n')
                     }
                 }
@@ -35,7 +34,7 @@ pipeline {
         stage('SVN切遊戲資源') {
             steps {
                 script {
-                    for(url in SVN_URLS) {
+                    for( url in SVN_URLS ) {
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
                         def elements = cleanedOutput.split(",")
 
@@ -45,9 +44,9 @@ pipeline {
                         echo "Game Name: ${gameName}"
                         echo "Game URL: ${gameUrl}" 
 
-                        dir(TMD_RESOURCES_URL+gameName+"/") {
+                        dir( TMD_RESOURCES_URL + gameName + "/" ) {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                                echo "切换到 SVN URL: ${gameUrl}"
+                                echo "${gameName} 切换到 SVN URL: ${gameUrl}"
                                 sh(script: "${SVN_INSTALL_PATH} switch ${gameUrl} --username \$SVN_USER --password \$SVN_PASSWORD")
                             }
                         }
@@ -63,7 +62,7 @@ pipeline {
             }
             steps {
                 echo "加密成DAT..."
-                dir(PROJ_ANDROID_URL) {
+                dir( PROJ_ANDROID_URL ) {
                     
                 }
             }
@@ -75,7 +74,7 @@ pipeline {
             }
             steps {
                 echo "不需加密DAT..."
-                dir(PROJ_ANDROID_URL) {
+                dir( PROJ_ANDROID_URL ) {
                     
                 }
             }
@@ -85,7 +84,7 @@ pipeline {
             steps {
                 echo "修改build-cfg-original.json..."
                 script {
-                    // JSON 内容
+
                     def jsonContent = """{
                         "copy_resources": [
                             {
