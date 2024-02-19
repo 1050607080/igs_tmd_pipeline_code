@@ -136,7 +136,7 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
-                   sh "BUILD_BAT_FILE"
+                   sh "./${BUILD_BAT_FILE}"
                 }
             }
         }
@@ -187,7 +187,7 @@ pipeline {
         always {
             emailext(
                 subject: "遊戲資源打包: ${currentBuild.currentResult}",
-                body: "打包結果: ${currentBuild.currentResult}，資源輸出位置(192.168.123.123): SouthPark\\ClientCocos\\bin\\release\\tmp\\",
+                body: "打包結果: ${currentBuild.currentResult}，打包資源位置在(192.168.123.123): SouthPark\\ClientCocos\\bin\\release\\tmp\\",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
