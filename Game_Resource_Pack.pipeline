@@ -22,7 +22,7 @@ pipeline {
 
     stages {
 
-        stage('撈取版本資源路徑') {
+        stage('從二測版本管理撈取資源路徑') {
             steps {
                 script { 
                     dir( "/Users/tmd/Desktop/home_brew_jenkins_data/" ) {
@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage('SVN切版本遊戲資源') {
+        stage('SVN切換遊戲資源分支') {
             steps {
                 script {
                     for( url in SVN_URLS ) {
@@ -59,7 +59,7 @@ pipeline {
         }
 
         
-       stage('資源需要加密') {
+       stage('資源加密') {
             when {
                 expression { params.ENCODE == true }
             }
@@ -70,7 +70,7 @@ pipeline {
             }
         }
 
-        stage('資源不需加密') {
+        stage('資源不加密') {
             when {
                 expression { params.ENCODE == false }
             }
@@ -85,11 +85,51 @@ pipeline {
             steps {      
                 script {
                    echo "修改打包路徑" 
+                    
+                    def resourcesArray = []
+                    
+                    for(url in SVN_URLS) {
+                        def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
+                        def elements = cleanedOutput.split(",")
+                        def gameName = elements[0]
+
+                        if (gameName == "Cocos2d-x") {
+                            // 如果是 Cocos2d-x，可能需要一些特殊处理
+                            resourcesArray.add("""
+                            {
+                                "from": "../../../${gameName}/cocos/scripting/lua-bindings/script",
+                                "to": "cocos",
+                                "zip": false
+                            }
+                            """.trim())
+                        } else {
+                            resourcesArray.add("""
+                            {
+                                "from": "../../../${gameName}/${gameName}Resource",
+                                "to": "${gameName}Resource",
+                                "zip": true
+                            },
+                            {
+                                "from": "../../../${gameName}/${gameName}Lua",
+                                "to": "${gameName}Lua",
+                                "zip": true
+                            }
+                            """.trim())
+                        }
+                    }
+
+                    def jsonContent = """{
+                        "copy_resources": [
+                            ${resourcesArray.join(",\n")}
+                        ]
+                    }"""
+
+                    writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent
                 }
             }
         }
 
-        stage('資源打包開始') {
+        stage('資源打包') {
             steps {
                 dir(PROJ_ANDROID_URL) {
                     script{
@@ -112,10 +152,8 @@ pipeline {
             }
         }
 
-         stage('還原此次異動') {
+         stage('清理環境') {
             steps {
-                echo "清理build-cfg-original.json"
-                echo "tmd resources 切回trunk"
                 script {
                     for(url in SVN_URLS) {
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
