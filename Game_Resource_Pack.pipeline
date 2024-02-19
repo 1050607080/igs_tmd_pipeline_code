@@ -10,6 +10,7 @@ pipeline {
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
         BUILD_SHELL_FILE = "build.sh"
+        PYTHONHOME = '/Library/Frameworks/Python.framework/Versions/2.7/bin/python' 
     }
 
     parameters {
@@ -138,6 +139,8 @@ pipeline {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
                     script{
+                        sh 'echo $PYTHONHOME'
+                        sh 'python --version'
                         sh "./${BUILD_SHELL_FILE}"
                     }
                 }
