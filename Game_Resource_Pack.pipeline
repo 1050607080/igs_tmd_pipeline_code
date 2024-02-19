@@ -25,7 +25,7 @@ pipeline {
         stage('設定環境變數') {
             steps {
                 script { 
-                    env.PATH = "SVN_INSTALL_PATH:${env.PATH}"
+                    env.PATH = "${SVN_INSTALL_PATH}:${env.PATH}"
                 }
             }
         }
