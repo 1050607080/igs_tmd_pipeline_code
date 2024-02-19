@@ -136,7 +136,9 @@ pipeline {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
-                   sh "./${BUILD_SHELL_FILE}"
+                    script{
+                        sh "./${BUILD_SHELL_FILE}"
+                    }
                 }
             }
         }
