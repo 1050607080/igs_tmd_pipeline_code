@@ -102,7 +102,7 @@ pipeline {
                                 "zip": false
                             }
                             """.trim())
-                        } elseif (gameName == "Inanna"){
+                        } else if (gameName == "Inanna"){
                             resourcesArray.add("""
                             {
                                 "from": "../../../${gameName}/${gameName}Resource",
