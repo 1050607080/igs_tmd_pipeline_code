@@ -80,38 +80,59 @@ pipeline {
             }
         }
 
-        stage('修改打包路徑') {
-            steps {
-                echo "修改build-cfg-original.json..."
-                script {
+        stages {
+            stage('修改打包路徑') {
+                steps {
+                    echo "修改build-cfg-original.json..."
+                    script {
+                        def resourcesArray = []
+                        
+                        for(url in SVN_URLS) {
+                            def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
+                            def elements = cleanedOutput.split(",")
+                            def gameName = elements[0]
 
-                    def jsonContent = """{
-                        "copy_resources": [
-                            {
-                                "from": "../../../Cocos2d-x/cocos/scripting/lua-bindings/script",
-                                "to": "cocos",
-                                "zip": false
-                            },
-                            {
-                                "from": "../../../Inanna/InannaResource",
-                                "to": "InannaResource",
-                                "zip": true
-                            },
-                            {
-                                "from": "../../../Inanna/InannaLua",
-                                "to": "InannaLua",
-                                "zip": true
+                            if (gameName == "Cocos2d-x") {
+                                // 如果是 Cocos2d-x，可能需要一些特殊处理
+                                resourcesArray.add("""
+                                {
+                                    "from": "../../../${gameName}/cocos/scripting/lua-bindings/script",
+                                    "to": "cocos",
+                                    "zip": false
+                                }
+                                """.trim())
+                            } else {
+                                resourcesArray.add("""
+                                {
+                                    "from": "../../../${gameName}/${gameName}Resource",
+                                    "to": "${gameName}Resource",
+                                    "zip": true
+                                },
+                                {
+                                    "from": "../../../${gameName}/${gameName}Lua",
+                                    "to": "${gameName}Lua",
+                                    "zip": true
+                                }
+                                """.trim())
                             }
-                        ]
-                    }"""
-                 
-                    writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent   
-                    echo "JSON file has been generated at: ${PROJ_ANDROID_URL}"
+                        }
+
+                        def jsonContent = """{
+                            "copy_resources": [
+                                ${resourcesArray.join(",\n")}
+                            ]
+                        }"""
+
+                        echo "Final JSON Content: \n${jsonContent}"
+
+                        writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent
+                        echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"
+                    }
                 }
             }
         }
 
-        stage('開始打包') {
+        stage('開始打包資源') {
             steps {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
@@ -120,7 +141,7 @@ pipeline {
             }
         }
 
-         stage('清理環境') {
+         stage('還原此次異動') {
             steps {
                 echo "清理build-cfg-original.json"
                 dir(PROJ_ANDROID_URL) {
