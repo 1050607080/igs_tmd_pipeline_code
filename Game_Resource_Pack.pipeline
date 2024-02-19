@@ -88,7 +88,8 @@ pipeline {
                 script {
                     echo "修改build-cfg-original.json..."
 
-                    /*def resourcesArray = []
+                    /*
+                    def resourcesArray = []
                     
                     for(url in SVN_URLS) {
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
@@ -129,7 +130,8 @@ pipeline {
                     echo "Final JSON Content: \n${jsonContent}"
 
                     writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent
-                    echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"*/
+                    echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"
+                    */
                 }
             }
         }
@@ -139,11 +141,6 @@ pipeline {
                 echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
                     script{
-                        //sh 'python --version'
-                        //sh 'pytho3 --version'
-                        //sh "./${BUILD_SHELL_FILE}"
-                        //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResource.py'
-                        //sh '/Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateAllVersion.py'
                         sh "${env.PYTHON} --version"
                         sh "${env.PYTHON} CreateDownloadResourceEncode.py"
                     }
