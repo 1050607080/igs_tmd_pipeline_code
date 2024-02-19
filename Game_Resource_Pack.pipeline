@@ -41,7 +41,7 @@ pipeline {
                     /*env.getEnvironment().each {
                         echo "${it.key}: ${it.value}"
                     }*/
-                     sh 'svn --version'
+                    //sh 'svn --version'
                 }
             }
         }
