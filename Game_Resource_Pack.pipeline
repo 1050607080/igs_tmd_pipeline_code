@@ -102,7 +102,7 @@ pipeline {
                                 "zip": false
                             }
                             """.trim())
-                        } else {
+                        } elseif (gameName == "Inanna"){
                             resourcesArray.add("""
                             {
                                 "from": "../../../${gameName}/${gameName}Resource",
@@ -111,6 +111,20 @@ pipeline {
                             },
                             {
                                 "from": "../../../${gameName}/${gameName}Lua",
+                                "to": "${gameName}Lua",
+                                "zip": true
+                            }
+                            """.trim())
+                        }
+                        else{
+                            resourcesArray.add("""
+                            {
+                                "from": "../../../${gameName}/ClientCocos/${gameName}Resource",
+                                "to": "${gameName}Resource",
+                                "zip": true
+                            },
+                            {
+                                "from": "../../../${gameName}/ClientCocos/${gameName}Lua",
                                 "to": "${gameName}Lua",
                                 "zip": true
                             }
