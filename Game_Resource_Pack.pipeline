@@ -21,6 +21,12 @@ pipeline {
     }
 
     stages {
+        stage('檢查環境變數') {
+            steps {
+                sh 'echo $PATH'
+            }
+        }
+
         stage('版本路徑撈取') {
             steps {
                 script { 
