@@ -38,8 +38,8 @@ pipeline {
                     // echo "PATH: ${env.PATH}"
                     //sh 'echo $PATH'
                     //sh 'which svn'
-                    env.each { key, value ->
-                        echo "${key}: ${value}"
+                    env.getEnvironment().each {
+                        echo "${it.key}: ${it.value}"
                     }
                 }
             }
