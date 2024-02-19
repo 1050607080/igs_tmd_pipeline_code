@@ -1,7 +1,7 @@
 import os
 import json
 import argparse
-import Package
+import PackageJenkins
 
 CONFIG_FILE = "build-cfg-original.json"
 VERSION_FILE = "AllVersion.json"
@@ -45,18 +45,18 @@ def createAllVersionFile( rootPath ):
                 if DEFINE_LUA_PATTERN in filename:
                     defineFilePath = os.path.normpath( os.path.join( dirpath, filename ) )
                     tokens = filename.split( DEFINE_LUA_PATTERN )
-                    print( filename + " : " , Package.GetVersion( defineFilePath ) )
-                    allversion[tokens[0]] = Package.GetVersion( defineFilePath )
+                    print( filename + " : " , PackageJenkins.GetVersion( defineFilePath ) )
+                    allversion[tokens[0]] = PackageJenkins.GetVersion( defineFilePath )
                     found = True
                     break
                 if INANNA_DEFINE_LUA_PATTERN == filename:
                     defineFilePath = os.path.normpath( os.path.join( dirpath, filename ) )
-                    print( filename + " : " , Package.GetVersion( defineFilePath ) )
-                    allversion["Inanna"] = Package.GetVersion( defineFilePath )
+                    print( filename + " : " , PackageJenkins.GetVersion( defineFilePath ) )
+                    allversion["Inanna"] = PackageJenkins.GetVersion( defineFilePath )
                     found = True 
             if found:
                 break
-    Package.CreateJsonFile( allversion, versionJsonPath )
+    PackageJenkins.CreateJsonFile( allversion, versionJsonPath )
 
 if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__)) + "/"
