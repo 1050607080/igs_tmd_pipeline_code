@@ -33,10 +33,12 @@ pipeline {
 
         stage('檢查環境變數') {
             steps {
-               /* script { 
+                script { 
+                    echo "檢查環境變數"
                     sh 'echo $PATH'
                     sh 'which svn'
-                }*/
+                }
+                
             }
         }
 
