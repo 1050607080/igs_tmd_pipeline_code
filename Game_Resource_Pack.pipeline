@@ -189,6 +189,13 @@ pipeline {
                                 sh(script: "${SVN_INSTALL_PATH} switch ${switch_url} --username \$SVN_USER --password \$SVN_PASSWORD")
                             }
                         }
+                        
+                        dir(PROJ_ANDROID_URL) {
+                        script {
+                            def svnRevertCmd = "${SVN_INSTALL_PATH} revert ${PROJ_ANDROID_URL + "build-cfg-original.json"}"
+                            sh(svnRevertCmd)
+                            }
+                        }
                     }
                 }
             }
@@ -199,7 +206,7 @@ pipeline {
         always {
             emailext(
                 subject: "遊戲資源打包: ${currentBuild.currentResult}",
-                body: "打包結果: ${currentBuild.currentResult}，打包資源位置在(192.168.123.123): SouthPark\\ClientCocos\\bin\\release\\tmp\\",
+                body: "打包結果: ${currentBuild.currentResult}，打包資源位置在(192.168.123.123): SouthPark\\ClientCocos\\bin\\${params.MODE}\\tmp\\",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
