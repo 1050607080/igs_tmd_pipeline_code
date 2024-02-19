@@ -22,21 +22,19 @@ pipeline {
 
     stages {
 
-        stage('版本路徑撈取') {
+        stage('撈取版本資源路徑') {
             steps {
                 script { 
                     dir( "/Users/tmd/Desktop/home_brew_jenkins_data/" ) {
-                        
                         def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.GAME_NAME}", returnStdout: true).trim()
                         echo "版本路徑撈取: ${output}"
                         SVN_URLS = output.split('\n')
-                        
                     }
                 }
             }
         }
 
-        stage('SVN切遊戲資源') {
+        stage('SVN切版本遊戲資源') {
             steps {
                 script {
                     for( url in SVN_URLS ) {
@@ -66,10 +64,8 @@ pipeline {
                 expression { params.ENCODE == true }
             }
             steps {
-                echo "加密成DAT..."
                 dir( PROJ_ANDROID_URL ) {
                     script { BUILD_SHELL_FILE = "Build_Release_Encode.sh" }
-                    
                 }
             }
         }
@@ -79,7 +75,6 @@ pipeline {
                 expression { params.ENCODE == false }
             }
             steps {
-                echo "不需加密DAT..."
                 dir( PROJ_ANDROID_URL ) {
                     script{ BUILD_SHELL_FILE = "Build_Release_Decode.sh" }
                 }
@@ -89,7 +84,6 @@ pipeline {
         stage('修改打包路徑') {
             steps {      
                 script {
-                    echo "修改build-cfg-original.json..."
                     /*
                     def resourcesArray = []
                     
@@ -138,22 +132,23 @@ pipeline {
             }
         }
 
-        stage('開始打包資源') {
+        stage('資源打包開始') {
             steps {
-                echo "開始打包..."
                 dir(PROJ_ANDROID_URL) {
                     script{
                         switch(params.MODE) {
                             case "debug":
                                 echo "debug"
+                                sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/debug/tmp*"
                                 sh "./${BUILD_SHELL_FILE} debug"
                                 break
                             case "release":
                                 echo "release"
+                                sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp*"
                                 sh "./${BUILD_SHELL_FILE} release"
                                 break
                             default:
-                                error("Unknown environment: ${params.ENVIRONMENT}")
+                                error("Unknown MODE: ${params.MODE}")
                         }
                     }
                 }

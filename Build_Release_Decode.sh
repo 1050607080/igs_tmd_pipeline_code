@@ -1,6 +1,6 @@
 #!/bin/bash
 MODE=$1  # 获取第一个命令行参数
-echo "Start Build_Release_Encode.sh in $MODE mode"
+echo "Start Build_Release_Decode.sh in $MODE mode"
 
 if [ "$MODE" == "debug" ]; then
     /Library/Frameworks/Python.framework/Versions/2.7/bin/python CreateDownloadResourceDecode.py -m debug -p mac -b false
