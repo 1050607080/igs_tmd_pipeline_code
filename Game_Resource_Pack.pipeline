@@ -146,8 +146,6 @@ pipeline {
                         //sh "${env.PYTHON} --version"
                     }*/
                     withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
-                        sh 'echo $PYTHON'
-                        sh 'echo $SVN'
                         sh '${PYTHON} --version'
                         sh '${SVN} --version'
                         sh '${PYTHON} CreateDownloadResourceEncode.py'
