@@ -79,55 +79,53 @@ pipeline {
                 }
             }
         }
+        
+        stage('修改打包路徑') {
+            steps {
+                echo "修改build-cfg-original.json..."
+                script {
+                    def resourcesArray = []
+                    
+                    for(url in SVN_URLS) {
+                        def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
+                        def elements = cleanedOutput.split(",")
+                        def gameName = elements[0]
 
-        stages {
-            stage('修改打包路徑') {
-                steps {
-                    echo "修改build-cfg-original.json..."
-                    script {
-                        def resourcesArray = []
-                        
-                        for(url in SVN_URLS) {
-                            def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
-                            def elements = cleanedOutput.split(",")
-                            def gameName = elements[0]
-
-                            if (gameName == "Cocos2d-x") {
-                                // 如果是 Cocos2d-x，可能需要一些特殊处理
-                                resourcesArray.add("""
-                                {
-                                    "from": "../../../${gameName}/cocos/scripting/lua-bindings/script",
-                                    "to": "cocos",
-                                    "zip": false
-                                }
-                                """.trim())
-                            } else {
-                                resourcesArray.add("""
-                                {
-                                    "from": "../../../${gameName}/${gameName}Resource",
-                                    "to": "${gameName}Resource",
-                                    "zip": true
-                                },
-                                {
-                                    "from": "../../../${gameName}/${gameName}Lua",
-                                    "to": "${gameName}Lua",
-                                    "zip": true
-                                }
-                                """.trim())
+                        if (gameName == "Cocos2d-x") {
+                            // 如果是 Cocos2d-x，可能需要一些特殊处理
+                            resourcesArray.add("""
+                            {
+                                "from": "../../../${gameName}/cocos/scripting/lua-bindings/script",
+                                "to": "cocos",
+                                "zip": false
                             }
+                            """.trim())
+                        } else {
+                            resourcesArray.add("""
+                            {
+                                "from": "../../../${gameName}/${gameName}Resource",
+                                "to": "${gameName}Resource",
+                                "zip": true
+                            },
+                            {
+                                "from": "../../../${gameName}/${gameName}Lua",
+                                "to": "${gameName}Lua",
+                                "zip": true
+                            }
+                            """.trim())
                         }
-
-                        def jsonContent = """{
-                            "copy_resources": [
-                                ${resourcesArray.join(",\n")}
-                            ]
-                        }"""
-
-                        echo "Final JSON Content: \n${jsonContent}"
-
-                        writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent
-                        echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"
                     }
+
+                    def jsonContent = """{
+                        "copy_resources": [
+                            ${resourcesArray.join(",\n")}
+                        ]
+                    }"""
+
+                    echo "Final JSON Content: \n${jsonContent}"
+
+                    writeFile file: PROJ_ANDROID_URL+"build-cfg-original.json", text: jsonContent
+                    echo "JSON file has been generated at: ${PROJ_ANDROID_URL}build-cfg-original.json"
                 }
             }
         }
