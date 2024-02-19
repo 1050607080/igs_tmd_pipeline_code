@@ -10,7 +10,7 @@ pipeline {
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
         BUILD_SHELL_FILE = "build.sh"
-        PYTHON = '/Library/Frameworks/Python.framework/Versions/2.7/bin/python' 
+        //PYTHON = '/Library/Frameworks/Python.framework/Versions/2.7/bin/python' 
     }
 
     parameters {
@@ -24,12 +24,12 @@ pipeline {
 
         stage('設定環境變數') {
             steps {
-                withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
+                /*withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
                     sh 'echo $PYTHON'
                     sh 'echo $SVN'
                     sh '${PYTHON} --version'
                     sh '${SVN} --version'
-                }
+                }*/
             }
         }
 
@@ -164,6 +164,13 @@ pipeline {
                     /*script{
                         //sh "${env.PYTHON} --version"
                     }*/
+                    withEnv(['PYTHON=/Library/Frameworks/Python.framework/Versions/2.7/bin/python', 'SVN=/opt/homebrew/bin/svn']) {
+                        sh 'echo $PYTHON'
+                        sh 'echo $SVN'
+                        sh '${PYTHON} --version'
+                        sh '${SVN} --version'
+                        sh '${PYTHON} CreateDownloadResourceEncode.py'
+                    }
                 }
             }
         }
