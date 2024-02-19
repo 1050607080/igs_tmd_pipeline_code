@@ -35,9 +35,12 @@ pipeline {
             steps {
                 script { 
                     echo "檢查環境變數"
-                    echo "PATH: ${env.PATH}"
+                    // echo "PATH: ${env.PATH}"
                     //sh 'echo $PATH'
                     //sh 'which svn'
+                    env.each { key, value ->
+                        echo "${key}: ${value}"
+                    }
                 }
             }
         }
