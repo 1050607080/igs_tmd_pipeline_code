@@ -65,7 +65,7 @@ pipeline {
             steps {
                 echo "加密成DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    script { BUILD_SHELL_FILE = "build_Release_Encode.sh" }
+                    //script { BUILD_SHELL_FILE = "build_Release_Encode.sh" }
                     
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
             steps {
                 echo "不需加密DAT..."
                 dir( PROJ_ANDROID_URL ) {
-                    script{ BUILD_SHELL_FILE = "build_Release_noEncode.sh" }
+                    //script{ BUILD_SHELL_FILE = "build_Release_noEncode.sh" }
                 }
             }
         }
@@ -163,9 +163,7 @@ pipeline {
                     for(url in SVN_URLS) {
                         def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
                         def elements = cleanedOutput.split(",")
-                        
                         def gameName = elements[0]
-
                         def switch_url = "http://192.168.1.183/svn/"+gameName
 
 
