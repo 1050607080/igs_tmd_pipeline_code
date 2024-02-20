@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     dir(WORKSPACE_PATH){
-                        sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme SouthPark release -configuration ${params.BUILD_FLAVOR}"
+                        sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme SouthPark release
                     }
                 }
             }
