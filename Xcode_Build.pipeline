@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
+        PROJECT_WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
         SOUTHPARK_XCWORKSPACE = "/SouthPark.xcworkspace"
-        SCHEME = ""
-        CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
-        PROVISIONING_PROFILE_SPECIFIER = "LEO_TMD_AppStore_2023"
+        TARGET = ""
+        CONFIG = "Release"
+        EXPORT_OPTION = "exportOptions.plist"
     }
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_MODE', choices: ['Release', 'Debug'], description: '選擇編譯版本')
+        choice(name: 'BUILD_MODE', choices: ['Release', 'Debug', Development], description: '選擇編譯版本(外部、測試、開發)')
     }
     
     stages {
@@ -20,10 +20,19 @@ pipeline {
                 script {
                     if (params.BUILD_MODE == 'Release') {
                         echo "進行Release版本編譯"
-                        SCHEME = "SouthPark release"
-                    } else {
+                        TARGET = "SouthPark release"
+                        CONFIG = "Release"
+                        EXPORT_OPTION = "ExportOption_Release.plist"
+                    } else if(params.BUILD_MODE == 'Debug') {
                         echo "進行Debug版本編譯"
-                        SCHEME = "SouthPark debug"
+                        TARGET = "SouthPark debug package"
+                        CONFIG = "Debug"
+                        EXPORT_OPTION = "ExportOption_Test.plist"
+                    } else if(params.BUILD_MODE == 'Development') {
+                        echo "進行Development版本編譯"
+                        TARGET = "SouthPark debug"
+                        CONFIG = "Debug"
+                        EXPORT_OPTION = "ExportOption_Dev.plist"
                     }
                 }
             }
@@ -32,10 +41,10 @@ pipeline {
         stage('Xcode Clean') {
             steps {
                 script {
-                    dir(WORKSPACE_PATH){
-                        echo "${SCHEME}"
-                        echo "${params.BUILD_MODE}"
-                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${SCHEME}' -configuration ${params.BUILD_MODE}"
+                    dir(PROJECT_WORKSPACE_PATH){
+                        echo "${TARGET}"
+                        echo "${CONFIG}"
+                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG}"
                     }
                 }
             }
@@ -44,9 +53,9 @@ pipeline {
         stage('Xcode Build') {
             steps {
                 script {
-                    dir(WORKSPACE_PATH){
-                      echo "${SCHEME}"
-                      sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${SCHEME}' -configuration ${params.BUILD_MODE} build"
+                    dir(PROJECT_WORKSPACE_PATH){
+                      echo "${TARGET}"
+                      sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG} build"
                     }
                 }
             }
@@ -55,9 +64,9 @@ pipeline {
         stage('Xcode Archive') {
             steps {
                 script {
-                    dir(WORKSPACE_PATH) {
+                    dir(PROJECT_WORKSPACE_PATH) {
                         echo "Xcode Archive"
-                        sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${SCHEME}' -sdk iphoneos -configuration ${params.BUILD_MODE} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build"
+                        sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -sdk iphoneos -configuration ${CONFIG} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist ${EXPORT_OPTION} -exportPath ./build"
                     }
                 }
             }
