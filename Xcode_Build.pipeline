@@ -32,8 +32,8 @@ pipeline {
         stage('Xcode Clean') {
             steps {
                 script {
-                    dir("/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"){
-                         echo "%{env.SCHEME}"
+                    dir(WORKSPACE_PATH){
+                         echo "%{$env.SCHEME}"
                     }
                 }
             }
@@ -42,8 +42,8 @@ pipeline {
         stage('Xcode Build') {
             steps {
                 script {
-                    dir("/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"){
-                      echo "%{env.SCHEME}"
+                    dir(WORKSPACE_PATH){
+                      echo "%{$env.SCHEME}"
                     }
                 }
             }
