@@ -1,5 +1,4 @@
-#!/bin/bash
-MODE=$1  # 获取第一个命令行参数
+MODE=$1
 echo "Start Build_Release_Decode.sh in $MODE mode"
 
 if [ "$MODE" == "debug" ]; then
