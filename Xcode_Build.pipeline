@@ -20,7 +20,7 @@ pipeline {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯"
-                         env.SCHEME = "SouthPark release"
+                        env.SCHEME = "SouthPark release"
                     } else {
                         echo "進行Debug版本編譯"
                         env.SCHEME = "SouthPark debug"
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     dir("/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"){
-                        sh "xcodebuild -target SouthPark release clean"
+                         echo "%{env.SCHEME}"
                     }
                 }
             }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     dir("/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"){
-                        sh "xcodebuild -target SouthPark release -configuration Release -sdk iphoneos10.1"
+                      echo "%{env.SCHEME}"
                     }
                 }
             }
