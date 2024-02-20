@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        buildConfig = ""
         WORKSPACE = 'SouthPark.xcworkspace'
         SCHEME = ''
         CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
@@ -31,11 +30,9 @@ pipeline {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯"
-                        buildConfig = 'Release'
                          SCHEME = 'SouthPark release'
                     } else {
                         echo "進行Debug版本編譯"
-                        buildConfig = 'Debug'
                          SCHEME = 'SouthPark debug'
                     }
                 }
@@ -45,9 +42,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_CONFIG}
+                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
 
-                    xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_CONFIG}
+                    xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
                     """
                 }
             }
@@ -56,9 +53,9 @@ pipeline {
         stage('Xcode Archive') {
             steps {
                 script {
-                    sh """
+                    /*sh """
                     xcodebuild archive -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig} -archivePath ${SCHEME}.xcarchive CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY}" PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER}"
-                    """
+                    """*/
                 }
             }
         }
@@ -66,9 +63,9 @@ pipeline {
         stage('Export Ipa') {
             steps {
                 script {
-                    sh """
+                    /*sh """
                     xcrun -sdk iphoneos PackageApplication -v ${SCHEME}.xcarchive/Products/Applications/*.app -o ${pwd()}/${SCHEME}.ipa
-                    """
+                    """*/
                 }
             }
         }
