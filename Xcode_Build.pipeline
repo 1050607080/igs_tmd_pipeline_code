@@ -45,7 +45,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig} CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY}" PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER}"
+                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} 
+                    xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration buildConfig CODE_SIGN_IDENTITY="Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)" PROVISIONING_PROFILE_SPECIFIER="LEO_TMD_AppStore_2023"
                     """
                 }
             }
