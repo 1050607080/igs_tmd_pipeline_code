@@ -15,7 +15,7 @@ pipeline {
     }
     
     stages {
-        stage('準備編譯') {
+        stage('Ready') {
             steps {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
@@ -55,8 +55,10 @@ pipeline {
         stage('Xcode Archive') {
             steps {
                 script {
-                    echo "Xcode Archive"
-                    sh"xcodebuild -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -sdk iphoneos -configuration Release archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build"
+                    dir(WORKSPACE_PATH) {
+                        echo "Xcode Archive"
+                        sh"xcodebuild -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -sdk iphoneos -configuration Release archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build"
+                    }
                 }
             }
         }
