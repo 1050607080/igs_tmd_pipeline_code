@@ -43,7 +43,6 @@ pipeline {
                 script {
                     sh """
                     xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
-
                     xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
                     """
                 }
@@ -53,6 +52,7 @@ pipeline {
         stage('Xcode Archive') {
             steps {
                 script {
+                    echo "Xcode Archive"
                     /*sh """
                     xcodebuild archive -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig} -archivePath ${SCHEME}.xcarchive CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY}" PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER}"
                     """*/
@@ -63,6 +63,7 @@ pipeline {
         stage('Export Ipa') {
             steps {
                 script {
+                    echo "Export Ipa"
                     /*sh """
                     xcrun -sdk iphoneos PackageApplication -v ${SCHEME}.xcarchive/Products/Applications/*.app -o ${pwd()}/${SCHEME}.ipa
                     """*/
