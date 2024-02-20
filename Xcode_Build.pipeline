@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        WORKSPACE_PATH = /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/
         WORKSPACE = 'SouthPark.xcworkspace'
         SCHEME = ''
         CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
@@ -31,7 +32,9 @@ pipeline {
         stage('Xcode Clean') {
             steps {
                 script {
-                    sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.BUILD_FLAVOR}"
+                    dir(WORKSPACE_PATH){
+                        sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.BUILD_FLAVOR}"
+                    }
                 }
             }
         }
@@ -39,7 +42,9 @@ pipeline {
         stage('Xcode Build') {
             steps {
                 script {
-                    sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.CONFIGURATION}"
+                    dir(WORKSPACE_PATH){
+                        sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.CONFIGURATION}"
+                    }
                 }
             }
         }
