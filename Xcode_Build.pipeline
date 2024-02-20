@@ -1,17 +1,24 @@
 pipeline {
     agent any
 
+    environment {
+        buildConfig = ""
+        WORKSPACE = 'SouthPark.xcworkspace'
+        SCHEME = ''
+        CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
+        PROVISIONING_PROFILE_SPECIFIER = "LEO_TMD_AppStore_2023"
+    }
+
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_FLAVOR', choices: ['release', 'debug'], description: '選擇編譯版本')
+        choice(name: 'BUILD_FLAVOR', choices: ['Release', 'Debug'], description: '選擇編譯版本')
     }
     
     stages {
         stage('準備編譯') {
             steps {
                 script {
-                    echo "你的名字: ${params.NAME}"
-                    if (params.BUILD_FLAVOR == 'release') {
+                    if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯，將會上傳到商店"
                     } else {
                         echo "進行Debug版本編譯，將存在本地端"
@@ -19,14 +26,47 @@ pipeline {
                 }
             }
         }
-        stage('編譯中') {
+        stage('編譯類型') {
             steps {
                 script {
-                    if (params.BUILD_FLAVOR == 'release') {
-                        echo "進行Release版本編譯中"
+                    if (params.BUILD_FLAVOR == 'Release') {
+                        echo "進行Release版本編譯"
+                        buildConfig = 'Release'
+                         SCHEME = 'SouthPark release'
                     } else {
-                        echo "進行Debug版本編譯中"
+                        echo "進行Debug版本編譯"
+                        buildConfig = 'Debug'
+                         SCHEME = 'SouthPark debug'
                     }
+                }
+            }
+        }
+        stage('Xcode Build') {
+            steps {
+                script {
+                    sh """
+                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig} CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY}" PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER}"
+                    """
+                }
+            }
+        }
+
+        stage('Xcode Archive') {
+            steps {
+                script {
+                    sh """
+                    xcodebuild archive -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig} -archivePath ${SCHEME}.xcarchive CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY}" PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER}"
+                    """
+                }
+            }
+        }
+
+        stage('Export Ipa') {
+            steps {
+                script {
+                    sh """
+                    xcrun -sdk iphoneos PackageApplication -v ${SCHEME}.xcarchive/Products/Applications/*.app -o ${pwd()}/${SCHEME}.ipa
+                    """
                 }
             }
         }
@@ -38,7 +78,7 @@ pipeline {
             emailext(
                 subject: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
                 body: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
-                to: 'weitsunglin@igs.com.tw'
+                to: "${params.NAME}@igs.com.tw"
             )
         }
         failure {
@@ -46,7 +86,7 @@ pipeline {
             emailext(
                 subject: "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}",
                 body: "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}",
-                to: 'weitsunglin@igs.com.tw'
+                to: "${params.NAME}@igs.com.tw"
             )
         }
     }
