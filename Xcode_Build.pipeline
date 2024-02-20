@@ -20,10 +20,10 @@ pipeline {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯"
-                         SCHEME = 'SouthPark release'
+                         env.SCHEME = 'SouthPark release'
                     } else {
                         echo "進行Debug版本編譯"
-                        SCHEME = 'SouthPark debug'
+                        env.SCHEME = 'SouthPark debug'
                     }
                 }
             }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     dir(WORKSPACE_PATH){
-                        sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.CONFIGURATION}"
+                       sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
             }
