@@ -35,6 +35,7 @@ pipeline {
                     dir(WORKSPACE_PATH){
                         echo "${SCHEME}"
                         echo "${params.BUILD_FLAVOR}"
+                        xcodebuild clean -project SouthPark.xcworkspace -scheme SouthPark release -configuration Release
                         //sh "xcodebuild clean -workspace ${SOUTHPARK_XCWORKSPACE} -scheme "${SCHEME}" -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
