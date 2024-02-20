@@ -11,7 +11,7 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_MODE', choices: ['Release', 'Debug', Development], description: '選擇編譯版本(外部、測試、開發)')
+        choice(name: 'BUILD_MODE', choices: ['Release', 'Debug', 'Development'], description: '選擇編譯版本(外部、測試、開發)')
     }
     
     stages {
