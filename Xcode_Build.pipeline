@@ -36,7 +36,6 @@ pipeline {
                         echo "${SCHEME}"
                         echo "${params.BUILD_FLAVOR}"
                         sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -configuration Release"
-                        //sh "xcodebuild clean -workspace ${SOUTHPARK_XCWORKSPACE} -scheme "${SCHEME}" -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
             }
@@ -47,6 +46,7 @@ pipeline {
                 script {
                     dir(WORKSPACE_PATH){
                       echo "${SCHEME}"
+                      sh"xcodebuild -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -configuration Release build"
                     }
                 }
             }
