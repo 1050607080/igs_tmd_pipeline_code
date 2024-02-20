@@ -35,7 +35,7 @@ pipeline {
                     dir(WORKSPACE_PATH){
                         echo "${SCHEME}"
                         echo "${params.BUILD_FLAVOR}"
-                        sh "xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}"
+                        sh "xcodebuild clean -workspace ${WORKSPACE} -scheme "${SCHEME}" -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
             }
