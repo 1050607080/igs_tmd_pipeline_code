@@ -56,7 +56,7 @@ pipeline {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
                             echo "${TARGET}"
-                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG} build"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG} -destination 'generic/platform=iOS' build"
                         } catch (Exception e) {
                             echo "Xcode Build failed with error: ${e}"
                             throw e
