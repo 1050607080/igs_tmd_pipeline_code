@@ -3,7 +3,8 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_FLAVOR', choices: ['release', 'debug'], description: '選擇編譯的版本')
+        choice(name: 'BUILD_MODE', choices: ['release', 'debug'], description: '選擇編譯的版本')
+        choice(name: 'BUILD_TYPE', choices: ['aab', 'apk'], description: '選擇編譯的類型')
     }
     
     stages {
@@ -11,21 +12,14 @@ pipeline {
             steps {
                 script {
                     echo "名字: ${params.NAME}"
-                    echo "版本: ${params.BUILD_FLAVOR}"
+                    echo "版本: ${params.BUILD_MODE}"
                 }
             }
         }
-        stage('編譯APK') {
+        stage('編譯中') {
             steps {
                 script {
-                    echo "編譯APK為 ${params.BUILD_FLAVOR} 版本中"
-                }
-            }
-        }
-        stage('編譯AAB') {
-            steps {
-                script {
-                    echo "編譯AAB為 ${params.BUILD_FLAVOR} 版本中"
+                    echo "編譯APK為 ${params.BUILD_MODE} 版本中"
                 }
             }
         }
@@ -33,18 +27,18 @@ pipeline {
     
     post {
         success {
-            echo "編譯成功，版本為 ${params.BUILD_FLAVOR}"
+            echo "編譯成功，版本為 ${params.BUILD_MODE}"
             emailext(
-                subject: "編譯成功，版本為 ${params.BUILD_FLAVOR}",
-                body: "編譯成功，版本為 ${params.BUILD_FLAVOR}。",
+                subject: "編譯成功，版本為 ${params.BUILD_MODE}",
+                body: "編譯成功，版本為 ${params.BUILD_MODE}。",
                 to: 'weitsunglin@igs.com.tw'
             )
         }
         failure {
-            echo "編譯失敗，版本為 ${params.BUILD_FLAVOR}"
+            echo "編譯失敗，版本為 ${params.BUILD_MODE}"
             emailext(
-                subject: "編譯失敗，版本為 ${params.BUILD_FLAVOR}",
-                body: "編譯失敗，版本為 ${params.BUILD_FLAVOR}。",
+                subject: "編譯失敗，版本為 ${params.BUILD_MODE}",
+                body: "編譯失敗，版本為 ${params.BUILD_MODE}。",
                 to: 'weitsunglin@igs.com.tw'
             )
         }
