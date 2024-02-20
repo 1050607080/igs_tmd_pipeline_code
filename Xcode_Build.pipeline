@@ -20,10 +20,10 @@ pipeline {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯"
-                        SCHEME = "SouthPark release"
+                        SCHEME = "SouthPark"
                     } else {
                         echo "進行Debug版本編譯"
-                        SCHEME = "SouthPark debug"
+                        SCHEME = "SouthPark"
                     }
                 }
             }
