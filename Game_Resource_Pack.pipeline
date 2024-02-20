@@ -22,7 +22,7 @@ pipeline {
 
     stages {
 
-        stage('從二測版本管理撈取資源路徑') {
+        stage('Get Game's SVN Path') {
             steps {
                 script { 
                     dir( PROJ_ANDROID_URL ) {
@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage('SVN切換遊戲資源分支') {
+        stage('Game Switch Path using SVN') {
             steps {
                 script {
                     for( url in SVN_URLS ) {
@@ -59,7 +59,7 @@ pipeline {
         }
 
         
-       stage('資源加密') {
+       stage('Lua Encode Dat') {
             when {
                 expression { params.ENCODE == true }
             }
@@ -73,7 +73,7 @@ pipeline {
             }
         }
 
-        stage('資源不加密') {
+        stage('Lua NOT Encode Dat') {
             when {
                 expression { params.ENCODE == false }
             }
@@ -87,7 +87,7 @@ pipeline {
             }
         }
 
-        stage('修改打包路徑') {
+        stage('Modify build-cfg-original.json') {
             steps {      
                 script {
                    echo "修改打包路徑" 
@@ -149,7 +149,7 @@ pipeline {
             }
         }
 
-        stage('資源打包') {
+        stage('Packing') {
             steps {
                 dir(PROJ_ANDROID_URL) {
                     script{
@@ -172,7 +172,7 @@ pipeline {
             }
         }
 
-         stage('清理環境') {
+         stage('Clean') {
             steps {
                 script {
                     for(url in SVN_URLS) {
