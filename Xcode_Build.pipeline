@@ -4,7 +4,7 @@ pipeline {
     environment {
         WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
         WORKSPACE = 'SouthPark.xcworkspace'
-        SCHEME = ''
+        SCHEME = ""
         CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
         PROVISIONING_PROFILE_SPECIFIER = "LEO_TMD_AppStore_2023"
     }
@@ -20,10 +20,10 @@ pipeline {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯"
-                         env.SCHEME = 'SouthPark release'
+                         env.SCHEME = "SouthPark release"
                     } else {
                         echo "進行Debug版本編譯"
-                        env.SCHEME = 'SouthPark debug'
+                        env.SCHEME = "SouthPark debug"
                     }
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     dir(WORKSPACE_PATH){
-                        sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.BUILD_FLAVOR}"
+                        sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme SouthPark release -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
             }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     dir(WORKSPACE_PATH){
-                       sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.BUILD_FLAVOR}"
+                       sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme SouthPark release -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
             }
