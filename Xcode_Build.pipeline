@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
-        WORKSPACE = "/SouthPark.xcworkspace"
+        SOUTHPARK_XCWORKSPACE = "/SouthPark.xcworkspace"
         SCHEME = ""
         CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
         PROVISIONING_PROFILE_SPECIFIER = "LEO_TMD_AppStore_2023"
@@ -35,7 +35,7 @@ pipeline {
                     dir(WORKSPACE_PATH){
                         echo "${SCHEME}"
                         echo "${params.BUILD_FLAVOR}"
-                        sh "xcodebuild clean -workspace ${WORKSPACE} -scheme "${SCHEME}" -configuration ${params.BUILD_FLAVOR}"
+                        sh "xcodebuild clean -workspace ${SOUTHPARK_XCWORKSPACE} -scheme "${SCHEME}" -configuration ${params.BUILD_FLAVOR}"
                     }
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     dir(WORKSPACE_PATH){
-                      echo "{$SCHEME}"
+                      echo "${SCHEME}"
                     }
                 }
             }
