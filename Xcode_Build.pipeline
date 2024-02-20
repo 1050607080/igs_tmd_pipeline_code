@@ -56,6 +56,7 @@ pipeline {
             steps {
                 script {
                     echo "Xcode Archive"
+                    sh"xcodebuild -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -sdk iphoneos -configuration Release archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build"
                 }
             }
         }
