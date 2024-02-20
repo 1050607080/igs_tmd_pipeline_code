@@ -43,7 +43,7 @@ pipeline {
                 script {
                     sh """
                     xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
-                    xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
+                    xcodebuild build -workspace SouthPark.xcworkspace -scheme SouthPark release -configuration Release
                     """
                 }
             }
