@@ -22,7 +22,7 @@ pipeline {
 
     stages {
 
-        stage('Get Game's SVN Path') {
+        stage('Get Game SVN Path') {
             steps {
                 script { 
                     dir( PROJ_ANDROID_URL ) {
