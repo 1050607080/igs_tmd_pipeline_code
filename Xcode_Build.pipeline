@@ -45,9 +45,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME}  -configuration buildConfig
+                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME}  -configuration ${buildConfig}
 
-                    xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration buildConfig
+                    xcodebuild build -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig}
                     """
                 }
             }
