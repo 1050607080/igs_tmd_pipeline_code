@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        WORKSPACE_PATH = /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/
+        WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
         WORKSPACE = 'SouthPark.xcworkspace'
         SCHEME = ''
         CODE_SIGN_IDENTITY = "Apple Distribution: SHIZI TECH LTD CO. (T43P9S8849)"
