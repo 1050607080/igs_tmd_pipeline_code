@@ -11,14 +11,14 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_FLAVOR', choices: ['Release', 'Debug'], description: '選擇編譯版本')
+        choice(name: 'BUILD_MODE', choices: ['Release', 'Debug'], description: '選擇編譯版本')
     }
     
     stages {
         stage('Ready') {
             steps {
                 script {
-                    if (params.BUILD_FLAVOR == 'Release') {
+                    if (params.BUILD_MODE == 'Release') {
                         echo "進行Release版本編譯"
                         SCHEME = "SouthPark release"
                     } else {
@@ -34,8 +34,8 @@ pipeline {
                 script {
                     dir(WORKSPACE_PATH){
                         echo "${SCHEME}"
-                        echo "${params.BUILD_FLAVOR}"
-                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -configuration Release"
+                        echo "${params.BUILD_MODE}"
+                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${SCHEME}' -configuration ${params.BUILD_MODE}"
                     }
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
                 script {
                     dir(WORKSPACE_PATH){
                       echo "${SCHEME}"
-                      sh"xcodebuild -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -configuration Release build"
+                      sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${SCHEME}' -configuration ${params.BUILD_MODE} build"
                     }
                 }
             }
@@ -57,7 +57,7 @@ pipeline {
                 script {
                     dir(WORKSPACE_PATH) {
                         echo "Xcode Archive"
-                        sh"xcodebuild -workspace SouthPark.xcworkspace -scheme 'SouthPark release' -sdk iphoneos -configuration Release archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build"
+                        sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${SCHEME}' -sdk iphoneos -configuration ${params.BUILD_MODE} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist exportOptions.plist -exportPath ./build"
                     }
                 }
             }
@@ -66,18 +66,18 @@ pipeline {
     
     post {
         success {
-            echo "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}"
+            echo "編譯成功，編譯版本為 ${params.BUILD_MODE}"
             emailext(
-                subject: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
-                body: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
+                subject: "編譯成功，編譯版本為 ${params.BUILD_MODE}",
+                body: "編譯成功，編譯版本為 ${params.BUILD_MODE}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
         failure {
-            echo "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}"
+            echo "編譯失敗，編譯版本為 ${params.BUILD_MODE}"
             emailext(
-                subject: "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}",
-                body: "編譯失敗，編譯版本為 ${params.BUILD_FLAVOR}",
+                subject: "編譯失敗，編譯版本為 ${params.BUILD_MODE}",
+                body: "編譯失敗，編譯版本為 ${params.BUILD_MODE}",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
