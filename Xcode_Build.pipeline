@@ -54,8 +54,13 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
-                      echo "${TARGET}"
-                      sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG} build"
+                        try {
+                            echo "${TARGET}"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG} build"
+                        } catch (Exception e) {
+                            echo "Xcode Build failed with error: ${e}"
+                            throw e
+                        }
                     }
                 }
             }
@@ -65,8 +70,13 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_WORKSPACE_PATH) {
-                        echo "Xcode Archive"
-                        sh"xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -sdk iphoneos -configuration ${CONFIG} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist ${EXPORT_OPTION} -exportPath ./build"
+                        try {
+                            echo "Xcode Archive"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -sdk iphoneos -configuration ${CONFIG} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist ${EXPORT_OPTION} -exportPath ./build"
+                        } catch (Exception e) {
+                            echo "Xcode Archive failed with error: ${e}"
+                            throw e 
+                        }
                     }
                 }
             }
