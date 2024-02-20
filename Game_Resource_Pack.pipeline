@@ -25,7 +25,7 @@ pipeline {
         stage('從二測版本管理撈取資源路徑') {
             steps {
                 script { 
-                    dir( "/Users/tmd/Desktop/home_brew_jenkins_data/" ) {
+                    dir( PROJ_ANDROID_URL ) {
                         def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.GAME_NAME}", returnStdout: true).trim()
                         echo "版本路徑撈取: ${output}"
                         SVN_URLS = output.split('\n')
