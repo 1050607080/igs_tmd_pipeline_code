@@ -18,33 +18,28 @@ pipeline {
             steps {
                 script {
                     if (params.BUILD_FLAVOR == 'Release') {
-                        echo "進行Release版本編譯，將會上傳到商店"
-                    } else {
-                        echo "進行Debug版本編譯，將存在本地端"
-                    }
-                }
-            }
-        }
-        stage('編譯類型') {
-            steps {
-                script {
-                    if (params.BUILD_FLAVOR == 'Release') {
                         echo "進行Release版本編譯"
                          SCHEME = 'SouthPark release'
                     } else {
                         echo "進行Debug版本編譯"
-                         SCHEME = 'SouthPark debug'
+                        SCHEME = 'SouthPark debug'
                     }
                 }
             }
         }
+
+        stage('Xcode Clean') {
+            steps {
+                script {
+                    sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.BUILD_FLAVOR}"
+                }
+            }
+        }
+
         stage('Xcode Build') {
             steps {
                 script {
-                    sh """
-                    xcodebuild clean -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${params.BUILD_FLAVOR}
-                    xcodebuild build -workspace SouthPark.xcworkspace -scheme SouthPark release -configuration Release
-                    """
+                    sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme ${env.SCHEME} -configuration ${params.CONFIGURATION}"
                 }
             }
         }
