@@ -62,14 +62,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Export Ipa') {
-            steps {
-                script {
-                    echo "Export Ipa"
-                }
-            }
-        }
     }
     
     post {
@@ -77,7 +69,7 @@ pipeline {
             echo "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}"
             emailext(
                 subject: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
-                body: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}",
+                body: "編譯成功，編譯版本為 ${params.BUILD_FLAVOR}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
