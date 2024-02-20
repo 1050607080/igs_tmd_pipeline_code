@@ -32,8 +32,8 @@ pipeline {
         stage('Xcode Clean') {
             steps {
                 script {
-                    dir(WORKSPACE_PATH){
-                        sh "xcodebuild clean -workspace ${env.WORKSPACE} -scheme SouthPark release"
+                    dir("/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"){
+                        sh "xcodebuild -target SouthPark release clean"
                     }
                 }
             }
@@ -42,8 +42,8 @@ pipeline {
         stage('Xcode Build') {
             steps {
                 script {
-                    dir(WORKSPACE_PATH){
-                       sh "xcodebuild build -workspace ${env.WORKSPACE} -scheme SouthPark release -configuration ${params.BUILD_FLAVOR}"
+                    dir("/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"){
+                        sh "xcodebuild -target SouthPark release -configuration Release -sdk iphoneos10.1"
                     }
                 }
             }
@@ -53,9 +53,6 @@ pipeline {
             steps {
                 script {
                     echo "Xcode Archive"
-                    /*sh """
-                    xcodebuild archive -workspace ${WORKSPACE} -scheme ${SCHEME} -configuration ${buildConfig} -archivePath ${SCHEME}.xcarchive CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY}" PROVISIONING_PROFILE_SPECIFIER="${PROVISIONING_PROFILE_SPECIFIER}"
-                    """*/
                 }
             }
         }
@@ -64,9 +61,6 @@ pipeline {
             steps {
                 script {
                     echo "Export Ipa"
-                    /*sh """
-                    xcrun -sdk iphoneos PackageApplication -v ${SCHEME}.xcarchive/Products/Applications/*.app -o ${pwd()}/${SCHEME}.ipa
-                    """*/
                 }
             }
         }
