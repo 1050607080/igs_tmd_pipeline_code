@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        CREDENTIALS_ID = 'remote44102_login'
+        REMOTE_CREDENTIALS_ID = 'remote44102_login'
+        DEPLOY_TO_CDN_CREDENTIALS_ID = 'deploy_to_cdn'
     }
 
     parameters {
@@ -17,7 +18,7 @@ pipeline {
         stage('Fix Web Environment') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
                         def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
                         def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
                         def oldContent = params.ENVIRONMENT_TYPE == 'production' ? '<type>iostesting</type>' : '<type>production</type>'
@@ -32,14 +33,18 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
                         def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
                         
                         if (params.DEPLOY_TO_CDN) {
                             echo "Deploying to CDN..."
-                            def cdnCommand = "powershell -Command \"& 'C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換CDN_WebEnvironment.bat'\""
-                            sshCommand remote: remote, command: cdnCommand
+
+                            withCredentials([usernamePassword(credentialsId: 'DEPLOY_TO_CDN_CREDENTIALS_ID', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                                def cdnCommand = "powershell -Command \"& 'C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換CDN_WebEnvironment.bat' -Username $USERNAME -Password $PASSWORD\""
+                                sshCommand remote: remote, command: cdnCommand
+                            }
                         }
+                        
                         
                         if (params.DEPLOY_TO_GCP) {
                             echo "Deploying to GCP..."
