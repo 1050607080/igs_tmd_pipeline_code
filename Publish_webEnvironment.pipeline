@@ -73,12 +73,14 @@ pipeline {
 // Helper functions
 def getRemoteConfig(host, user, password) {
     def remote = [:]
+    remote.name = 'default' // 添加了 'name' 字段
     remote.host = host
     remote.user = user
     remote.password = password
     remote.allowAnyHosts = true
     return remote
 }
+
 
 def getDeploymentTargets() {
     def targets = []
