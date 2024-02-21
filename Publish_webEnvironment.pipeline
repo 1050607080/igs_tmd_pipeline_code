@@ -43,11 +43,14 @@ pipeline {
 
                     def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
                     def newContent = "<type>${params.ENVIRONMENT_TYPE}</type>"
-                    
+
                     def command = ""
+                    
                     if (params.ENVIRONMENT == 'production'){
                         command = "powershell -Command \"(Get-Content -Path '${filePath}').replace('<type>iostesting</type>', '${newContent}') | Set-Content -Path '${filePath}'\""
-                    }else if (params.ENVIRONMENT == 'iostesting'){
+                    }
+                    
+                    if (params.ENVIRONMENT == 'iostesting'){
                          command = "powershell -Command \"(Get-Content -Path '${filePath}').replace('<type>production</type>', '${newContent}') | Set-Content -Path '${filePath}'\""
                     }
         
