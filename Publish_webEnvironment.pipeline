@@ -37,8 +37,8 @@ pipeline {
                         if (params.DEPLOY_TO_CDN) {
                             echo "Deploying to CDN..."
                             withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
-                                def batPath = "C:\\\\Users\\\\Administrator\\\\Desktop\\\\TMD_Client\\\\送審專用\\\\Ios送審工具\\\\更換CDN_WebEnvironment.bat" // 雙反斜線是為了在 Groovy 字符串中轉義反斜線
-                                def command = "cmd /c \\"${batPath}\\" \\"${CDNUSERNAME}\\" \\"${CDNPASSWORD}\\""
+                               def batPath = "C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\example.bat" // 使用單反斜線即可
+                                def command = "cmd /c '${batPath}' '${param1}' '${param2}'"
                                 sshCommand remote: remote, command: command
                             }
                         }
