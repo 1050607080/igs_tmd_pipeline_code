@@ -25,14 +25,20 @@ pipeline {
             steps {
                 script {
                     dir('/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio') {
-                        // 將 Groovy 變量傳遞給 Bash 腳本
-                        sh """
-                        export PATH=\$PATH:\$ANDROID_HOME/tools:\$ANDROID_HOME/platform-tools
-                        export BUILD_MODE='${params.BUILD_MODE}'
-                        export BUILD_TYPE='${params.BUILD_TYPE}'
-                        ./gradlew --version
-                        ./gradlew clean build -PbuildMode=\$BUILD_MODE -PbuildType=\$BUILD_TYPE
-                        """
+                        try {
+                            // 將 Groovy 變量傳遞給 Bash 腳本
+                            sh """
+                            export PATH=\$PATH:\$ANDROID_HOME/tools:\$ANDROID_HOME/platform-tools
+                            export BUILD_MODE='${params.BUILD_MODE}'
+                            export BUILD_TYPE='${params.BUILD_TYPE}'
+                            ./gradlew --version
+                            ./gradlew clean build -PbuildMode=\$BUILD_MODE -PbuildType=\$BUILD_TYPE
+                            """
+                        } 
+                        catch (Exception e) {
+                            echo "android studio build  error: ${e}"
+                            throw e
+                        }
                     }
                 }
             }
