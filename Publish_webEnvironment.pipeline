@@ -38,8 +38,7 @@ pipeline {
                             echo "Deploying to CDN..."
                             withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
                                 def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                                def batPath = "C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換CDN_WebEnvironment.bat"
-                                // 注意这里简化了命令字符串的构造
+                                def batPath = "C:\\\\Users\\\\Administrator\\\\Desktop\\\\TMD_Client\\\\送審專用\\\\Ios送審工具\\\\更換CDN_WebEnvironment.bat"
                                 def command = "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command & '${batPath}' '${CDNUSERNAME}' '${CDNPASSWORD}'"
                                 sshCommand remote: remote, command: command
                             }
