@@ -85,7 +85,6 @@ pipeline {
     
     post {
         success {
-            echo "編譯成功，編譯版本為 ${params.BUILD_MODE}"
             emailext(
                 subject: "編譯成功，編譯版本為 ${params.BUILD_MODE}",
                 body: "編譯成功，編譯版本為 ${params.BUILD_MODE}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
@@ -93,10 +92,9 @@ pipeline {
             )
         }
         failure {
-            echo "編譯失敗，編譯版本為 ${params.BUILD_MODE}"
             emailext(
                 subject: "編譯失敗，編譯版本為 ${params.BUILD_MODE}",
-                body: "編譯失敗，編譯版本為 ${params.BUILD_MODE}",
+                body: "編譯失敗",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
