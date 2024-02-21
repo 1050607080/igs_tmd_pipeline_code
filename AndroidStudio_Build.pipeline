@@ -24,7 +24,7 @@ pipeline {
         stage('build') {
             steps {
                 script {
-                    dir('/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio') {
+                    dir('/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android') {
                         try {
                             // 將 Groovy 變量傳遞給 Bash 腳本
                             sh """
