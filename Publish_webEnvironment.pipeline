@@ -36,19 +36,19 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    def Remote(name, host, user, password) {
-                        def remote = [:]
-                        remote.name = name
-                        remote.host = host
-                        remote.user = user
-                        remote.password = password
-                        remote.allowAnyHosts = true
-                        return remote
+                    def Remote = { name, host, user, password ->
+                    def remote = [:]
+                    remote.name = name
+                    remote.host = host
+                    remote.user = user
+                    remote.password = password
+                    remote.allowAnyHosts = true
+                    return remote
                     }
                     def remote = Remote(user_102, host_102, user_102, password_102)
                     def command = " echo 'Hellow World'"
                     sshCommand remote: remote, command: command
-                    
+
                     if (params.DEPLOY_TO_CDN) {
                         echo "deploy CDN"
                     }
