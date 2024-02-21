@@ -38,10 +38,8 @@ pipeline {
                         
                         if (params.DEPLOY_TO_CDN) {
                             echo "Deploying to CDN..."
-                            withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
-                                def cdnCommand = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/更換CDN_WebEnvironment.bat liangweiwei 1qazxsw2!@#"
-                                sshCommand remote: remote, command: cdnCommand
-                            }
+                            def cdnCommand = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/更換CDN_WebEnvironment.bat liangweiwei 1qazxsw2!@#"
+                            sshCommand remote: remote, command: cdnCommand
                         }
                         
                         if (params.DEPLOY_TO_GCP) {
@@ -68,7 +66,7 @@ pipeline {
 
 def getRemoteConfig(host, user, password) {
     def remote = [:]
-    remote.name = user // 添加了 'name' 字段
+    remote.name = user
     remote.host = host
     remote.user = user
     remote.password = password
