@@ -28,9 +28,10 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    def executeRemoteSSHCommand(String remote_command) {         
+                    def executeRemoteSSHCommand = { String remote_command ->
                         sshagent(['remote44102_login']) {
-                        sh 'ssh administrator@192.168.44.102 remote_command'
+                            // 注意这里要使用双引号，并将变量放在${}中
+                            sh "ssh administrator@192.168.44.102 ${remote_command}"
                         }
                     }
                     executeRemoteSSHCommand("echo Hello, World!")
