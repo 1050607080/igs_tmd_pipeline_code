@@ -39,7 +39,7 @@ pipeline {
                         if (params.DEPLOY_TO_CDN) {
                             echo "Deploying to CDN..."
 
-                            withCredentials([usernamePassword(credentialsId: 'DEPLOY_TO_CDN_CREDENTIALS_ID', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                            withCredentials([usernamePassword(credentialsId: DEPLOY_TO_CDN_CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                                 def cdnCommand = "powershell -Command \"& 'C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換CDN_WebEnvironment.bat' -Username $USERNAME -Password $PASSWORD\""
                                 sshCommand remote: remote, command: cdnCommand
                             }
