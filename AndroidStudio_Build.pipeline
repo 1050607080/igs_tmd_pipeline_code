@@ -26,13 +26,18 @@ pipeline {
                 script {
                     dir('/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio') {
                         try {
-                            // 將 Groovy 變量傳遞給 Bash 腳本
+                            // 根据BUILD_TYPE和BUILD_MODE动态选择构建命令
+                            def buildCommand = ""
+                            if (params.BUILD_TYPE == 'aab') {
+                                buildCommand = "bundle${params.BUILD_MODE.capitalize()}"
+                            } else {
+                                buildCommand = "assemble${params.BUILD_MODE.capitalize()}"
+                            }
+
                             sh """
                             export PATH=\$PATH:\$ANDROID_HOME/tools:\$ANDROID_HOME/platform-tools
-                            export BUILD_MODE='${params.BUILD_MODE}'
-                            export BUILD_TYPE='${params.BUILD_TYPE}'
                             ./gradlew --version
-                            ./gradlew clean build -PbuildMode=\$BUILD_MODE -PbuildType=\$BUILD_TYPE
+                            ./gradlew clean ${buildCommand}
                             """
                         } 
                         catch (Exception e) {
