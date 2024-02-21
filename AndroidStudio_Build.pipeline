@@ -9,25 +9,27 @@ pipeline {
 
     environment {
         ANDROID_HOME = "/Users/tmd/Library/Android/sdk"
+        ANDROID_STUDIO_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio"
     }
 
     stages {
         stage('android studio ready') {
             steps {
                 script {
+                     dir(ANDROID_STUDIO_PATH) {
+                        sh './gradlew --version'
+                    }
                     echo "名字: ${params.NAME}"
                     echo "版本: ${params.BUILD_MODE}"
                     echo "類型: ${params.BUILD_TYPE}"
-                    sh './gradlew --version'
                 }
             }
         }
         stage('android studio build') {
             steps {
                 script {
-                    dir('/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio') {
+                    dir(ANDROID_STUDIO_PATH) {
                         try {
-                            // 根据BUILD_TYPE和BUILD_MODE动态选择构建命令
                             def buildCommand = ""
                             if (params.BUILD_TYPE == 'aab') {
                                 buildCommand = "bundle${params.BUILD_MODE.capitalize()}"
@@ -37,7 +39,6 @@ pipeline {
 
                             sh """
                             export PATH=\$PATH:\$ANDROID_HOME/tools:\$ANDROID_HOME/platform-tools
-                            ./gradlew --version
                             ./gradlew clean ${buildCommand}
                             """
                         } 
