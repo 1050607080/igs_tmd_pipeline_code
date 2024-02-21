@@ -6,28 +6,41 @@ pipeline {
         choice(name: 'BUILD_MODE', choices: ['release', 'debug'], description: '編譯版本')
         choice(name: 'BUILD_TYPE', choices: ['aab', 'apk'], description: '編譯類型')
     }
-    
+
+    environment {
+        ANDROID_HOME = "/Users/tmd/Library/Android/sdk"
+    }
+
     stages {
         stage('ready') {
             steps {
                 script {
                     echo "名字: ${params.NAME}"
                     echo "版本: ${params.BUILD_MODE}"
+                    echo "類型: ${params.BUILD_TYPE}"
                 }
             }
         }
-        stage('complie') {
+        stage('build') {
             steps {
                 script {
-                    echo "編譯APK為 ${params.BUILD_MODE} 版本中"
+                    dir('/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio') {
+                        sh '''
+                        export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+                        ./gradlew --version
+                        ./gradlew clean build -PbuildMode=${params.BUILD_MODE} -PbuildType=${params.BUILD_TYPE}
+                        '''
+                    }
                 }
             }
         }
     }
-    
+
     post {
         success {
-            echo "編譯成功，版本為 ${params.BUILD_MODE}"
+            script {
+                echo "編譯成功，版本為 ${params.BUILD_MODE}"
+            }
             emailext(
                 subject: "編譯成功，版本為 ${params.BUILD_MODE}",
                 body: "編譯成功，版本為 ${params.BUILD_MODE}。",
@@ -35,7 +48,9 @@ pipeline {
             )
         }
         failure {
-            echo "編譯失敗，版本為 ${params.BUILD_MODE}"
+            script {
+                echo "編譯失敗，版本為 ${params.BUILD_MODE}"
+            }
             emailext(
                 subject: "編譯失敗，版本為 ${params.BUILD_MODE}",
                 body: "編譯失敗，版本為 ${params.BUILD_MODE}。",
