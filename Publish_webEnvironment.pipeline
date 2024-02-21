@@ -1,12 +1,20 @@
 pipeline {
     agent any
 
+    environment {
+        host_102 = '192.168.44.102'
+        user_102 = 'administrator'
+        password_102 = '2022tmdServer:'
+    }
+
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'ENVIRONMENT_TYPE', choices: ['production', 'iostesting'], description: '環境類型')
         booleanParam(name: 'DEPLOY_TO_CDN', defaultValue: true, description: '是否發布到CDN')
         booleanParam(name: 'DEPLOY_TO_GCP', defaultValue: true, description: '是否發布到GCP')
     }
+
+
     
     stages {
         stage('ready') {
@@ -28,13 +36,19 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    def executeRemoteSSHCommand = { String remote_command ->
-                        sshagent(['remote44102_login']) {
-                            // 注意这里要使用双引号，并将变量放在${}中
-                            sh "ssh administrator@192.168.44.102 ${remote_command}"
-                        }
+                    def Remote(name, host, user, password) {
+                        def remote = [:]
+                        remote.name = name
+                        remote.host = host
+                        remote.user = user
+                        remote.password = password
+                        remote.allowAnyHosts = true
+                        return remote
                     }
-                    executeRemoteSSHCommand("echo Hello, World!")
+                    def remote = Remote(user_102, host_102, user_102, password_102)
+                    def command = " echo 'Hellow World'"
+                    sshCommand remote: remote, command: command
+                    
                     if (params.DEPLOY_TO_CDN) {
                         echo "deploy CDN"
                     }
