@@ -3,12 +3,12 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_MODE', choices: ['release', 'debug'], description: '選擇編譯的版本')
-        choice(name: 'BUILD_TYPE', choices: ['aab', 'apk'], description: '選擇編譯的類型')
+        choice(name: 'BUILD_MODE', choices: ['release', 'debug'], description: '編譯版本')
+        choice(name: 'BUILD_TYPE', choices: ['aab', 'apk'], description: '編譯類型')
     }
     
     stages {
-        stage('準備編譯') {
+        stage('ready') {
             steps {
                 script {
                     echo "名字: ${params.NAME}"
@@ -16,7 +16,7 @@ pipeline {
                 }
             }
         }
-        stage('編譯中') {
+        stage('complie') {
             steps {
                 script {
                     echo "編譯APK為 ${params.BUILD_MODE} 版本中"
