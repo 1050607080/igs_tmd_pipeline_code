@@ -41,24 +41,23 @@ pipeline {
                     }
                     def remote = Remote(user_102, host_102, user_102, password_102)
 
-
-                     // 定义文件路径和需要替换的内容
                     def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
-                    def oldContent = '<type>production</type>'
 
-                    if (params.ENVIRONMENT == 'production'){
-                         oldContent = '<type>iostesting</type>'
+                    def oldContent = ''
+                    if (params.ENVIRONMENT_TYPE == 'production'){
+                        oldContent = '<type>iostesting</type>'
                     }
                     
-                    if (params.ENVIRONMENT == 'iostesting'){
+                    if (params.ENVIRONMENT_TYPE == 'iostesting'){
                         oldContent = '<type>production</type>'
                     }
 
                     def newContent = "<type>${params.ENVIRONMENT_TYPE}</type>"
 
-                    // 构建PowerShell命令字符串
-                    def command = "powershell -Command \"(Get-Content ${filePath}).replace('${oldContent}', '${newContent}') | Set-Content ${filePath}\""
+                    echo "oldContent: ${oldContent}"
+                    echo "newContent: ${params.ENVIRONMENT_TYPE}"
 
+                    def command = "powershell -Command \"(Get-Content ${filePath}).replace('${oldContent}', '${newContent}') | Set-Content ${filePath}\""
                     sshCommand remote: remote, command: command
                 }
             }
