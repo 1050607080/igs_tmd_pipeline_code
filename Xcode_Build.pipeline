@@ -4,34 +4,24 @@ pipeline {
     environment {
         PROJECT_WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
         SOUTHPARK_XCWORKSPACE = "/SouthPark.xcworkspace"
-        TARGET = ""
-        CONFIG = "Release"
         EXPORT_OPTION = "exportOptions.plist"
     }
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'BUILD_MODE', choices: ['Release', 'Debug', 'Development'], description: '選擇編譯版本(外部、測試、開發)')
+        choice(name: 'BUILD_TARGET', choices: ['SouthPark release', 'SouthPark debug package', 'SouthPark debug'], description: '選擇編譯TARGET')
+        choice(name: 'BUILD_CONFIG', choices: ['Release', 'Debug'], description: '選擇編譯CONFIG')
     }
     
     stages {
         stage('Ready') {
             steps {
                 script {
-                    if (params.BUILD_MODE == 'Release') {
-                        echo "進行Release版本編譯"
-                        TARGET = "SouthPark release"
-                        CONFIG = "Release"
+                    if (params.BUILD_TARGET == 'SouthPark release') {
                         EXPORT_OPTION = "ExportOption_Release.plist"
-                    } else if(params.BUILD_MODE == 'Debug') {
-                        echo "進行Debug版本編譯"
-                        TARGET = "SouthPark debug package"
-                        CONFIG = "Debug"
+                    } else if(params.BUILD_TARGET == 'SouthPark debug package') {
                         EXPORT_OPTION = "ExportOption_Test.plist"
-                    } else if(params.BUILD_MODE == 'Development') {
-                        echo "進行Development版本編譯"
-                        TARGET = "SouthPark debug"
-                        CONFIG = "Debug"
+                    } else if(params.BUILD_TARGET == 'SouthPark debug') {
                         EXPORT_OPTION = "ExportOption_Dev.plist"
                     }
                 }
@@ -42,9 +32,7 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
-                        echo "${TARGET}"
-                        echo "${CONFIG}"
-                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG}"
+                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG}"
                     }
                 }
             }
@@ -55,8 +43,7 @@ pipeline {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
-                            echo "${TARGET}"
-                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -configuration ${CONFIG} -destination 'generic/platform=iOS' build"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG} -destination 'generic/platform=iOS' build"
                         } catch (Exception e) {
                             echo "Xcode Build failed with error: ${e}"
                             throw e
@@ -71,8 +58,7 @@ pipeline {
                 script {
                     dir(PROJECT_WORKSPACE_PATH) {
                         try {
-                            echo "Xcode Archive"
-                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${TARGET}' -sdk iphoneos -configuration ${CONFIG} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist ${EXPORT_OPTION} -exportPath ./build"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -sdk iphoneos -configuration ${params.BUILD_CONFIG} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist ${EXPORT_OPTION} -exportPath ./build"
                         } catch (Exception e) {
                             echo "Xcode Archive failed with error: ${e}"
                             throw e 
@@ -86,14 +72,14 @@ pipeline {
     post {
         success {
             emailext(
-                subject: "編譯成功，編譯版本為 ${params.BUILD_MODE}",
-                body: "編譯成功，編譯版本為 ${params.BUILD_MODE}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
+                subject: "編譯成功，編譯TARGET為 ${params.BUILD_TARGET}",
+                body: "編譯成功，編譯版本為 ${params.BUILD_TARGET}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
         failure {
             emailext(
-                subject: "編譯失敗，編譯版本為 ${params.BUILD_MODE}",
+                subject: "編譯失敗，編譯TARGET為 ${params.BUILD_TARGET}",
                 body: "編譯失敗",
                 to: "${params.NAME}@igs.com.tw"
             )

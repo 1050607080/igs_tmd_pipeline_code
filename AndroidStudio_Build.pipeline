@@ -19,9 +19,6 @@ pipeline {
                      dir(ANDROID_STUDIO_PATH) {
                         sh './gradlew --version'
                     }
-                    echo "名字: ${params.NAME}"
-                    echo "版本: ${params.BUILD_MODE}"
-                    echo "類型: ${params.BUILD_TYPE}"
                 }
             }
         }

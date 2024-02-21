@@ -90,7 +90,6 @@ pipeline {
         stage('Modify build-cfg-original.json') {
             steps {      
                 script {
-                   echo "修改打包路徑" 
                     
                     def resourcesArray = []
                     
@@ -155,12 +154,10 @@ pipeline {
                     script{
                         switch(params.MODE) {
                             case "debug":
-                                echo "debug"
                                 sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/debug/tmp*"
                                 sh "./${BUILD_SHELL_FILE} debug"
                                 break
                             case "release":
-                                echo "release"
                                 sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp*"
                                 sh "./${BUILD_SHELL_FILE} release"
                                 break
