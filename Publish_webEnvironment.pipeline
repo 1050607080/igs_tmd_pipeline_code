@@ -40,7 +40,7 @@ pipeline {
                             echo "Deploying to CDN..."
                             withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                                 // 使用 PowerShell 的 -ArgumentList 参数传递用户名和密码
-                                def cdnCommand = "powershell -Command \"& 'C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換CDN_WebEnvironment.bat ${USERNAME} ${PASSWORD}'\""
+                                def cdnCommand = "C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換CDN_WebEnvironment.bat ${USERNAME} ${PASSWORD}"
                                 sshCommand remote: remote, command: cdnCommand
                             }
                         }
@@ -48,7 +48,7 @@ pipeline {
                         
                         if (params.DEPLOY_TO_GCP) {
                             echo "Deploying to GCP..."
-                            def gcpCommand = "powershell -Command \"& 'C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換GCP_WebEnvironment.bat'\""
+                            def gcpCommand = "C:\\Users\\Administrator\\Desktop\\TMD_Client\\送審專用\\Ios送審工具\\更換GCP_WebEnvironment.bat"
                             sshCommand remote: remote, command: gcpCommand
                         }
                     }
