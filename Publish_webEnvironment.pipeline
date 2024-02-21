@@ -7,6 +7,12 @@ pipeline {
         booleanParam(name: 'DEPLOY_TO_CDN', defaultValue: true, description: '是否發布到CDN')
         booleanParam(name: 'DEPLOY_TO_GCP', defaultValue: true, description: '是否發布到GCP')
     }
+
+     def executeRemoteSSHCommand(String remote_command) {         
+        sshagent(['remote44102_login']) {
+            sh 'ssh administrator@192.168.44.102 remote_command'
+        }
+    }
     
     stages {
         stage('ready') {
@@ -37,12 +43,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    def executeRemoteSSHCommand(String remote_command) {         
-        sshagent(['remote44102_login']) {
-            sh 'ssh administrator@192.168.44.102 remote_command'
         }
     }
 
