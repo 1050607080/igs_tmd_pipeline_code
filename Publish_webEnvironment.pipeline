@@ -28,6 +28,7 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
+                    executeRemoteSSHCommand("echo Hello, World!")
                     if (params.DEPLOY_TO_CDN) {
                         echo "deploy CDN"
                     }
@@ -38,7 +39,13 @@ pipeline {
             }
         }
     }
-    
+
+    def executeRemoteSSHCommand(String remote_command) {         
+        sshagent(['remote44102_login']) {
+            sh 'ssh administrator@192.168.44.102 remote_command'
+        }
+    }
+
     post {
         always {
             emailext(
