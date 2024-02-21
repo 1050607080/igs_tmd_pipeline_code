@@ -1,10 +1,10 @@
 pipeline {
     agent any
 
+    // 定義環境變量
     environment {
-        host_102 = '192.168.44.102'
-        user_102 = 'administrator'
-        password_102 = '2022tmdServer:'
+        // 假定已經在 Jenkins 中設定好的 Credentials ID
+        CREDENTIALS_ID = 'remote44102_login'
     }
 
     parameters {
@@ -14,79 +14,45 @@ pipeline {
         booleanParam(name: 'DEPLOY_TO_GCP', defaultValue: true, description: '是否發布到GCP')
     }
 
-
-    
     stages {
-        stage('ready') {
+        stage('Prepare') {
+            steps {
+                echo "Ready"
+            }
+        }
+
+        stage('Fix Web Environment') {
             steps {
                 script {
-                    echo "ready"
+                    // 使用 withCredentials 包裝 sshCommand，確保敏感信息安全
+                    withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                        def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
+                        def oldContent = params.ENVIRONMENT_TYPE == 'production' ? '<type>iostesting</type>' : '<type>production</type>'
+                        def newContent = "<type>${params.ENVIRONMENT_TYPE}</type>"
+
+                        echo "Changing WebEnvironment.xml from ${oldContent} to ${newContent}"
+
+                        def command = "powershell -Command \"(Get-Content ${filePath}).replace('${oldContent}', '${newContent}') | Set-Content ${filePath}\""
+                        sshCommand remote: remote, command: command
+                    }
                 }
             }
         }
 
-        stage('fixWebEnvironment') {
+        stage('Deploy') {
             steps {
                 script {
-                    echo "fixWebEnvironment"
-
-                    def Remote = { name, host, user, password ->
-                        def remote = [:]
-                        remote.name = name
-                        remote.host = host
-                        remote.user = user
-                        remote.password = password
-                        remote.allowAnyHosts = true
-                        return remote
-                    }
-                    def remote = Remote(user_102, host_102, user_102, password_102)
-
-                    def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
-
-                    def oldContent = ''
-                    if (params.ENVIRONMENT_TYPE == 'production'){
-                        oldContent = '<type>iostesting</type>'
-                    }
-                    
-                    if (params.ENVIRONMENT_TYPE == 'iostesting'){
-                        oldContent = '<type>production</type>'
-                    }
-
-                    def newContent = "<type>${params.ENVIRONMENT_TYPE}</type>"
-
-                    echo "oldContent: ${oldContent}"
-                    echo "newContent: ${params.ENVIRONMENT_TYPE}"
-
-                    def command = "powershell -Command \"(Get-Content ${filePath}).replace('${oldContent}', '${newContent}') | Set-Content ${filePath}\""
-                    sshCommand remote: remote, command: command
-                }
-            }
-        }
-        
-        stage('deploy') {
-            steps {
-                script {
-                    def Remote = { name, host, user, password ->
-                        def remote = [:]
-                        remote.name = name
-                        remote.host = host
-                        remote.user = user
-                        remote.password = password
-                        remote.allowAnyHosts = true
-                        return remote
-                    }
-                    def remote = Remote(user_102, host_102, user_102, password_102)
-                    def command = " echo 'Hellow World'"
-                    sshCommand remote: remote, command: command
-
-                    // C:\Users\Administrator\Desktop\TMD_Client\送審專用\Ios送審工具\更換CDN_WebEnvironment.bat
-                    // C:\Users\Administrator\Desktop\TMD_Client\送審專用\Ios送審工具\更換更換GCP_WebEnvironment
-
-                    if (params.DEPLOY_TO_CDN) {
-                        echo "deploy CDN"
-                    }
-                    if (params.DEPLOY_TO_GCP) {
-                        echo "deploy GCP"
+                    withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                        if (params.DEPLOY_TO_CDN) {
+                            echo "Deploying to CDN..."
+                            // 在此添加部署到 CDN 的命令
+                        }
+                        if (params.DEPLOY_TO_GCP) {
+                            echo "Deploying to GCP..."
+                            // 在此添加部署到 GCP 的命令
+                        }
                     }
                 }
             }
@@ -96,10 +62,27 @@ pipeline {
     post {
         always {
             emailext(
-                subject: "${currentBuild.currentResult}部署通知",
-                body: "${currentBuild.currentResult}，環境類型：${params.ENVIRONMENT_TYPE}，部署位置：${(params.DEPLOY_TO_CDN ? 'CDN' : '')}${(params.DEPLOY_TO_CDN && params.DEPLOY_TO_GCP ? '和' : '')}${(params.DEPLOY_TO_GCP ? 'GCP' : '')}。",
+                subject: "${currentBuild.currentResult} Deployment Notification",
+                body: "${currentBuild.currentResult}, Environment Type: ${params.ENVIRONMENT_TYPE}, Deployment Targets: ${getDeploymentTargets()}",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
     }
+}
+
+// Helper functions
+def getRemoteConfig(host, user, password) {
+    def remote = [:]
+    remote.host = host
+    remote.user = user
+    remote.password = password
+    remote.allowAnyHosts = true
+    return remote
+}
+
+def getDeploymentTargets() {
+    def targets = []
+    if (params.DEPLOY_TO_CDN) targets.add('CDN')
+    if (params.DEPLOY_TO_GCP) targets.add('GCP')
+    return targets.join(' and ')
 }
