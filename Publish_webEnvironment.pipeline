@@ -3,31 +3,36 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        string(name: 'ENVIRONMENT_TYPE', defaultValue: 'production', description: '環境的類型')
+        choice(name: 'ENVIRONMENT_TYPE', choices: ['production', 'iostesting'], description: '環境類型')
         booleanParam(name: 'DEPLOY_TO_CDN', defaultValue: true, description: '是否發布到CDN')
         booleanParam(name: 'DEPLOY_TO_GCP', defaultValue: true, description: '是否發布到GCP')
     }
     
     stages {
-        stage('配置環境') {
+        stage('ready') {
             steps {
                 script {
-                    echo "環境類型: ${params.ENVIRONMENT_TYPE}"
-                    // 在這裡添加修改 webEnvironment.xml 的腳本或命令
+                    echo "ready"
+                }
+            }
+        }
+
+        stage('fixWebEnvironment') {
+            steps {
+                script {
+                    echo "fixWebEnvironment"
                 }
             }
         }
         
-        stage('部署') {
+        stage('deploy') {
             steps {
                 script {
                     if (params.DEPLOY_TO_CDN) {
-                        echo "發布到 CDN"
-                        // 在這裡添加發布到 CDN 的腳本或命令
+                        echo "deploy CDN"
                     }
                     if (params.DEPLOY_TO_GCP) {
-                        echo "發布到 GCP"
-                        // 在這裡添加發布到 GCP 的腳本或命令
+                        echo "deploy GCP"
                     }
                 }
             }
@@ -35,17 +40,10 @@ pipeline {
     }
     
     post {
-        success {
+        always {
             emailext(
-                subject: '部署成功',
+                subject: "${currentBuild.currentResult}部署通知",
                 body: "${currentBuild.currentResult}，環境類型：${params.ENVIRONMENT_TYPE}，部署位置：${(params.DEPLOY_TO_CDN ? 'CDN' : '')}${(params.DEPLOY_TO_CDN && params.DEPLOY_TO_GCP ? '和' : '')}${(params.DEPLOY_TO_GCP ? 'GCP' : '')}。",
-                to: "${params.NAME}@igs.com.tw"
-            )
-        }
-        failure {
-            emailext(
-                subject: '部署失敗',
-                body: "錯誤訊息：${currentBuild.currentResult}，環境類型：${params.ENVIRONMENT_TYPE}，嘗試部署位置：${(params.DEPLOY_TO_CDN ? 'CDN' : '')}${(params.DEPLOY_TO_CDN && params.DEPLOY_TO_GCP ? '和' : '')}${(params.DEPLOY_TO_GCP ? 'GCP' : '')}。",
                 to: "${params.NAME}@igs.com.tw"
             )
         }
