@@ -23,7 +23,7 @@ pipeline {
                         def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
                         def oldContent = params.ENVIRONMENT_TYPE == 'production' ? '<type>iostesting</type>' : '<type>production</type>'
                         def newContent = "<type>${params.ENVIRONMENT_TYPE}</type>"
-                        def command = "powershell -Command \"(Get-Content ${filePath}).replace('${oldContent}', '${newContent}') | Set-Content ${filePath}\""
+                        def command = "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command & '${batPath}' '${CDNUSERNAME}' '${CDNPASSWORD}'"
                         sshCommand remote: remote, command: command
                     }
                 }
