@@ -37,7 +37,7 @@ pipeline {
                             echo "Deploying to CDN..."
                             withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
                                 def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                                def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/cdn_test.bat ${CDNUSERNAME} ${CDNPASSWORD}"
+                                def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/cdn_test.bat"
                                 sshCommand remote: remote, command: command
                             }
                         }
