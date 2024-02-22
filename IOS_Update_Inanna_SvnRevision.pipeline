@@ -5,12 +5,29 @@ pipeline {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: 'IOS新版本號')
     }
+
+     environment {
+        MSSQL_SERVER = '10.100.20.17'
+        MSSQL_DATABASE = 'GameTower2_TMD'
+        TMD_DB = 'tmd_db'
+        REMOTE_CREDENTIALS ='remote4463_login'
+    }
     
     stages {
         stage('DB Modify') {
             steps {
                 script {
                     echo "DB (10.100.20.17) Modify Inanna Svn revision"
+                    //REMOTE
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
+                        def remote = getRemoteConfig(MSSQL_SERVER, REMOTE_USER, REMOTE_PASSWORD)
+                        //DB
+                        withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) { 
+                            def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \\\"SELECT TOP 10 * FROM _GoldItem_Table\\\""
+                            sshCommand remote: remote, command: dbCommand
+                        }
+                        sshCommand remote: remote, command: command
+                    }
                 }
             }
         }
@@ -36,4 +53,14 @@ pipeline {
             }
         }
     }
+}
+
+def getRemoteConfig(host, user, password) {
+    def remote = [:]
+    remote.name = user
+    remote.host = host
+    remote.user = user
+    remote.password = password
+    remote.allowAnyHosts = true
+    return remote
 }
