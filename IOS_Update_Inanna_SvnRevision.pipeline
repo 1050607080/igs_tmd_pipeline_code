@@ -20,7 +20,7 @@ pipeline {
                     echo "DB (10.100.20.17) Modify Inanna Svn revision"
                     //REMOTE
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
-                        def remote = getRemoteConfig(MSSQL_SERVER, REMOTE_USER, REMOTE_PASSWORD)
+                        def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
                         //DB
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) { 
                             def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \\\"SELECT TOP 10 * FROM _GoldItem_Table\\\""
