@@ -14,7 +14,7 @@ pipeline {
     }
 
     stages {
-        stage('Fix Web Environment') {
+        stage('Fix WebEnvironment') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
@@ -29,25 +29,39 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to CDN') {
+            when {
+                expression {
+                    return params.DEPLOY_TO_CDN
+                }
+            }
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {                        
-                        if (params.DEPLOY_TO_CDN) {
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
                             echo "Deploying to CDN..."
-                            withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
-                                def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                                def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/cdn_test.bat"
-                                sshCommand remote: remote, command: command
-                            }
-                        }
-                        
-                        if (params.DEPLOY_TO_GCP) {
-                            echo "Deploying to GCP..."
-                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/gcp_test.bat"
                             def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/cdn_test.bat"
                             sshCommand remote: remote, command: command
                         }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to GCP') {
+            when {
+                expression {
+                    return params.DEPLOY_TO_GCP
+                }
+            }
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        echo "Deploying to GCP..."
+                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/gcp_test.bat"
+                        sshCommand remote: remote, command: command
                     }
                 }
             }
