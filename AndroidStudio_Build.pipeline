@@ -13,15 +13,6 @@ pipeline {
     }
 
     stages {
-        stage('android studio ready') {
-            steps {
-                script {
-                     dir(ANDROID_STUDIO_PATH) {
-                        sh './gradlew --version'
-                    }
-                }
-            }
-        }
         stage('android studio build') {
             steps {
                 script {

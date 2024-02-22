@@ -14,7 +14,7 @@ pipeline {
     }
     
     stages {
-        stage('Ready') {
+        stage('ExportOption Setting') {
             steps {
                 script {
                     if (params.BUILD_TARGET == 'SouthPark release') {

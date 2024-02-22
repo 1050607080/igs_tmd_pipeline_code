@@ -21,7 +21,6 @@ pipeline {
     }
 
     stages {
-
         stage('Get Game SVN Path') {
             steps {
                 script { 
@@ -68,7 +67,7 @@ pipeline {
                     script { 
                         BUILD_SHELL_FILE = "Build_Release_Encode.sh" 
                         sh 'chmod +x /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/Build_Release_Encode.sh'
-                        }
+                    }
                 }
             }
         }
@@ -89,8 +88,7 @@ pipeline {
 
         stage('Modify build-cfg-original.json') {
             steps {      
-                script {
-                    
+                script { 
                     def resourcesArray = []
                     
                     for(url in SVN_URLS) {
@@ -184,8 +182,6 @@ pipeline {
                         else {
                             switch_url = switch_url + "/trunk"
                         }
-
-                        echo "Game Name: ${gameName}"
 
                         dir(TMD_RESOURCES_URL+gameName+"/") {
                             withCredentials([usernamePassword(credentialsId: CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
