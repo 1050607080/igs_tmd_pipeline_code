@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+     environment {
+        NEW_VERSION = "0.0.000"
+    }
+
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'DB_TYPE', choices: ['測試', '正式'], description: '選擇資料庫類型')
@@ -8,33 +12,21 @@ pipeline {
     }
     
     stages {
-        stage('準備中') {
+        stage('Ready to start') {
             steps {
-                script {
-                    echo "你的名字: ${params.NAME}"
-                    echo "資料庫類型: ${params.DB_TYPE}"
-                    echo "新版本號: ${params.VERSION}"
-                    
-                  // 版本號處理
+                script {                    
+                    // 版本號處理
                     def versionParts = params.VERSION.tokenize('.')
                     def major = versionParts[0] as int
                     def minor = versionParts[1] as int
                     def patch = (versionParts[2] as int) - 2 // 使用括號確保先進行類型轉換，然後減去2
-                    env.NEW_VERSION = "${major}.${minor}.${patch}" // 將處理後的新版本號存儲到 env 中
+                    NEW_VERSION = "${major}.${minor}.${patch}" // 將處理後的新版本號存儲到 env 中
                 }
             }
         }
-        stage('遠端連線跳板機') {
+        stage('Modify DB') {
             steps {
                 script {
-                    echo "資料庫類型 ${params.DB_TYPE} 遠端連線跳板機"
-                }
-            }
-        }
-        stage('新增該版本的LatestSvnRevision資料') {
-            steps {
-                script {
-                    echo "處理後的新版本號: ${env.NEW_VERSION}"
                     if (params.DB_TYPE == '測試') {
                         echo "在測試資料庫上執行 SQL "
                     } else {
@@ -46,11 +38,23 @@ pipeline {
     }
     
     post {
-        success {
-            echo '操作成功'
-        }
-        failure {
-            echo '操作失败'
+        always {
+            script {
+                if (currentBuild.result == 'SUCCESS') {
+                    emailext(
+                        subject: "SUCCESS Add ${params.DB_TYPE} DB LatestSvnRevision",
+                        body: "SUCCESS",
+                        to: "${params.NAME}@igs.com.tw"
+                    )
+                } 
+                else {
+                    emailext(
+                        subject: "Failure Add ${params.DB_TYPE} DB LatestSvnRevision",
+                        body: "Failure",
+                        to: "${params.NAME}@igs.com.tw"
+                    )
+                }
+            }
         }
     }
 }

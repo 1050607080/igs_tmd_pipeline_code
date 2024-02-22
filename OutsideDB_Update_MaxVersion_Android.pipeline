@@ -3,14 +3,15 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: 'IOS新版本號')
+        string(name: 'STORE_VERSION', defaultValue: '1.1.180', description: '商店版新版本號')
+        string(name: 'OFFICAL_VERSION', defaultValue: '1.1.180', description: '官方版新版本號')
     }
     
     stages {
         stage('DB Modify') {
             steps {
                 script {
-                    echo "DB (10.100.20.17) Modify Inanna Svn revision"
+                    echo "DB Modify"
                 }
             }
         }
@@ -21,14 +22,14 @@ pipeline {
             script {
                 if (currentBuild.result == 'SUCCESS') {
                     emailext(
-                        subject: "SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision",
+                        subject: "SUCCESS Modify 10.100.20.17 Android Store & Offical Max Version",
                         body: "SUCCESS",
                         to: "${params.NAME}@igs.com.tw"
                     )
                 } 
                 else {
                     emailext(
-                        subject: "Failure Modify 10.100.20.17 IOS Inanna Svn revision",
+                        subject: "Failure Modify 10.100.20.17 Android Store & Offical Max Version",
                         body: "Failure",
                         to: "${params.NAME}@igs.com.tw"
                     )

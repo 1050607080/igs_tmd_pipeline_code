@@ -3,41 +3,37 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: '新版本號')
+        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: 'IOS新版本號')
     }
     
     stages {
-        stage('準備中') {
+        stage('DB Modify') {
             steps {
                 script {
-                    echo "你的名字: ${params.NAME}"
-                    echo "新版本號: ${params.NEW_IOS_VERSION}"
-                }
-            }
-        }
-        stage('遠端連線跳板機') {
-            steps {
-                script {
-                    echo "遠端連線跳板機"
-                }
-            }
-        }
-        stage('更改版號') {
-            steps {
-                script {
-                    echo "更改版號中"
-
+                    echo "DB (10.100.20.17) Modify CurrentVersion"
                 }
             }
         }
     }
     
     post {
-        success {
-            echo '操作成功'
-        }
-        failure {
-            echo '操作失败'
+        always {
+            script {
+                if (currentBuild.result == 'SUCCESS') {
+                    emailext(
+                        subject: "SUCCESS Modify 10.100.20.17 IOS CurrentVersion",
+                        body: "SUCCESS",
+                        to: "${params.NAME}@igs.com.tw"
+                    )
+                } 
+                else {
+                    emailext(
+                        subject: "Failure Modify 10.100.20.17 IOS CurrentVersion",
+                        body: "Failure",
+                        to: "${params.NAME}@igs.com.tw"
+                    )
+                }
+            }
         }
     }
 }
