@@ -20,7 +20,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
                         def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def filePath = 'D:\\\\webGame\\\\Game\\\\TMD_mobile\\\\data\\\\iostesting\\\\Inanna\\\\InannaLua\\\\WebEnvironment.xml'
+                        def filePath = 'D:\\webGame\\Game\\TMD_mobile\\data\\iostesting\\Inanna\\InannaLua\\WebEnvironment.xml'
                         def oldContent = params.ENVIRONMENT_TYPE == 'production' ? '<type>iostesting</type>' : '<type>production</type>'
                         def newContent = "<type>${params.ENVIRONMENT_TYPE}</type>"
                         def command = "powershell -Command \"(Get-Content ${filePath}).replace('${oldContent}', '${newContent}') | Set-Content ${filePath}\""
@@ -38,7 +38,6 @@ pipeline {
                             echo "Deploying to CDN..."
                             withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
                                 def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                                //def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/test.bat"
                                 def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/cdn_test.bat ${CDNUSERNAME} ${CDNPASSWORD}"
                                 sshCommand remote: remote, command: command
                             }
