@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         REMOTE_CREDENTIALS = 'remote44102_login'
-        CDN_CREDENTIALS = 'deploy_to_cdn'
     }
 
     parameters {
@@ -38,12 +37,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-                        withCredentials([usernamePassword(credentialsId: CDN_CREDENTIALS, passwordVariable: 'CDNPASSWORD', usernameVariable: 'CDNUSERNAME')]) {
-                            echo "Deploying to CDN..."
-                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/jenkins_cdn_change_webEnvoroment.bat"
-                            sshCommand remote: remote, command: command
-                        }
+                        echo "Deploying to CDN..."
+                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/jenkins_cdn_change_webEnvoroment.bat"
+                        sshCommand remote: remote, command: command
                     }
                 }
             }
