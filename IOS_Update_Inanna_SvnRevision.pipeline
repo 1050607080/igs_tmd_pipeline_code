@@ -23,7 +23,7 @@ pipeline {
                         def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
                         //DB
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) { 
-                            def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \\\"SELECT TOP 10 * FROM _GoldItem_Table\\\""
+                            def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 10 * FROM _GoldItem_Table\""
                             sshCommand remote: remote, command: dbCommand
                         }
                         sshCommand remote: remote, command: command
