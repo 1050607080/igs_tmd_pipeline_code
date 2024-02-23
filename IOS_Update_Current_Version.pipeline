@@ -30,11 +30,6 @@ pipeline {
                                 echo "Caught an exception: ${e.getMessage()}"
                             }
                         }
-                        try {
-                            sshCommand remote: remote, command: command
-                        } catch (Exception e) {
-                            echo "Caught an exception while executing another command: ${e.getMessage()}"
-                        }
                     }
                 }
             }
