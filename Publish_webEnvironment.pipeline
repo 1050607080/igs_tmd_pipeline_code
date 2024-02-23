@@ -86,7 +86,6 @@ def getRemoteConfig(host, user, password) {
     return remote
 }
 
-
 def getDeploymentTargets() {
     def targets = []
     if (params.DEPLOY_TO_CDN) targets.add('CDN')
