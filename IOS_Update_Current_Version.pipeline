@@ -24,7 +24,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
                                 //確認currentVersion 
-                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM Client_MobileApp\""
+                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112'\""
                                 sshCommand remote: remote, command: confirm_dbCommand
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
