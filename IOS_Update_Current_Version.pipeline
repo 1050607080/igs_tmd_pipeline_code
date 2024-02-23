@@ -46,14 +46,14 @@ pipeline {
             script {
                 if (currentBuild.result == 'SUCCESS') {
                     emailext(
-                        subject: "SUCCESS Modify ${10.100.20.17} IOS CurrentVersion",
+                        subject: "SUCCESS Modify ${MSSQL_SERVER} IOS CurrentVersion",
                         body: "SUCCESS",
                         to: "${params.NAME}@igs.com.tw"
                     )
                 } 
                 else {
                     emailext(
-                        subject: "Failure Modify ${10.100.20.17} IOS CurrentVersion",
+                        subject: "Failure Modify ${MSSQL_SERVER} IOS CurrentVersion",
                         body: "Failure",
                         to: "${params.NAME}@igs.com.tw"
                     )
