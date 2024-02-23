@@ -51,12 +51,13 @@ pipeline {
                         to: "${params.NAME}@igs.com.tw"
                     )
                     //LINE NOTIFY
-                    
-                    sh """
-                    curl -X POST -H 'Authorization: Bearer er9r44taY2VuF0w39iEzgyHcuwB7pHB1o8pNZ9kb5Xu' 
-                        -F "message=name: ${params.NAME} SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
-                    """
+                    line_notify
 
+                    withCredentials([usernamePassword(credentialsId: "line_notify", usernameVariable: '_', passwordVariable: 'line_token')]) {
+                        sh """
+                        curl -X POST -H 'Authorization: Bearer ${line_token}' -F "message=name: ${params.NAME} SUCCESS modify 10.100.20.17 db ios Inanna Svn revision" https://notify-api.line.me/api/notify
+                        """
+                    }
                 } 
                 else {
                     emailext(
