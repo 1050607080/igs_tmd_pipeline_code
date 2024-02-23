@@ -13,6 +13,7 @@ pipeline {
         MSSQL_DATABASE = 'GameTower2_Config'
         TMD_DB = 'tmd_db'
         REMOTE_CREDENTIALS ='remote4463_login'
+        CURRENTVERSION = ''
     }
     
     stages {
@@ -21,6 +22,8 @@ pipeline {
                 script {
                     //修改環境
                     MSSQL_SERVER = params.DB_ENVIORNMENT
+
+                    CURRENTVERSION = params.CURRENT_VERSION
                     
                     //REMOTE
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
@@ -30,7 +33,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
                                 //修改currentVersion 
-                                def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET currentVersion = '${params.CURRENT_VERSION}' WHERE gameId = '2112' AND userClientType = '${params.USER_CLIENT_TYPE}' AND variation = 0\""
+                                def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET currentVersion = '${CURRENTVERSION}' WHERE gameId = '2112' AND userClientType = '${params.USER_CLIENT_TYPE}' AND variation = 0\""
                                 sshCommand remote: remote, command: updateDbCommand
 
                                 //確認currentVersion 
