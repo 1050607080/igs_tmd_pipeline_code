@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: 'IOS新版本號')
+        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.184', description: 'IOS新版本號')
     }
 
     environment {
@@ -23,9 +23,15 @@ pipeline {
                         //DB
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
+
+                                //修改currentVersion 
+                                //def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET setCurrentVersion = '1.1.184' WHERE gameId = '2112' AND userClientType = 'iPhone'\""
+                                // sshCommand remote: remote, command: confirm_dbCommand
+
                                 //確認currentVersion 
-                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112'\""
+                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112' AND userClientType = 'iPhone'\""
                                 sshCommand remote: remote, command: confirm_dbCommand
+
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
                             }
