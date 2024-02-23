@@ -21,7 +21,8 @@ pipeline {
                 script {
                     //選擇環境
                     MSSQL_SERVER = params.DB_ENVIORNMENT
-
+                    
+                    //版本號
                     NEWIOSVERSION = params.NEW_IOS_VERSION
 
                     //REMOTE
