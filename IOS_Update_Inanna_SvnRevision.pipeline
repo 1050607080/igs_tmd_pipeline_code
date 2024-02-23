@@ -51,9 +51,10 @@ pipeline {
                         to: "${params.NAME}@igs.com.tw"
                     )
                     //從 jenkins_2412 傳送至 Creator Client
-                    sh '''
-                    curl -X POST -H 'Authorization: Bearer er9r44taY2VuF0w39iEzgyHcuwB7pHB1o8pNZ9kb5Xu' -F "message=name: ${params.NAME} SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
-                    '''
+                    sh """
+                    curl -X POST -H 'Authorization: Bearer er9r44taY2VuF0w39iEzgyHcuwB7pHB1o8pNZ9kb5Xu' -F "message=name: \${params.NAME} SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
+                    """
+
                 } 
                 else {
                     emailext(
