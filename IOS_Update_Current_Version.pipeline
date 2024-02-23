@@ -4,6 +4,7 @@ pipeline {
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.184', description: 'IOS新版本號')
+        choice(name: 'USER_CLIENT_TYPE', choices: ['iPhone', 'Android', 'Android_IGS'], description: '選擇資料庫類型')
     }
 
     environment {
@@ -25,11 +26,11 @@ pipeline {
                             try {
 
                                 //修改currentVersion 
-                                //def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET setCurrentVersion = '1.1.184' WHERE gameId = '2112' AND userClientType = 'iPhone'\""
-                                // sshCommand remote: remote, command: confirm_dbCommand
+                                //def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET setCurrentVersion = '1.1.184' WHERE gameId = '2112' AND userClientType = ${params.USER_CLIENT_TYPE}\""
+                                // sshCommand remote: remote, command: updateDbCommand
 
                                 //確認currentVersion 
-                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112' AND userClientType = 'iPhone'\""
+                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112' AND userClientType = ${params.USER_CLIENT_TYPE} AND variation = 0\""
                                 sshCommand remote: remote, command: confirm_dbCommand
 
                             } catch (Exception e) {
