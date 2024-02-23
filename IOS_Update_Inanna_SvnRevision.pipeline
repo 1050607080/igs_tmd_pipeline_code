@@ -24,7 +24,7 @@ pipeline {
                         //DB
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
-                                def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 100 * FROM Client_LatestSvnRevision WHERE deviceVersion = '${params.NEW_IOS_VERSION}' OR deviceVersion = '1.1.178' \""
+                                def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 500 * FROM Client_LatestSvnRevision WHERE deviceVersion = '${params.NEW_IOS_VERSION}' OR deviceVersion = '1.1.178' \""
                                 sshCommand remote: remote, command: dbCommand
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
