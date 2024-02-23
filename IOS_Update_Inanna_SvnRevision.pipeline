@@ -14,19 +14,9 @@ pipeline {
     }
     
     stages {
-
-         stage('Ready') {
-            steps {
-                script {
-                    echo "DB (10.100.20.17) Modify Inanna Svn revision"
-                }
-            }
-        }
-
         stage('DB Modify') {
             steps {
                 script {
-                    echo "DB (10.100.20.17) Modify Inanna Svn revision"
                     //REMOTE
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
                         def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
@@ -52,7 +42,6 @@ pipeline {
                 }
             }
         }
-
     }
     
     post {
