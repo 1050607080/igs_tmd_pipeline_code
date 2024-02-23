@@ -31,7 +31,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
                                 //revision + 1
-                                def fix_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = revision + 1 WHERE deviceVersion = '${NEWIOSVERSION}'\""
+                                def fix_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = revision - 1 WHERE deviceVersion = '${NEWIOSVERSION}'\""
                                 sshCommand remote: remote, command: fix_dbCommand
                                 //確認revision號碼
                                 def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM Client_LatestSvnRevision WHERE deviceVersion = '${NEWIOSVERSION}'\""
