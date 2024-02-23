@@ -48,7 +48,7 @@ pipeline {
                             try {
                                 //新增一份 SvnRevision資料
                                 def insert_dbCommand = """
-                                sqlcmd -S \$MSSQL_SERVER -d \$MSSQL_DATABASE -U \$DB_ACCOUNT -P \$DB_PASSWORD -Q "INSERT INTO [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] ([deviceVersion], [path], [revision]) SELECT '\$NEWIOSVERSION' AS [deviceVersion], [path], [revision] FROM [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] WHERE [deviceVersion] = '\$PRE_VERSION';"
+                                sqlcmd -S $MSSQL_SERVER -d $MSSQL_DATABASE -U $DB_ACCOUNT -P \$DB_PASSWORD -Q "INSERT INTO [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] ([deviceVersion], [path], [revision]) SELECT '$NEWIOSVERSION' AS [deviceVersion], [path], [revision] FROM [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] WHERE [deviceVersion] = '$PRE_VERSION';"
                                 """
                                 sshCommand remote: remote, command: insert_dbCommand
 
