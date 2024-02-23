@@ -51,7 +51,7 @@ pipeline {
                         to: "${params.NAME}@igs.com.tw"
                     )
                     sh '''
-                    curl -X POST -H "Authorization: Bearer ycYdjhbeWNSRq5aX6iI2uKpffsJ7MUV0adAQoElo1Mq" -F "${params.NAME} SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
+                    curl -X POST -H "Authorization: Bearer ycYdjhbeWNSRq5aX6iI2uKpffsJ7MUV0adAQoElo1Mq" -F "SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
                     '''
                 } 
                 else {
