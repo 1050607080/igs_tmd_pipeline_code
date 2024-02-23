@@ -52,7 +52,7 @@ pipeline {
                     )
                     //從 jenkins_2412 傳送至 Creator Client
                     sh '''
-                    curl -X POST -H 'Authorization: Bearer LODTfpkJdF8rKtyGfx9WT5QvNw2MXQmRtujCluowYWR' -F "message=${params.NAME} SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
+                    curl -X POST -H 'Authorization: Bearer cKmshN0P47phLVLX5ARDJTsdTpT12XoOeOM1S7PvumC' -F "message=${params.NAME} SUCCESS Modify 10.100.20.17 IOS Inanna Svn revision" https://notify-api.line.me/api/notify
                     '''
                 } 
                 else {
