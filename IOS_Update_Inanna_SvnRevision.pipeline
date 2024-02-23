@@ -3,20 +3,27 @@ pipeline {
 
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: 'IOS新版本號(偶數)')
+        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.184', description: '版本號')
+        choice(name: 'DB_ENVIORNMENT', choices: ['db-gt-test24.gametower.com.tw', '10.100.20.17'], description: '選擇DB環境')
     }
 
      environment {
-        MSSQL_SERVER = '10.100.20.17'       //db-gt-test24.gametower.com.tw
+        MSSQL_SERVER = 'db-gt-test24.gametower.com.tw'       //db-gt-test24.gametower.com.tw、10.100.20.17
         MSSQL_DATABASE = 'GameTower2_TMD'
         TMD_DB = 'tmd_db'
         REMOTE_CREDENTIALS ='remote4463_login'
+        NEWIOSVERSION = ''
     }
     
     stages {
         stage('DB Modify') {
             steps {
                 script {
+                    //選擇環境
+                    MSSQL_SERVER = params.DB_ENVIORNMENT
+
+                    NEWIOSVERSION = params.NEW_IOS_VERSION
+
                     //REMOTE
                     withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
                         def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
@@ -24,10 +31,10 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
                                 //revision + 1
-                                def fix_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = revision + 1 WHERE deviceVersion = '${params.NEW_IOS_VERSION}'\""
+                                def fix_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = revision + 1 WHERE deviceVersion = '${NEWIOSVERSION}'\""
                                 sshCommand remote: remote, command: fix_dbCommand
                                 //確認revision號碼
-                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM Client_LatestSvnRevision WHERE deviceVersion = '${params.NEW_IOS_VERSION}'\""
+                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM Client_LatestSvnRevision WHERE deviceVersion = '${NEWIOSVERSION}'\""
                                 sshCommand remote: remote, command: confirm_dbCommand
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
