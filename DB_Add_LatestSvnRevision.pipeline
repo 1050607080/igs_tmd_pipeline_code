@@ -53,7 +53,7 @@ pipeline {
                                 sshCommand remote: remote, command: insert_dbCommand
 
                                 //確認revision號碼
-                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 50 * FROM Client_LatestSvnRevision\""
+                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM Client_LatestSvnRevision WHERE [deviceVersion] = '${NEWIOSVERSION}'\""
                                 sshCommand remote: remote, command: confirm_dbCommand
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
