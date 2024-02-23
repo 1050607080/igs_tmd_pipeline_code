@@ -27,11 +27,11 @@ pipeline {
                             try {
 
                                 //修改currentVersion 
-                                def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET currentVersion = ${params.NEW_IOS_VERSION} WHERE gameId = '2112' AND userClientType = ${params.USER_CLIENT_TYPE} AND variation = '0'\""
+                                def updateDbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE MobileApp SET currentVersion = '${params.NEW_IOS_VERSION}' WHERE gameId = '2112' AND userClientType = '${params.USER_CLIENT_TYPE}' AND variation = 0\""
                                 sshCommand remote: remote, command: updateDbCommand
 
                                 //確認currentVersion 
-                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112' AND userClientType = '${params.USER_CLIENT_TYPE}' AND variation = '0'\""
+                                def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM MobileApp WHERE gameId = '2112' AND userClientType = '${params.USER_CLIENT_TYPE}' AND variation = 0\""
                                 sshCommand remote: remote, command: confirm_dbCommand
 
                             } catch (Exception e) {
