@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        MSSQL_SERVER = 'db-gt-test24.gametower.com.tw'       //db-gt-test24.gametower.com.tw、10.100.20.17
+        MSSQL_SERVER = 'db-gt-test24.gametower.com.tw'  //db-gt-test24.gametower.com.tw、10.100.20.17
         MSSQL_DATABASE = 'GameTower2_TMD'
         TMD_DB = 'tmd_db'
         REMOTE_CREDENTIALS ='remote4463_login'
@@ -20,6 +20,9 @@ pipeline {
         stage('Caculate per version') {
             steps {
                 script { 
+                    //DB環境
+                    MSSQL_SERVER = params.DB_ENVIORNMENT
+
                     //IOS新版本
                     NEWIOSVERSION = params.NEW_IOS_VERSION  
 
@@ -31,7 +34,6 @@ pipeline {
                     PRE_VERSION = "${major}.${minor}.${patch}"
 
                     echo "PRE_VERSION ${PRE_VERSION}"
-
                 }
             }
         }
@@ -44,17 +46,18 @@ pipeline {
                         //DB
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
+                                //新增一份 SvnRevision資料
+                                def insert_dbCommand = """
+                                sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q "INSERT INTO [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] ([deviceVersion], [path], [revision]) SELECT ${NEWIOSVERSION} AS [deviceVersion], [path], [revision] FROM [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] WHERE [deviceVersion] = ${PRE_VERSION};"
+                                """
+                                sshCommand remote: remote, command: insert_dbCommand
+
                                 //確認revision號碼
                                 def confirm_dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 50 * FROM Client_LatestSvnRevision\""
                                 sshCommand remote: remote, command: confirm_dbCommand
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
                             }
-                        }
-                        try {
-                            sshCommand remote: remote, command: command
-                        } catch (Exception e) {
-                            echo "Caught an exception while executing another command: ${e.getMessage()}"
                         }
                     }
                 }
