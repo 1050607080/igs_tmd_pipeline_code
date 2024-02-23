@@ -6,14 +6,28 @@ pipeline {
         string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: 'IOS新版本號')
     }
 
+    //db-gt-test24.gametower.com.tw
      environment {
-        MSSQL_SERVER = 'db-gt-test24.gametower.com.tw'
+        MSSQL_SERVER = '10.100.20.17'
         MSSQL_DATABASE = 'GameTower2_TMD'
         TMD_DB = 'tmd_db'
         REMOTE_CREDENTIALS ='remote4463_login'
     }
+
+    //def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = 100 WHERE deviceVersion = '${params.NEW_IOS_VERSION}'\""
+    //def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = revision + 1 WHERE deviceVersion = '${params.NEW_IOS_VERSION}'\""
+
     
     stages {
+
+         stage('Ready') {
+            steps {
+                script {
+                    echo "DB (10.100.20.17) Modify Inanna Svn revision"
+                }
+            }
+        }
+
         stage('DB Modify') {
             steps {
                 script {
@@ -39,6 +53,7 @@ pipeline {
                 }
             }
         }
+
     }
     
     post {
