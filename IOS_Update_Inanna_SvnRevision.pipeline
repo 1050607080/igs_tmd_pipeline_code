@@ -50,7 +50,9 @@ pipeline {
                         body: "SUCCESS",
                         to: "${params.NAME}@igs.com.tw"
                     )
+                    sh '''
                     curl -X POST -H "Authorization: Bearer 0iWbOiqWP0vvhQ9KiN6fzbeg9P16mCPHxQalefJutOO" -F "message=Hello, World!" https://notify-api.line.me/api/notify
+                    '''
                 } 
                 else {
                     emailext(
