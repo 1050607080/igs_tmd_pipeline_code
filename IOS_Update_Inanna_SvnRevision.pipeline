@@ -51,8 +51,6 @@ pipeline {
                         to: "${params.NAME}@igs.com.tw"
                     )
                     //LINE NOTIFY
-                    line_notify
-
                     withCredentials([usernamePassword(credentialsId: "line_notify", usernameVariable: '_', passwordVariable: 'line_token')]) {
                         sh """
                         curl -X POST -H 'Authorization: Bearer ${line_token}' -F "message=name: ${params.NAME} SUCCESS modify 10.100.20.17 db ios Inanna Svn revision" https://notify-api.line.me/api/notify
