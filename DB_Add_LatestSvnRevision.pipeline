@@ -4,7 +4,7 @@ pipeline {
     parameters {
         string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'DB_ENVIORNMENT', choices: ['db-gt-test24.gametower.com.tw', '10.100.20.17'], description: '選擇DB環境')
-        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.180', description: '新版本號')
+        string(name: 'NEW_IOS_VERSION', defaultValue: '1.1.184', description: '新版本號')
     }
 
     environment {
