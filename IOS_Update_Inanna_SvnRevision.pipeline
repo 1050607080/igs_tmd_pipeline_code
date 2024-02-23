@@ -8,7 +8,7 @@ pipeline {
 
     //db-gt-test24.gametower.com.tw
      environment {
-        MSSQL_SERVER = '10.100.20.17'
+        MSSQL_SERVER = 'db-gt-test24.gametower.com.tw'
         MSSQL_DATABASE = 'GameTower2_TMD'
         TMD_DB = 'tmd_db'
         REMOTE_CREDENTIALS ='remote4463_login'
@@ -38,6 +38,10 @@ pipeline {
                         //DB
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
+                                //修正
+                                def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"UPDATE Client_LatestSvnRevision SET revision = revision + 1 WHERE deviceVersion = '${params.NEW_IOS_VERSION}'\""
+                                sshCommand remote: remote, command: dbCommand
+                                //確認
                                 def dbCommand = "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"SELECT TOP 999 * FROM Client_LatestSvnRevision WHERE deviceVersion = '${params.NEW_IOS_VERSION}'\""
                                 sshCommand remote: remote, command: dbCommand
                             } catch (Exception e) {
