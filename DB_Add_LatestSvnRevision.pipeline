@@ -47,7 +47,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: TMD_DB, usernameVariable: 'DB_ACCOUNT', passwordVariable: 'DB_PASSWORD')]) {
                             try {
                                 //新增一份 SvnRevision資料
-                                def insert_dbCommand =  "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"INSERT INTO [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] SELECT '1.1.188', [path], [revision] FROM [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] where [deviceVersion] = '1.1.186'\""
+                                def insert_dbCommand =  "sqlcmd -S ${MSSQL_SERVER} -d ${MSSQL_DATABASE} -U ${DB_ACCOUNT} -P ${DB_PASSWORD} -Q \"INSERT INTO [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] SELECT ${MSSQL_DATABASE}, [path], [revision] FROM [GameTower2_TMD].[dbo].[Client_LatestSvnRevision] where [deviceVersion] = ${PRE_VERSION}\""
                                 sshCommand remote: remote, command: insert_dbCommand
 
                                 //確認revision號碼
