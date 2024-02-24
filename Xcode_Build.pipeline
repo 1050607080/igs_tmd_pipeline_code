@@ -8,7 +8,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'BUILD_TARGET', choices: ['SouthPark release', 'SouthPark debug package', 'SouthPark debug'], description: '選擇編譯TARGET')
         choice(name: 'BUILD_CONFIG', choices: ['Release', 'Debug'], description: '選擇編譯CONFIG')
     }
@@ -32,7 +32,12 @@ pipeline {
             steps {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
-                        sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG}"
+                        try {
+                            sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG}"
+                        } catch (Exception e) {
+                            echo "Xcode Clean failed with error: ${e.message}"
+                            throw e
+                        }
                     }
                 }
             }
@@ -45,7 +50,7 @@ pipeline {
                         try {
                             sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG} -destination 'generic/platform=iOS' build"
                         } catch (Exception e) {
-                            echo "Xcode Build failed with error: ${e}"
+                            echo "Xcode Build failed with error: ${e.message}"
                             throw e
                         }
                     }
@@ -60,7 +65,7 @@ pipeline {
                         try {
                             sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -sdk iphoneos -configuration ${params.BUILD_CONFIG} archive -archivePath ./build/SouthPark.xcarchive && xcodebuild -exportArchive -archivePath ./build/SouthPark.xcarchive -exportOptionsPlist ${EXPORT_OPTION} -exportPath ./build"
                         } catch (Exception e) {
-                            echo "Xcode Archive failed with error: ${e}"
+                            echo "Xcode Archive failed with error: ${e.message}"
                             throw e 
                         }
                     }
@@ -72,16 +77,16 @@ pipeline {
     post {
         success {
             emailext(
-                subject: "編譯成功，編譯TARGET為 ${params.BUILD_TARGET}",
-                body: "編譯成功，編譯版本為 ${params.BUILD_TARGET}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
-                to: "${params.NAME}@igs.com.tw"
+                subject: "Xcode 編譯成功，編譯TARGET為 ${params.BUILD_TARGET}",
+                body: "編譯版本為 ${params.BUILD_TARGET}，輸出路徑: /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build/",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
             )
         }
         failure {
             emailext(
-                subject: "編譯失敗，編譯TARGET為 ${params.BUILD_TARGET}",
+                subject: "Xcode 編譯失敗了，怎辦，編譯TARGET為 ${params.BUILD_TARGET}",
                 body: "編譯失敗",
-                to: "${params.NAME}@igs.com.tw"
+                to: "${params.BUILDER_NAME}@igs.com.tw"
             )
         }
     }

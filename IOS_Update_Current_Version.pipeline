@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         string(name: 'CURRENT_VERSION', defaultValue: '1.1.184', description: '新版本號')
         choice(name: 'USER_CLIENT_TYPE', choices: ['iPhone', 'Android', 'Android_IGS'], description: '選擇裝置')
         choice(name: 'DB_ENVIORNMENT', choices: ['db-gt-test24.gametower.com.tw', '10.100.20.25'], description: '選擇DB環境')
@@ -42,6 +42,7 @@ pipeline {
 
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
+                                throw e
                             }
                         }
                     }
@@ -57,14 +58,14 @@ pipeline {
                     emailext(
                         subject: "SUCCESS Modify ${MSSQL_SERVER} IOS CurrentVersion",
                         body: "SUCCESS",
-                        to: "${params.NAME}@igs.com.tw"
+                        to: "${params.BUILDER_NAME}@igs.com.tw"
                     )
                 } 
                 else {
                     emailext(
                         subject: "Failure Modify ${MSSQL_SERVER} IOS CurrentVersion",
                         body: "Failure",
-                        to: "${params.NAME}@igs.com.tw"
+                        to: "${params.BUILDER_NAME}@igs.com.tw"
                     )
                 }
             }

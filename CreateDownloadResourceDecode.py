@@ -269,24 +269,7 @@ def package_Split(app_android_root):
                 tmpZipFilePathList = zipFileList[tmpZipPath]
                 if tmpZipFilePathList.count( ZipFilePath ) == 0:
                     tmpZipFilePathList.append( ZipFilePath )
-
-
-    '''
-        Modified by WinthropChang at 2015/10/20
-        
-        Start to encrypt lua file
-        Because we use Cocos2dx 3.2.This version doesn't support luajit 64bit.
-        If we compile lua code to bytecode will crashed in iOS 64bit device.
-        For security and void this issue we just encypt file not compile it.
-        
-        We can use our encrypt algorithm and decrypt in c++.
-        Bu cocos provide a lua tool to do this(XXTEA).
-        The algorithm is very simple.
-        
-        If you are interesting on it,please surf the wiki.
-        
-        https://en.wikipedia.org/wiki/XXTEA
-    '''                    
+             
 
     #pack resource to zip file
     for zipPath, zipFileList in zipFileList.items():
