@@ -167,6 +167,29 @@ pipeline {
             }
         }
 
+        stage('Move Assets') {
+            // 使用when条件来判断是否为release模式
+            when {
+                // 检查params.MODE是否等于release
+                expression { params.MODE == 'release' }
+            }
+            steps {
+                dir(PROJ_ANDROID_URL) {
+                    script {
+                        // 由于已经通过when条件判断是release模式，这里只需要处理不同的GAME_VERSION
+                        switch(params.GAME_VERSION) {
+                            case "android":
+                                sh "/path/to/move_and_update_android_assets.sh"
+                                break
+                            case "ios":
+                                
+                                break
+                        }
+                    }
+                }
+            }
+        }
+
          stage('Clean Environment') {
             steps {
                 script {
