@@ -1,3 +1,25 @@
+def resources = [
+    ['name': 'Boost', 'url': 'http://192.168.1.183/svn/Boost/version_1_55_0'],
+    ['name': 'Casino', 'url': 'http://192.168.1.183/svn/Casino/tags/version_2_0_132'],
+    ['name': 'Cocos2d-x', 'url': 'http://192.168.1.183/svn/Cocos2d-x/3.17/trunk'],
+    ['name': 'GameTower2', 'url': 'http://192.168.1.183/svn/TMD_GameTower2/tags/version_3_0_5'],
+    // 为Inanna指定iOS和Android的不同URL
+    ['name': 'Inanna', 'ios': 'http://192.168.1.183/svn/Inanna/branches/ReleaseIOS', 'android': 'http://192.168.1.183/svn/Inanna/branches/ReleaseAndroid'],
+    ['name': 'Ishtar', 'url': 'http://192.168.1.183/svn/Ishtar/trunk'],
+    ['name': 'Libraries', 'url': 'http://192.168.1.183/svn/Libraries/trunk'],
+    ['name': 'ManganDahen', 'url': 'http://192.168.1.183/svn/ManganDahen/branches/Release'],
+    ['name': 'SouthPark', 'url': 'http://192.168.1.183/svn/SouthPark/trunk']
+]
+
+def switchResources = { resource, platform ->
+    def targetDir = "/Users/tmd/Documents/tmd/${resource.name}"
+    def url = resource.containsKey(platform) ? resource[platform] : resource['url']
+    dir(targetDir) {
+        echo "Switching ${resource.name} to ${url}"
+        sh "svn switch ${url} ${resource.name}"
+    }
+}
+
 pipeline {
     agent any
 
@@ -10,7 +32,9 @@ pipeline {
         stage('SVN Switching Resources') {
             steps {
                 script {
-                     echo "SVN Switching Resources"
+                    resources.each { resource ->
+                        switchResources(resource, params.SWITCH_TARGET)
+                    }
                 }
             }
         }
@@ -27,7 +51,7 @@ pipeline {
         failure {
             emailext(
                 subject: "SVN 切換 MAC ${params.SWITCH_TARGET}送審資源失敗",
-                body: "切換失敗",
+                body: "切換失败",
                 to: "${params.BUILDER_NAME}@igs.com.tw"
             )
         }
