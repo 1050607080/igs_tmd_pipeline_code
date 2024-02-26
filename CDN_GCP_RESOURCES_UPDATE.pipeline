@@ -6,10 +6,6 @@ pipeline {
         choice(name: 'UPDATE_TARGET', choices: ['android', 'ios'], description: '更新資源')
     }
 
-    environment {
-
-    }
-
     stages {
         stage('Moving Resources') {
             steps {

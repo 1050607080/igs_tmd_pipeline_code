@@ -6,10 +6,6 @@ pipeline {
         choice(name: 'SWITCH_TARGET', choices: ['android', 'ios'], description: '切換送審資源')
     }
 
-    environment {
-
-    }
-
     stages {
         stage('SVN Switching Resources') {
             steps {

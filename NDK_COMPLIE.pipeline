@@ -6,10 +6,6 @@ pipeline {
         choice(name: 'ANDROID_VERSION', choices: ['store', 'offical'], description: '底層版本')
     }
 
-    environment {
-
-    }
-
     stages {
         stage('Delete resources') {
             steps {
