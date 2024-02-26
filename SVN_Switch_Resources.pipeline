@@ -14,7 +14,7 @@ pipeline {
         stage('SVN Switching Resources') {
             steps {
                 script {
-                    
+                     echo "SVN Switching Resources"
                 }
             }
         }
