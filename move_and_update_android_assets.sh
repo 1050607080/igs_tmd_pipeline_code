@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # 定義源目錄和目標目錄
-SOURCE_DIR="/Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp"
-TARGET_DIR="/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets"
+SOURCE_DIR="/Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/"
+TARGET_DIR="/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets/"
 
 # 清空目標目錄下的所有文件（謹慎使用，確保路徑正確！）
 rm -rf ${TARGET_DIR}/*
