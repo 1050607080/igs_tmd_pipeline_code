@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage('Delete resources') {
+        stage('Delete Resources') {
             steps {
                 script {
                     echo"Delete resources"
