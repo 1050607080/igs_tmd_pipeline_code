@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        choice(name: 'SWITCH_TARGET', choices: ['android', 'ios'], description: '切換送審資源')
+    }
+
+    environment {
+
+    }
+
+    stages {
+        stage('SVN Switching Resources') {
+            steps {
+                script {
+                    
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                subject: "SVN 切換 MAC ${params.SWITCH_TARGET}送審資源成功",
+                body: "切換成功",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+        failure {
+            emailext(
+                subject: "SVN 切換 MAC ${params.SWITCH_TARGET}送審資源失敗",
+                body: "切換失敗",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+    }
+}

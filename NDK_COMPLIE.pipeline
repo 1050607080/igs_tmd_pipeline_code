@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        choice(name: 'ANDROID_VERSION', choices: ['store', 'offical'], description: '底層版本')
+    }
+
+    environment {
+
+    }
+
+    stages {
+        stage('Delete resources') {
+            steps {
+                script {
+                    echo"Delete resources"
+                }
+            }
+        }
+
+        stage('Build NDK') {
+            steps {
+                script {
+                    echo"Build NDK"
+                }
+            }
+        }
+
+        stage('Copy Resources') {
+            steps {
+                script {
+                    echo"Copy resources"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                subject: "ndk編譯底層成功，底層版本${params.ANDROID_VERSION}",
+                body: "ndk編譯底層成功",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+        failure {
+            emailext(
+                subject: "ndk編譯底層失敗，底層版本${params.ANDROID_VERSION}",
+                body: "ndk編譯底層失敗",
+                to:  "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+    }
+}

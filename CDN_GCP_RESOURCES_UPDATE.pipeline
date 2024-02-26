@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        choice(name: 'UPDATE_TARGET', choices: ['android', 'ios'], description: '更新資源')
+    }
+
+    environment {
+
+    }
+
+    stages {
+        stage('Moving Resources') {
+            steps {
+                script {
+                    echo "Moving Resources"
+                }
+            }
+        }
+
+        stage('CDN & GCP resources update') {
+            steps {
+                script {
+                    echo "CDN & GCP resources update"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                subject: "${params.UPDATE_TARGET} CDN&GCP資源更新成功",
+                body: "更新成功",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+        failure {
+            emailext(
+                subject: "${params.UPDATE_TARGET} CDN&GCP資源更新失敗",
+                body: "更新失敗",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+    }
+}

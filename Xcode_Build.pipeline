@@ -11,6 +11,8 @@ pipeline {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'BUILD_TARGET', choices: ['SouthPark release', 'SouthPark debug package', 'SouthPark debug'], description: '選擇編譯TARGET')
         choice(name: 'BUILD_CONFIG', choices: ['Release', 'Debug'], description: '選擇編譯CONFIG')
+        string(name: 'VERSION', defaultValue: '1.1.180', description: 'VERSION')
+        string(name: 'BUILD', defaultValue: '1', description: 'BUILD')
     }
     
     stages {

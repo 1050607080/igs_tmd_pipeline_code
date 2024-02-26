@@ -5,6 +5,9 @@ pipeline {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'BUILD_MODE', choices: ['release', 'debug'], description: '編譯版本')
         choice(name: 'BUILD_TYPE', choices: ['aab', 'apk'], description: '編譯類型')
+        choice(name: 'BUILD_ENV', choices: ['production', 'testing'], description: '編譯環境')
+        string(name: 'VERSION_NAME', defaultValue: '1.1.175', description: 'versionName')
+        string(name: 'VERSION_CODE', defaultValue: '1000249', description: 'versionCode')
     }
 
     environment {
@@ -45,14 +48,14 @@ pipeline {
             emailext(
                 subject: "androdi studio 編譯成功，版本為 ${params.BUILD_MODE}，類型為 ${params.BUILD_TYPE}",
                 body: "編譯成功，路徑在:/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/build/outputs 。",
-                to: 'weitsunglin@igs.com.tw'
+                to: "${params.BUILDER_NAME}@igs.com.tw"
             )
         }
         failure {
             emailext(
                 subject: "androdi studio 編譯失敗，怎辦，版本為 ${params.BUILD_MODE}，類型為 ${params.BUILD_TYPE}",
                 body: "編譯失敗",
-                to: 'weitsunglin@igs.com.tw'
+                to:  "${params.BUILDER_NAME}@igs.com.tw"
             )
         }
     }
