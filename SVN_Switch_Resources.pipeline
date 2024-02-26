@@ -11,12 +11,17 @@ def resources = [
     ['name': 'SouthPark', 'url': 'http://192.168.1.183/svn/SouthPark/trunk']
 ]
 
+environment {
+    SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
+}
+
+
 def switchResources = { resource, platform ->
     def targetDir = "/Users/tmd/Documents/tmd/${resource.name}"
     def url = resource.containsKey(platform) ? resource[platform] : resource['url']
     dir(targetDir) {
         echo "Switching ${resource.name} to ${url}"
-        sh "svn switch ${url} ${resource.name}"
+        sh "${SVN_INSTALL_PATH} switch ${url} ${resource.name}"
     }
 }
 
