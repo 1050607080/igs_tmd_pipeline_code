@@ -17,7 +17,7 @@ pipeline {
         choice(name: 'GAME_VERSION', choices: ['android', 'ios'], description: '遊戲版本')
         string(name: 'GAME_NAME', defaultValue: 'Cocos2d-x Inanna', description: '遊戲名稱')
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
-        choice(name: 'MODE', choices: ['debug', 'release'], description: '打包模式')
+        choice(name: 'MODE', choices: ['release','debug'], description: '打包模式')
     }
 
     stages {
