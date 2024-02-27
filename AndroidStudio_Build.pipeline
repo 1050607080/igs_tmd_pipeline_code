@@ -13,9 +13,35 @@ pipeline {
     environment {
         ANDROID_HOME = "/Users/tmd/Library/Android/sdk"
         ANDROID_STUDIO_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio"
+        PROJ_ANDROID_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android"
     }
 
     stages {
+        stage('Setting project') {
+            steps {
+                script {
+                    dir(PROJ_ANDROID_PATH) {
+                         echo "Setting project"
+
+                        def gradleFilePath = "${PROJ_ANDROID_PATH}/gradle"
+                        
+                        // 读取 Gradle 文件内容
+                        def gradleFile = new File(gradleFilePath)
+                        def gradleContent = gradleFile.text
+
+                        // 替换 versionName 和 versionCode
+                        gradleContent = gradleContent.replaceAll(/versionName\s+".*"/, 'versionName "' + VERSION_NAME + '"')
+                        gradleContent = gradleContent.replaceAll(/versionCode\s+\d+/, 'versionCode ' + VERSION_CODE)
+
+                        // 将修改后的内容写回到 Gradle 文件中
+                        gradleFile.write(gradleContent)
+                        
+                        echo "Set versionName to ${VERSION_NAME} and versionCode to ${VERSION_CODE}"
+                    }
+                }
+            }
+        }
+
         stage('android studio build') {
             steps {
                 script {
