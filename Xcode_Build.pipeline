@@ -54,9 +54,10 @@ pipeline {
                             def newMarketingVersion = params.VERSION
                             def newProjectVersion = params.BUILD
 
-                            // 更新 SouthPark release-Info.plist
-                            sh "sed -i '' 's/<string>\\\$\(newMarketingVersion\)<\\/string>/<string>${newMarketingVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark\\ release-Info.plist"
-                            sh "sed -i '' 's/<string>\\\$\(newProjectVersion\)<\\/string>/<string>${newProjectVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark\\ release-Info.plist"
+                            // 假设 newMarketingVersion 和 newProjectVersion 是已定义的变量
+                            sh "sed -i '' 's/<string>\\$(newMarketingVersion)<\\/string>/<string>${newMarketingVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark\\ release-Info.plist"
+                            sh "sed -i '' 's/<string>\\$(newProjectVersion)<\\/string>/<string>${newProjectVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark\\ release-Info.plist"
+
 
                             // 更新 PushService/Info.plist
                             sh "sed -i '' 's/<string>\\\$\(newMarketingVersion\)<\\/string>/<string>${newMarketingVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/PushService/Info.plist"
