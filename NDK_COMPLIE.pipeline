@@ -29,7 +29,7 @@ pipeline {
 
                     fileContent.each { line ->
                         if (line.trim().startsWith("##LOCAL_CFLAGS += -DOFFICIAL_VERSION")) {
-                            if (androidVersion == 'official') {
+                            if (androidVersion == 'offical') {
                                 // 移除 ## 以反註解
                                 newContent.add(line.trim().substring(2))
                             } else {
