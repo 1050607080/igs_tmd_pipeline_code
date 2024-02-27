@@ -50,6 +50,7 @@ pipeline {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
+                            echo "Version and Build Number Setting"
                             def target = params.BUILD_TARGET
                             def newMarketingVersion = params.VERSION
                             def newProjectVersion = params.BUILD
