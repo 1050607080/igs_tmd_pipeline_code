@@ -4,6 +4,7 @@ pipeline {
     environment {
         PROJECT_WORKSPACE_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/"
         EXPORT_OPTION = "exportOptions.plist"
+        SOUTH_PARK_INFO = ""
     }
 
     parameters {
@@ -20,10 +21,13 @@ pipeline {
                 script {
                     if (params.BUILD_TARGET == 'SouthPark release') {
                         EXPORT_OPTION = "ExportOption_Release.plist"
+                        SOUTH_PARK_INFO = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark release-Info.plist"
                     } else if(params.BUILD_TARGET == 'SouthPark debug package') {
                         EXPORT_OPTION = "ExportOption_Test.plist"
+                        SOUTH_PARK_INFO = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark debug package-Info.plist"
                     } else if(params.BUILD_TARGET == 'SouthPark debug') {
                         EXPORT_OPTION = "ExportOption_Dev.plist"
+                        SOUTH_PARK_INFO = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark debug-Info.plist"
                     }
                 }
             }
@@ -52,9 +56,14 @@ pipeline {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
                             echo "Version and Build Number Setting"
+                            //設定滿貫
+                            setVersion(params.VERSION, SOUTH_PARK_INFO)
+                            setBuildNumber(params.BUILD, SOUTH_PARK_INFO)
 
-                             setVersionAndBuildNumber("1.1.184", "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark release-Info.plist")
-
+                            //設定pushService 
+                            setVersion(params.VERSION, "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/PushService/Info.plist")
+                            setBuildNumber(params.BUILD, "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/PushService/Info.plist")
+                            
                         } catch (Exception e) {
                             echo "Xcode Version and Build Number Setting failed with error: ${e.message}"
                             throw e
@@ -114,8 +123,8 @@ pipeline {
     }
 }
 
-def setVersionAndBuildNumber(String newMarketingVersion, String plistPath) {
-    echo "Setting newMarketingVersionr"
+def setVersion(String newMarketingVersion, String plistPath) {
+    echo "setVersion"
     sh """
         #!/bin/sh
 
@@ -129,5 +138,23 @@ def setVersionAndBuildNumber(String newMarketingVersion, String plistPath) {
         # 打印更新后的 CFBundleShortVersionString 值
         echo "更新后的值:"
         grep -A 1 "CFBundleShortVersionString" "${plistPath}"
+    """
+}
+
+def setBuildNumber(String currentProjectVersion, String plistPath) {
+    echo "setBuildNumber"
+    sh """
+        #!/bin/sh
+
+        # 打印原始 CFBundleVersion 值
+        echo "原始值:"
+        grep -A 1 "CFBundleVersion" "${plistPath}"
+
+        # 使用 awk 来更新 CFBundleVersion 的值
+        awk -v newVersion="${currentProjectVersion}" '/<key>CFBundleVersion<\\/key>/{print; getline; sub(/>.*</, ">" newVersion "<"); print; next}1' "${plistPath}" > temp.plist && mv temp.plist "${plistPath}"
+
+        # 打印更新后的 CFBundleVersion 值
+        echo "更新后的值:"
+        grep -A 1 "CFBundleVersion" "${plistPath}"
     """
 }
