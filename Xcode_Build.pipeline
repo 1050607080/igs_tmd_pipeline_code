@@ -56,8 +56,8 @@ pipeline {
                     def newProjectVersion = params.BUILD
 
                     // 更新项目的版本号和构建号
-                    sh "xcodebuild -workspace '${projectPath}' -target '${target}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
-                    sh "xcodebuild -workspace '${projectPath}' -target 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
+                    sh "xcodebuild -workspace '${projectPath}' -scheme '${target}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
+                    sh "xcodebuild -workspace '${projectPath}' -scheme 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
                     echo "Updated marketing version to ${newMarketingVersion} and workspace version to ${newProjectVersion}"
                 }
             }
