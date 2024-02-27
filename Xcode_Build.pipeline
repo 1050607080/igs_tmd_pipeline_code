@@ -61,12 +61,13 @@ pipeline {
             }
         }
 
-        /*stage('Xcode Build') {
+        stage('Xcode Build') {
             steps {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
                             sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG} -destination 'generic/platform=iOS' build"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme PushService -configuration ${params.BUILD_CONFIG} -destination 'generic/platform=iOS' build"
                         } catch (Exception e) {
                             echo "Xcode Build failed with error: ${e.message}"
                             throw e
@@ -74,7 +75,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
 
         stage('Xcode Archive') {
             steps {
