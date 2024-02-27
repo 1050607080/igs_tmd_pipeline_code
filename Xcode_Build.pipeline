@@ -11,7 +11,7 @@ pipeline {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'BUILD_TARGET', choices: ['SouthPark release', 'SouthPark debug package', 'SouthPark debug'], description: '選擇編譯TARGET')
         choice(name: 'BUILD_CONFIG', choices: ['Release', 'Debug'], description: '選擇編譯CONFIG')
-        string(name: 'VERSION', defaultValue: '1.1.180', description: 'VERSION')
+        string(name: 'VERSION', defaultValue: '1.1.184', description: 'VERSION')
         string(name: 'BUILD', defaultValue: '1', description: 'BUILD')
     }
     
@@ -56,9 +56,9 @@ pipeline {
                     def newProjectVersion = params.BUILD
 
                     // 更新项目的版本号和构建号
-                    sh "xcodebuild -project '${projectPath}' -target '${target}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
-                    sh "xcodebuild -project '${projectPath}' -target 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
-                    echo "Updated marketing version to ${newMarketingVersion} and project version to ${newProjectVersion}"
+                    sh "xcodebuild -workspace '${projectPath}' -target '${target}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
+                    sh "xcodebuild -workspace '${projectPath}' -target 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
+                    echo "Updated marketing version to ${newMarketingVersion} and workspace version to ${newProjectVersion}"
                 }
             }
         }
