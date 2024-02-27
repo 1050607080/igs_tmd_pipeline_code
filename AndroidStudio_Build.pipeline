@@ -23,7 +23,7 @@ pipeline {
                     dir(PROJ_ANDROID_PATH) {
                          echo "Setting project"
 
-                        def gradleFilePath = "${PROJ_ANDROID_PATH}/gradle"
+                        def gradleFilePath = "${PROJ_ANDROID_PATH}/build.gradle"
                         
                         // 读取 Gradle 文件内容
                         def gradleFile = new File(gradleFilePath)
