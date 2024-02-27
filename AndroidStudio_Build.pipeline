@@ -45,22 +45,19 @@ pipeline {
          stage('Setting environment') {
             steps {
                 script {
-                    dir(PROJ_ANDROID_PATH) {
-                        // Load the XML file
-                        def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
-                        
-                        // Update the <type> element directly
-                        xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
-                        
-                        // Convert the updated XML back to a String
-                        def xmlString = XmlUtil.serialize(xmlFile)
+                    // Load the XML file
+                    def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
+                    
+                    // Update the <type> element directly
+                    xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
+                    
+                    // Convert the updated XML back to a String
+                    def xmlString = XmlUtil.serialize(xmlFile)
 
-                        // Write the string back to the file
-                        new File(INANNALUA_ENV_PATH).text = xmlString
+                    // Write the string back to the file
+                    new File(INANNALUA_ENV_PATH).text = xmlString
 
-                        echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."
-                        
-                    }
+                    echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."     
                 }
             }
         }
