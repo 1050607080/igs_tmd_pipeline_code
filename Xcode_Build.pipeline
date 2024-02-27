@@ -56,7 +56,7 @@ pipeline {
                             sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${target}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
                             sh "xcodebuild -workspace SouthPark.xcworkspace -scheme 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
                         } catch (Exception e) {
-                            echo "Xcode Build failed with error: ${e.message}"
+                            echo "Xcode Version and Build Number Setting failed with error: ${e.message}"
                             throw e
                         }
                     }
