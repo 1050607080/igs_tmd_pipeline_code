@@ -52,7 +52,9 @@ pipeline {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
                             echo "Version and Build Number Setting"
-                            
+
+                             setVersionAndBuildNumber("1.1.184", "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark release-Info.plist")
+
                         } catch (Exception e) {
                             echo "Xcode Version and Build Number Setting failed with error: ${e.message}"
                             throw e
@@ -110,4 +112,22 @@ pipeline {
             )
         }
     }
+}
+
+def setVersionAndBuildNumber(String newMarketingVersion, String plistPath) {
+    echo "Setting newMarketingVersionr"
+    sh """
+        #!/bin/sh
+
+        # 打印原始 CFBundleShortVersionString 值
+        echo "原始值:"
+        grep -A 1 "CFBundleShortVersionString" "${plistPath}"
+
+        # 使用 awk 来更新 CFBundleShortVersionString 的值
+        awk -v newVersion="${newMarketingVersion}" '/<key>CFBundleShortVersionString<\\/key>/{print; getline; sub(/>.*</, ">" newVersion "<"); print; next}1' "${plistPath}" > temp.plist && mv temp.plist "${plistPath}"
+
+        # 打印更新后的 CFBundleShortVersionString 值
+        echo "更新后的值:"
+        grep -A 1 "CFBundleShortVersionString" "${plistPath}"
+    """
 }
