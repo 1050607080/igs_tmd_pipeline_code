@@ -46,26 +46,18 @@ pipeline {
             steps {
                 script {
                     dir(PROJ_ANDROID_PATH) {
-                        echo "Setting environment"
-
-                        // Define the path to the XML file
-                        def INANNALUA_ENV_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets/InannaLua/WebEnviornment.xml"
-                        
                         // Load the XML file
                         def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
                         
-                        // Update the <type> element in the XML
+                        // Update the <type> element directly
                         xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
                         
-                        // Save the updated XML back to the file
-                        def writer = new FileWriter(INANNALUA_ENV_PATH)
-                        def xmlOutput = new StreamingMarkupBuilder().bind {
-                            mkp.yield xmlFile
-                        }
-                        writer.write(xmlOutput.toString())
-                        writer.close()
-                        
-                        // Optional: Echo the change for verification
+                        // Convert the updated XML back to a String
+                        def xmlString = XmlUtil.serialize(xmlFile)
+
+                        // Write the string back to the file
+                        new File(INANNALUA_ENV_PATH).text = xmlString
+
                         echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."
                         
                     }
