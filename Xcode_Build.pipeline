@@ -53,8 +53,8 @@ pipeline {
                             echo "Version and Build Number Setting"
                             def newMarketingVersion = params.VERSION
                             def newProjectVersion = params.BUILD
-                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
-                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}'"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}' -destination 'generic/platform=iOS'"
+                            sh "xcodebuild -workspace SouthPark.xcworkspace -scheme 'PushService' MARKETING_VERSION='${newMarketingVersion}' CURRENT_PROJECT_VERSION='${newProjectVersion}' -destination 'generic/platform=iOS'"
                         } catch (Exception e) {
                             echo "Xcode Version and Build Number Setting failed with error: ${e.message}"
                             throw e
