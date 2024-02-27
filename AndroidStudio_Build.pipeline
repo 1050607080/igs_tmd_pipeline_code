@@ -26,7 +26,7 @@ pipeline {
 
                         def gradleFilePath = "${PROJ_ANDROID_PATH}/build.gradle"
                         
-                        // 读取 Gradle 文件内容
+                        // read Gradle 文件内容
                         def gradleFile = new File(gradleFilePath)
                         def gradleContent = gradleFile.text
 
@@ -34,7 +34,6 @@ pipeline {
                         gradleContent = gradleContent.replaceAll(/versionName\s+".*"/, 'versionName "' + VERSION_NAME + '"')
                         gradleContent = gradleContent.replaceAll(/versionCode\s+\d+/, 'versionCode ' + VERSION_CODE)
 
-                        // 将修改后的内容写回到 Gradle 文件中
                         gradleFile.write(gradleContent)
                         
                         echo "Set versionName to ${VERSION_NAME} and versionCode to ${VERSION_CODE}"
@@ -49,23 +48,26 @@ pipeline {
                     dir(PROJ_ANDROID_PATH) {
                         echo "Setting environment"
 
-                        /*def xmlFile = new XmlSlurper().parse(file(INANNALUA_ENV_PATH))
-                        def buildEnv = env.BUILD_ENV.toLowerCase()
+                        // Define the path to the XML file
+                        def INANNALUA_ENV_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets/InannaLua/WebEnviornment.xml"
                         
-                        // 更新 XML 文件中的 <type> 元素
-                        xmlFile.type = buildEnv
+                        // Load the XML file
+                        def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
                         
-                        // 將修改後的 XML 保存回文件中
+                        // Update the <type> element in the XML
+                        xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
+                        
+                        // Save the updated XML back to the file
                         def writer = new FileWriter(INANNALUA_ENV_PATH)
                         def xmlOutput = new StreamingMarkupBuilder().bind {
                             mkp.yield xmlFile
                         }
-                        writer.write(xmlOutput)
+                        writer.write(xmlOutput.toString())
                         writer.close()
                         
-                        // 在 Jenkins 中打印出修改後的 XML 文件內容
-                        echo "Updated WebEnvironment.xml:"
-                        sh "cat ${INANNALUA_ENV_PATH}"*/
+                        // Optional: Echo the change for verification
+                        echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."
+                        
                     }
                 }
             }
