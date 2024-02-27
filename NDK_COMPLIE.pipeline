@@ -22,6 +22,8 @@ pipeline {
             steps {
                 script {
                     echo "Build Prepare"
+
+                    try {
                     def filePath = '/Users/tmd/Documents/tmd/Inanna/Android.mk'
                     def fileContent = readFile(filePath).split("\n")
                     def newContent = []
@@ -51,6 +53,11 @@ pipeline {
                     }
 
                     writeFile(file: filePath, data: newContent.join("\n"))
+
+                    } catch (Exception e) {
+                        echo "Build Prepare with error: ${e.message}"
+                        throw e
+                    }
                 }
             }
         }
