@@ -1,5 +1,3 @@
-import groovy.xml.StreamingMarkupBuilder
-
 pipeline {
     agent any
 
@@ -51,7 +49,7 @@ pipeline {
                     dir(PROJ_ANDROID_PATH) {
                         echo "Setting environment"
 
-                        def xmlFile = new XmlSlurper().parse(file(INANNALUA_ENV_PATH))
+                        /*def xmlFile = new XmlSlurper().parse(file(INANNALUA_ENV_PATH))
                         def buildEnv = env.BUILD_ENV.toLowerCase()
                         
                         // 更新 XML 文件中的 <type> 元素
@@ -67,7 +65,7 @@ pipeline {
                         
                         // 在 Jenkins 中打印出修改後的 XML 文件內容
                         echo "Updated WebEnvironment.xml:"
-                        sh "cat ${INANNALUA_ENV_PATH}"
+                        sh "cat ${INANNALUA_ENV_PATH}"*/
                     }
                 }
             }
