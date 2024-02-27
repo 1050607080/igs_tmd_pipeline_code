@@ -11,7 +11,6 @@ pipeline {
         stage('Delete Resources') {
             steps {
                 script {
-                    echo"Delete libs & obj"
                     sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs*"
                     sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj*"
                 }
@@ -21,8 +20,6 @@ pipeline {
         stage('Build Prepare') {
             steps {
                 script {
-                    echo "Build Prepare"
-
                     try {
                         def filePath = '/Users/tmd/Documents/tmd/Inanna/Android.mk'
                         def fileContent = readFile(filePath).split("\n")
@@ -49,8 +46,8 @@ pipeline {
                             }
                         }
                         writeFile(file: filePath, text: newContent.join("\n"))
-
-                    } catch (Exception e) {
+                    } 
+                    catch (Exception e) {
                         echo "Build Prepare with error: ${e.message}"
                         throw e
                     }
@@ -61,15 +58,26 @@ pipeline {
         stage('Build NDK') {
             steps {
                 script {
-                    echo"Build NDK"
+                    sh "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/build_relaese.sh"
                 }
             }
         }
 
-        stage('Copy Resources') {
+        stage('Fix Resources Name') {
             steps {
                 script {
-                    echo"Copy resources"
+                    if (params.ANDROID_VERSION == 'store') {
+                        sh '''
+                        mv /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj_store
+                        mv /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs_store
+                        '''
+                    } else {
+                        sh '''
+                        mv /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj_offical
+                        mv /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs_offical
+                        '''
+                    }
+
                 }
             }
         }
