@@ -22,7 +22,6 @@ pipeline {
             steps {
                 script {
                     dir(PROJ_ANDROID_PATH) {
-                        import groovy.xml.XmlUtil
 
                         echo "Setting project"
 
