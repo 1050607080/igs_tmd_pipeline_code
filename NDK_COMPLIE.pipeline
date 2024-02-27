@@ -7,10 +7,38 @@ pipeline {
     }
 
     stages {
+
         stage('Delete Resources') {
             steps {
                 script {
-                    echo"Delete resources"
+                    echo"Delete libs & obj"
+                    sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs*"
+                    sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj*"
+                }
+            }
+        }
+
+        stage('Build Prepare') {
+            steps {
+                script {
+                    echo"Build Prepare"
+
+                    def filePath = '/Users/tmd/Documents/tmd/Inanna/Android.mk'
+                    def fileContent = readFile(filePath).split("\n")
+                    def newContent = []
+                    def officialBuild = params.ANDROID_VERSION
+
+                    fileContent.each { line ->
+                        if (line.trim().startsWith("#LOCAL_CFLAGS += -DOFFICIAL_VERSION") && officialBuild) {
+                            newContent.add(line.trim().substring(1))
+                        } else if (line.trim().equals("LOCAL_CFLAGS += -DOFFICIAL_VERSION") && !officialBuild) {
+                            newContent.add("#" + line)
+                        } else {
+                            // 对于其他行，保持不变
+                            newContent.add(line)
+                        }
+                    }
+                    writeFile(file: filePath, data: newContent.join("\n"))
                 }
             }
         }
