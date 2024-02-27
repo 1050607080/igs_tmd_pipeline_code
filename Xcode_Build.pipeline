@@ -34,6 +34,7 @@ pipeline {
                 script {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
+                            sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/build*"
                             sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme '${params.BUILD_TARGET}' -configuration ${params.BUILD_CONFIG}"
                             sh "xcodebuild clean -workspace SouthPark.xcworkspace -scheme 'PushService' -configuration ${params.BUILD_CONFIG}"
                         } catch (Exception e) {
