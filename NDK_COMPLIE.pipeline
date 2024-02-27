@@ -52,7 +52,7 @@ pipeline {
                         }
                     }
 
-                    writeFile(file: filePath, data: newContent.join("\n"))
+                    writeFile(file: filePath, text: newContent.join("\n"))
 
                     } catch (Exception e) {
                         echo "Build Prepare with error: ${e.message}"
