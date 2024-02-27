@@ -22,8 +22,7 @@ pipeline {
             steps {
                 script {
                     dir(PROJ_ANDROID_PATH) {
-
-                        echo "Setting project"
+                         echo "Setting project"
 
                         def gradleFilePath = "${PROJ_ANDROID_PATH}/build.gradle"
                         
@@ -43,33 +42,28 @@ pipeline {
             }
         }
 
-        stage('Setting environment') {
+         stage('Setting environment') {
             steps {
                 script {
                     dir(PROJ_ANDROID_PATH) {
-                        // Ensure groovy.xml.XmlUtil is imported at the top of your Jenkinsfile if not already
-                        def xmlFile = new groovy.util.XmlSlurper(false, false).parse(new File(INANNALUA_ENV_PATH))
+                        // Load the XML file
+                        def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
                         
                         // Update the <type> element directly
                         xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
                         
-                        // Convert the updated XML back to a String using StreamingMarkupBuilder for sandbox compatibility
-                        def writer = new StringWriter()
-                        new groovy.xml.StreamingMarkupBuilder().bind {
-                            mkp.declareNamespace("": xmlFile.namespaceURI())
-                            mkp.yield xmlFile
-                        }.writeTo(writer)
-                        def xmlString = writer.toString()
+                        // Convert the updated XML back to a String
+                        def xmlString = XmlUtil.serialize(xmlFile)
 
                         // Write the string back to the file
                         new File(INANNALUA_ENV_PATH).text = xmlString
 
                         echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."
+                        
                     }
                 }
             }
         }
-
 
 
         stage('android studio build') {
