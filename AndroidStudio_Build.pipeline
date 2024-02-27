@@ -14,7 +14,7 @@ pipeline {
         ANDROID_HOME = "/Users/tmd/Library/Android/sdk"
         ANDROID_STUDIO_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android-studio"
         PROJ_ANDROID_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android"
-        INANNALUA_ENV_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets/InannaLua/WebEnviornment.xml"
+        INANNALUA_ENV_PATH = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets/InannaLua/WebEnvironment.xml"
     }
 
     stages {
