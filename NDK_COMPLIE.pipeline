@@ -58,7 +58,7 @@ pipeline {
         stage('Build NDK') {
             steps {
                 script {
-                    sh "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/build_relaese.sh"
+                    sh "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/build_release_jenkins.sh"
                 }
             }
         }
