@@ -52,6 +52,7 @@ pipeline {
                     dir(PROJECT_WORKSPACE_PATH){
                         try {
                             echo "Version and Build Number Setting"
+                            
                         } catch (Exception e) {
                             echo "Xcode Version and Build Number Setting failed with error: ${e.message}"
                             throw e
