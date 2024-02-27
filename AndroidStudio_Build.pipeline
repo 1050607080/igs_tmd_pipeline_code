@@ -41,31 +41,27 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Setting environment') {
             steps {
                 script {
-                    // 載入XML文件
-                    def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
-                    
-                    // 更新<type>元素
-                    xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
-                    
-                    // 使用StreamingMarkupBuilder進行序列化
-                    def writer = new StringWriter()
-                    def builder = new StreamingMarkupBuilder()
-                    writer << builder.bind {
-                        mkp.declareNamespace("": "http://www.w3.org/1999/xhtml")
-                        mkp.yield xmlFile
-                    }
-                    
-                    // 將更新後的XML字符串寫回文件
-                    new File(INANNALUA_ENV_PATH).text = writer.toString()
+                    // 定义文件路径
+                    def filePath = INANNALUA_ENV_PATH
+
+                    // 读取文件内容到字符串
+                    def fileContent = readFile(filePath)
+
+                    // 使用正则表达式查找并替换XML中的<type>元素内容
+                    def newContent = fileContent.replaceAll(/(<type>).*?(<\/type>)/, "\$1${params.BUILD_ENV}\$2")
+
+                    // 将更新后的内容写回文件
+                    writeFile(file: filePath, text: newContent)
 
                     echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."
                 }
             }
         }
+
 
 
         stage('android studio build') {
