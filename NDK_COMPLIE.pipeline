@@ -28,25 +28,29 @@ pipeline {
                     def androidVersion = params.ANDROID_VERSION
 
                     fileContent.each { line ->
-                        // 確保 line 不是 null
-                        if (line != null) {
-                            // 條件判斷如之前所述...
-                            if (line.trim().startsWith("#LOCAL_CFLAGS += -DOFFICIAL_VERSION") && androidVersion == 'official') {
-                                newContent.add(line.trim().substring(1))
-                            } else if (!line.trim().startsWith("#") && line.trim().contains("LOCAL_CFLAGS += -DOFFICIAL_VERSION") && androidVersion == 'store') {
-                                newContent.add("#" + line)
+                        if (line.trim().startsWith("##LOCAL_CFLAGS += -DOFFICIAL_VERSION")) {
+                            if (androidVersion == 'official') {
+                                // 移除 ## 以反註解
+                                newContent.add(line.trim().substring(2))
                             } else {
+                                // 保持原樣
                                 newContent.add(line)
                             }
+                        } else if (line.trim().startsWith("LOCAL_CFLAGS += -DOFFICIAL_VERSION")) {
+                            if (androidVersion == 'store') {
+                                // 添加 ## 以註解
+                                newContent.add("##" + line)
+                            } else {
+                                // 保持原樣
+                                newContent.add(line)
+                            }
+                        } else {
+                            // 對於不包含特定標記的行，保持原樣
+                            newContent.add(line)
                         }
                     }
 
-                    // 確保 newContent 不包含 null 之後再寫入
-                    if (newContent.any { it == null }) {
-                        echo "Error: newContent contains null values."
-                    } else {
-                        writeFile(file: filePath, data: newContent.join("\n"))
-                    }
+                    writeFile(file: filePath, data: newContent.join("\n"))
                 }
             }
         }
