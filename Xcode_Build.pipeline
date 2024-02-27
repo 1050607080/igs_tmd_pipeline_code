@@ -55,7 +55,7 @@ pipeline {
                             def newProjectVersion = params.BUILD
 
                             // 替换 SouthPark release-Info.plist 中的占位符
-                           sh "sed -i '' 's/<string>\\$(MARKETING_VERSION)<\\/string>/<string>\\${\"$\"}{newMarketingVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark\\ release-Info.plist"
+                           sh "sed -i '' 's/<string>\\$(MARKETING_VERSION)<\\/string>/<string>${'$'}{newMarketingVersion}<\\/string>/' /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/ios/SouthPark\\ release-Info.plist"
 
                         } catch (Exception e) {
                             echo "Xcode Version and Build Number Setting failed with error: ${e.message}"
