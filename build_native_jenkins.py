@@ -41,13 +41,14 @@ def check_environment_variables():
     ''' Checking the environment NDK_ROOT, which will be used for building
     '''
 
-    try:
+    '''try:
         NDK_ROOT = os.environ['NDK_ROOT']
     except Exception:
         print "NDK_ROOT not defined. Please define NDK_ROOT in your environment"
         sys.exit(1)
+    '''
 
-    return NDK_ROOT
+    return '/Users/tmd/Documents/android-ndk-r16b'
 
 def select_toolchain_version():
     '''Because ndk-r8e uses gcc4.6 as default. gcc4.6 doesn't support c++11. So we should select gcc4.7 when
