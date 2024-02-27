@@ -42,22 +42,27 @@ pipeline {
             }
         }
 
-         stage('Setting environment') {
+        stage('Setting environment') {
             steps {
                 script {
-                    // Load the XML file
+                    // 載入XML文件
                     def xmlFile = new XmlSlurper().parse(new File(INANNALUA_ENV_PATH))
                     
-                    // Update the <type> element directly
+                    // 更新<type>元素
                     xmlFile.WebEnvironment.type[0].replaceBody(params.BUILD_ENV)
                     
-                    // Convert the updated XML back to a String
-                    def xmlString = XmlUtil.serialize(xmlFile)
+                    // 使用StreamingMarkupBuilder進行序列化
+                    def writer = new StringWriter()
+                    def builder = new StreamingMarkupBuilder()
+                    writer << builder.bind {
+                        mkp.declareNamespace("": "http://www.w3.org/1999/xhtml")
+                        mkp.yield xmlFile
+                    }
+                    
+                    // 將更新後的XML字符串寫回文件
+                    new File(INANNALUA_ENV_PATH).text = writer.toString()
 
-                    // Write the string back to the file
-                    new File(INANNALUA_ENV_PATH).text = xmlString
-
-                    echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."     
+                    echo "Updated WebEnvironment.xml to ${params.BUILD_ENV} environment."
                 }
             }
         }
