@@ -29,13 +29,13 @@ def check_environment_variables_sdk():
     ''' Checking the environment ANDROID_SDK_ROOT, which will be used for building
     '''
 
-    try:
+    '''try:
         SDK_ROOT = os.environ['ANDROID_SDK_ROOT']
     except Exception:
         print "ANDROID_SDK_ROOT not defined. Please define ANDROID_SDK_ROOT in your environment"
-        sys.exit(1)
+        sys.exit(1)'''
 
-    return SDK_ROOT
+    return '/Users/tmd/Library/Android/sdk'
 
 def check_environment_variables():
     ''' Checking the environment NDK_ROOT, which will be used for building
