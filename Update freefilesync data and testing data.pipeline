@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define environment variables
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Starting build process...'
+                // Add your build commands here
+                echo 'Build completed.'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Starting test process...'
+                // Add your test commands here
+                echo 'Testing completed.'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Starting deployment process...'
+                // Add your deployment commands here
+                echo 'Deployment completed.'
+            }
+        }
+    }
+
+    post {
+        always {
+            emailext(
+                subject: "${currentBuild.currentResult} Update freefilesync data and testing data",
+                body: "${currentBuild.currentResult}, Update freefilesync data and testing data",
+                to: "${params.BUILDER_NAME}@igs.com.tw"
+            )
+        }
+    }
+}
