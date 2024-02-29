@@ -11,8 +11,8 @@ pipeline {
         stage('Delete Resources') {
             steps {
                 script {
-                    sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs*"
-                    sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj*"
+                    sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/libs_${params.ANDROID_VERSION}"
+                    sh "rm -rf /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/obj_${params.ANDROID_VERSION}"
                 }
             }
         }
