@@ -23,7 +23,7 @@ pipeline {
                             //def 4463remote = getRemoteConfig('192.168.44.63', 4463REMOTE_USER, 4463REMOTE_PASSWORD)
                             def 4055remote = getRemoteConfig('10.100.40.55', 4055REMOTE_USER, 4055REMOTE_PASSWORD)
                             def ommand = "pwd"
-                            sshCommand remote: 4463remote, command: ommand
+                            sshCommand remote: 4055remote, command: ommand
                         }
                     }
                 }
