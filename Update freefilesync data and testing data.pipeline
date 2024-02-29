@@ -16,12 +16,7 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    /*withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD4055', usernameVariable: 'REMOTE_USER4055')]) {
-                        def remote4055 = getRemoteConfig('10.100.40.55', REMOTE_USER4055, REMOTE_PASSWORD4055)
-                        def ommand = "pwd"
-                        sshCommand remote: remote4055, command: ommand
-                    }*/
-                    sshagent([REMOTE4055_CREDENTIALS]) {
+                    sshagent([env.REMOTE4055_CREDENTIALS]) {
                         sh '''
                         ssh -o StrictHostKeyChecking=no user@192.168.44.63 ssh -o StrictHostKeyChecking=no user@10.100.40.55 "echo '成功连接到目标机器' && pwd"
                         '''
@@ -29,6 +24,7 @@ pipeline {
                 }
             }
         }
+
         stage('Fix targetversion') {
             steps {
                 script{
