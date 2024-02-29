@@ -16,7 +16,7 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: 'REMOTE_PASSWORD4055', usernameVariable: 'REMOTE_USER4055')]) {
+                    withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD4055', usernameVariable: 'REMOTE_USER4055')]) {
                         def remote4055 = getRemoteConfig('10.100.40.55', REMOTE_USER4055, REMOTE_PASSWORD4055)
                         def ommand = "pwd"
                         sshCommand remote: remote4055, command: ommand
