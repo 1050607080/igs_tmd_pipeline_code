@@ -9,36 +9,22 @@ pipeline {
 
     environment {
         REMOTE4055_CREDENTIALS ='remote4055_login'
-        REMOTE4033_CREDENTIALS ='remote4463_login'
+        REMOTE4463_CREDENTIALS ='remote4463_login'
     }
 
     stages {
-        stage('Create Testing folder') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: REMOTE4033_CREDENTIALS, passwordVariable: 'REMOTE4463_PASSWORD', usernameVariable: 'REMOTE4463_USER')]) {
-                        withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: 'REMOTE4055_PASSWORD', usernameVariable: 'REMOTE4055_USER')]) {
-                            try {
-                                sh "/opt/homebrew/bin/sshpass -V"
-
-                                sh """
-                                /opt/homebrew/bin/sshpass -p '${REMOTE4463_PASSWORD}' ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 '/opt/homebrew/bin/sshpass -p '${REMOTE4055_PASSWORD}' ssh -o StrictHostKeyChecking=no admin@10.100.40.55 \'echo test\''
-                                """
-
-                            } catch (Exception e) {
-                                echo "Caught an exception: ${e.getMessage()}"
-                                throw e
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         stage('Fix targetversion') {
             steps {
                 script{
                     echo 'Fix targetversion'
+
+                    //REMOTE
+                    withCredentials([usernamePassword(credentialsId: REMOTE4463_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
+                        //def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
+                        //def fix_targetversion = ''
+                        //sshCommand remote: remote, command: fix_targetversion
+                    }
                 }
             }
         }
