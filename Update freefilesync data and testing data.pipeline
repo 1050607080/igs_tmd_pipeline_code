@@ -13,24 +13,28 @@ pipeline {
     }
 
     stages {
+
         stage('Create Testing folder') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: REMOTE4463_CREDENTIALS, passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
-                        withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
-                            def jumpHostUser = "${4463REMOTE_USER}@192.168.44.63"
-                            def targetHostUser = "${4055REMOTE_USER}@192.168.40.55"
-                            def sshCommand = "pwd"  // 在目标机器上执行的命令
+                    withCredentials([usernamePassword(credentialsId: 'REMOTE4463_CREDENTIALS', passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
+                        withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
+                            // 使用环境变量引用用户名和密码
+                            def jumpHostUser = "${env.4463REMOTE_USER}@192.168.44.63"
+                            def targetHostUser = "${env.4055REMOTE_USER}@192.168.40.55"
+                            def sshCommand = "pwd"
 
-
-                            def command = "sshpass -p '${4463REMOTE_PASSWORD}' ssh -o StrictHostKeyChecking=no -J ${jumpHostUser} ${targetHostUser} '${sshCommand}'"
-
-                            sh "echo ${4463REMOTE_PASSWORD} | ${command}"
+                            // 构建 SSH 命令
+                            def command = "ssh -o StrictHostKeyChecking=no -J ${jumpHostUser} ${targetHostUser} '${sshCommand}'"
+                            
+                            // 执行 SSH 命令
+                            sh "echo ${env.4463REMOTE_PASSWORD} | ${command}"
                         }
                     }
                 }
             }
         }
+
 
         stage('Fix targetversion') {
             steps {
