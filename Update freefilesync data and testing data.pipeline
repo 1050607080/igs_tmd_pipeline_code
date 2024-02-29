@@ -23,7 +23,7 @@ pipeline {
                                 sh """
                                 sshpass -p '${REMOTE4463_PASSWORD}' ssh -o StrictHostKeyChecking=no ${REMOTE4463_USER}@192.168.44.63 \\
                                 sshpass -p '${REMOTE4055_PASSWORD}' ssh -o StrictHostKeyChecking=no ${REMOTE4055_USER}@10.100.40.55 \\
-                                'echo "成功连接到目标机器" && pwd'
+                                'echo "成功连接到目标机器"'
                                 """
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
