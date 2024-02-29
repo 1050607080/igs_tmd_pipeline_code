@@ -1,43 +1,49 @@
-pipeline {
-    agent any
+parameters {
+    string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
+    choice(name: 'UPDATE_TARGET', choices: ['androidtesting', 'iostesting'], description: '更新資源')
+}
 
-    parameters {
-        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'UPDATE_TARGET', choices: ['android', 'ios'], description: '更新資源')
-    }
+stages {
+    stage('Copy production Resources to testing Resources') {
+        steps {
+            script {
+                echo "Copy production Resources to testing Resources"
 
-    stages {
-        stage('Moving Resources') {
-            steps {
-                script {
-                    echo "Moving Resources"
+                withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                    try {
+                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            // 清空 androidtesting 
+                            def clearCommand = "powershell -Command \"Remove-Item -Path 'D:\\webGame\\Game\\TMD_mobile\\data\\androidtesting\\*' -Recurse -Force\""
+                            sshCommand remote: remote, command: clearCommand
+                            
+                            // 複製 android 到 androidtesting
+                            def copyCommand = "powershell -Command \"Copy-Item -Path 'D:\\webGame\\Game\\TMD_mobile\\data\\android\\*' -Destination 'D:\\webGame\\Game\\TMD_mobile\\data\\androidtesting' -Recurse -Force\""
+                            sshCommand remote: remote, command: copyCommand
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            // 清空 iostesting
+                            def clearCommand = "powershell -Command \"Remove-Item -Path 'D:\\webGame\\Game\\TMD_mobile\\data\\iostesting\\*' -Recurse -Force\""
+                            sshCommand remote: remote, command: clearCommand
+                            
+                            // 複製 ios 到 iostesting
+                            def copyCommand = "powershell -Command \"Copy-Item -Path 'D:\\webGame\\Game\\TMD_mobile\\data\\ios\\*' -Destination 'D:\\webGame\\Game\\TMD_mobile\\data\\iostesting' -Recurse -Force\""
+                            sshCommand remote: remote, command: copyCommand
+                        }
+                    } catch (Exception e) {
+                        echo "An error occurred: ${e.getMessage()}"
+                        throw e
+                    }
                 }
             }
         }
-
-        stage('CDN & GCP resources update') {
-            steps {
-                script {
-                    echo "CDN & GCP resources update"
-                }
-            }
-        }
     }
 
-    post {
-        success {
-            emailext(
-                subject: "${params.UPDATE_TARGET} CDN&GCP資源更新成功",
-                body: "更新成功",
-                to: "${params.BUILDER_NAME}@igs.com.tw"
-            )
-        }
-        failure {
-            emailext(
-                subject: "${params.UPDATE_TARGET} CDN&GCP資源更新失敗",
-                body: "更新失敗",
-                to: "${params.BUILDER_NAME}@igs.com.tw"
-            )
+    stage('testing Resources CDN & GCP update') {
+        steps {
+            script {
+                echo "testing Resources CDN & GCP update"
+                // 在这里根据需要添加CDN和GCP更新的代码
+            }
         }
     }
 }
