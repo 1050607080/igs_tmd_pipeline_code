@@ -15,12 +15,13 @@ pipeline {
 
         stage('Create Testing folder') {
             steps {
-                echo 'Create Testing folder'
-                withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
-                    def remote = getRemoteConfig("192.168.40.55", REMOTE_USER, REMOTE_PASSWORD)
-                    def create_folder_command = "pwd"
-                    sshCommand remote: remote, command: create_folder_command
-                }  
+                script{
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
+                        def remote = getRemoteConfig("192.168.40.55", REMOTE_USER, REMOTE_PASSWORD)
+                        def create_folder_command = "pwd"
+                        sshCommand remote: remote, command: create_folder_command
+                    }  
+                }
             }
         }
 
