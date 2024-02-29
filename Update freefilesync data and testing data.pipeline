@@ -23,7 +23,8 @@ pipeline {
 
  
 
-                                sh "/opt/homebrew/bin/sshpass -p ${REMOTE4463_PASSWORD} ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 "/opt/homebrew/bin/sshpass -p ${REMOTE4055_PASSWORD} ssh -o StrictHostKeyChecking=no admin@10.100.40.55 'powershell.exe -Command \"echo 成功连接到目标机器\"'""
+                               sh """/opt/homebrew/bin/sshpass -p '${REMOTE4463_PASSWORD}' ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 "/opt/homebrew/bin/sshpass -p '${REMOTE4055_PASSWORD}' ssh -o StrictHostKeyChecking=no admin@10.100.40.55 'powershell.exe -Command \"echo 成功连接到目标机器\"'" """
+
 
 
                             } catch (Exception e) {
