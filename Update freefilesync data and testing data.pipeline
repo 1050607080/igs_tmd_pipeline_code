@@ -17,30 +17,15 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    /*withCredentials([usernamePassword(credentialsId: 'REMOTE4463_CREDENTIALS', passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
+                    withCredentials([usernamePassword(credentialsId: 'REMOTE4463_CREDENTIALS', passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
                         withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
-                            // 使用环境变量引用用户名和密码
-                            def jumpHostUser = "${env.4463REMOTE_USER}@192.168.44.63"
-                            def targetHostUser = "${env.4055REMOTE_USER}@192.168.40.55"
-                            def sshCommand = "pwd"
-
-                            // 构建 SSH 命令
-                            def command = "ssh -o StrictHostKeyChecking=no -J ${jumpHostUser} ${targetHostUser} '${sshCommand}'"
-                            
-                            // 执行 SSH 命令
-                            sh "echo ${env.4463REMOTE_PASSWORD} | ${command}"
+                        
+                            //def 4463remote = getRemoteConfig('192.168.44.63', 4463REMOTE_USER, 4463REMOTE_PASSWORD)
+                            def 4055remote = getRemoteConfig('10.100.40.55', 4055REMOTE_USER, 4055REMOTE_PASSWORD)
+                            def ommand = "pwd"
+                            sshCommand remote: 4463remote, command: ommand
                         }
-                    }*/
-
-                    def jumpHost = "weitsunglin@192.168.44.63"
-                    def targetHost = "weitsunglin@192.168.40.55"
-                    def sshCommand = "pwd"  // 您想在目标机上执行的命令
-
-                    // 构建通过跳板机执行命令到目标机的 SSH 命令
-                    def command = "ssh -o StrictHostKeyChecking=no ${jumpHost} ssh -o StrictHostKeyChecking=no ${targetHost} '${sshCommand}'"
-
-                    // 执行 SSH 命令
-                    sh command
+                    }
                 }
             }
         }
