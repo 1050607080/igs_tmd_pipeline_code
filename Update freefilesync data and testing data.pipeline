@@ -17,21 +17,20 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: REMOTE4463_CREDENTIALS, passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
-                        withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
+                    withCredentials([usernamePassword(credentialsId: 'REMOTE4463_CREDENTIALS', passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
+                        withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
                             // 定义跳板机和目标机的用户信息
-                            def jumpHostUser = "${4463REMOTE_USER}@192.168.44.63"
-                            def targetHostUser = "${4055REMOTE_USER}@192.168.40.55"
+                            def jumpHostUser = "${env.4463REMOTE_USER}@192.168.44.63"
+                            def targetHostUser = "${env.4055REMOTE_USER}@192.168.40.55"
                             def sshCommand = "pwd"  // 在目标机器上执行的命令
 
-                            // 构建 SSH 跳转命令，注意使用 sshpass 来处理密码输入
-                            // 这里使用 sshpass 对跳板机的密码进行处理，跳板机上需要有 sshpass 工具
-                            // 注意：以下命令为示例，可能需要根据您的具体环境进行调整
-                            def command = "sshpass -p '${4463REMOTE_PASSWORD}' ssh -o StrictHostKeyChecking=no -J ${jumpHostUser} ${targetHostUser} '${sshCommand}'"
+                            // 构建 SSH 跳转命令
+                            // 请注意，直接在 Jenkinsfile 中使用 sshpass 可能不被推荐，尤其是在安全性较高的环境下
+                            // 这里的命令依赖于 sshpass 工具，该工具需要预先安装在 Jenkins 的执行节点上
+                            def command = "sshpass -p '${env.4463REMOTE_PASSWORD}' ssh -o StrictHostKeyChecking=no -J ${jumpHostUser} ${targetHostUser} '${sshCommand}'"
 
                             // 执行 SSH 跳转命令
-                            // 这里假设 Jenkins 执行节点上已安装 sshpass
-                            sh command
+                            sh "echo ${env.4463REMOTE_PASSWORD} | ${command}"
                         }
                     }
                 }
@@ -41,17 +40,23 @@ pipeline {
 
         stage('Fix targetversion') {
             steps {
-                echo 'Fix targetversion'
+                script{
+                    echo 'Fix targetversion'
+                }
             }
         }
         stage('ReplaceBatchFlie') {
             steps {
-                echo 'ReplaceBatchFlie'
+                script{
+                    echo 'ReplaceBatchFlie'
+                }
             }
         }
          stage('Move ffsBatch') {
             steps {
-                echo 'Move ffsBatch'
+                script{
+                    echo 'Move ffsBatch'
+                }
             }
         }
     }
