@@ -13,18 +13,13 @@ pipeline {
     }
 
     stages {
-
         stage('Create Testing folder') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: REMOTE4033_CREDENTIALS, passwordVariable: 'REMOTE4463_PASSWORD', usernameVariable: 'REMOTE4463_USER')]) {
                         withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: 'REMOTE4055_PASSWORD', usernameVariable: 'REMOTE4055_USER')]) {
                             try {
-                                sh """
-                                /opt/homebrew/bin/sshpass -p '${REMOTE4463_PASSWORD}' ssh -o StrictHostKeyChecking=no ${REMOTE4463_USER}@192.168.44.63 \\
-                                /opt/homebrew/bin/sshpass -p '${REMOTE4055_PASSWORD}' ssh -o StrictHostKeyChecking=no ${REMOTE4055_USER}@10.100.40.55 \\
-                                'echo "成功连接到目标机器"'
-                                """
+                                sh "/opt/homebrew/bin/sshpass -V"
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
                                 throw e
