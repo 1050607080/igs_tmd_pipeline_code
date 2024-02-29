@@ -68,7 +68,7 @@ pipeline {
                         try {
                             echo "Deploying to GCP..."
                             def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/Ios送審工具/jenkins_gcp_change_webEnvoroment.bat"
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/jenkins_gcp_change_webEnvoroment.bat"
                             sshCommand remote: remote, command: command
                         } catch (Exception e) {
                             echo "Deployment to GCP failed with error: ${e.getMessage()}"
@@ -79,7 +79,6 @@ pipeline {
             }
         }
     }
-
     post {
         always {
             emailext(
