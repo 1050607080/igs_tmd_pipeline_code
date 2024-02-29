@@ -59,7 +59,7 @@ pipeline {
             }
         }
 
-        stage('testing Resources GCP purge') {
+        stage('testing Resources GCP purge 1') {
             steps {
                 script {
                     if (params.UPDATE_TARGET == 'androidtesting') {
@@ -101,7 +101,7 @@ pipeline {
             }
         }
 
-         stage('testing Resources GCP purge') {
+         stage('testing Resources GCP purge 2') {
             steps {
                 script {
                     if (params.UPDATE_TARGET == 'androidtesting') {
