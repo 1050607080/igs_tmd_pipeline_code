@@ -6,25 +6,26 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+
+        stage('Create Testing folder') {
             steps {
                 echo 'Starting build process...'
-                // Add your build commands here
-                echo 'Build completed.'
             }
         }
-        stage('Test') {
+
+        stage('Fix targetversion') {
             steps {
                 echo 'Starting test process...'
-                // Add your test commands here
-                echo 'Testing completed.'
             }
         }
-        stage('Deploy') {
+        stage('ReplaceBatchFlie') {
             steps {
                 echo 'Starting deployment process...'
-                // Add your deployment commands here
-                echo 'Deployment completed.'
+            }
+        }
+         stage('Move ffsBatch') {
+            steps {
+                echo 'Starting deployment process...'
             }
         }
     }
