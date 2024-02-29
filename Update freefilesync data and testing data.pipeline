@@ -20,13 +20,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: 'REMOTE4055_PASSWORD', usernameVariable: 'REMOTE4055_USER')]) {
                             try {
                                 sh "/opt/homebrew/bin/sshpass -V"
-
- 
-
-                               sh """/opt/homebrew/bin/sshpass -p '${REMOTE4463_PASSWORD}' ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 "/opt/homebrew/bin/sshpass -p '${REMOTE4055_PASSWORD}' ssh -o StrictHostKeyChecking=no admin@10.100.40.55 'powershell.exe -Command \"echo 成功连接到目标机器\"'" """
-
-
-
+                                /opt/homebrew/bin/sshpass -p 'PASSWORD1' ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 '/opt/homebrew/bin/sshpass -p '\''PASSWORD2'\'' ssh -o StrictHostKeyChecking=no admin@10.100.40.55 '\''powershell.exe -Command "echo \'成功连接到目标机器\'"\''
                             } catch (Exception e) {
                                 echo "Caught an exception: ${e.getMessage()}"
                                 throw e
