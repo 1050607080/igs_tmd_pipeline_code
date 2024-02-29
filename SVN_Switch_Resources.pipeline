@@ -35,6 +35,7 @@ pipeline {
                     dir("${TMD_RESOURCES_URL}Inanna/") {
                         withCredentials([usernamePassword(credentialsId: SVM_CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                             sh "${SVN_INSTALL_PATH} switch ${InanaUrl} --username $SVN_USER --password $SVN_PASSWORD"
+                            sh "${SVN_INSTALL_PATH} revert -R . --username $SVN_USER --password $SVN_PASSWORD"
                         }
                     }
 
@@ -43,6 +44,11 @@ pipeline {
                         dir("${TMD_RESOURCES_URL}${resource.name}") {
                             withCredentials([usernamePassword(credentialsId: SVM_CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
                                 sh "${SVN_INSTALL_PATH} switch ${resource.url} --username $SVN_USER --password $SVN_PASSWORD"
+                            }
+                            if (resource.name != "SouthPark") { 
+                                sh "${SVN_INSTALL_PATH} revert -R . --username $SVN_USER --password $SVN_PASSWORD"
+                            } else {
+                                echo "Skipping revert with name: ${resource.name}"
                             }
                         }
                     }
