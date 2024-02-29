@@ -3,29 +3,40 @@ pipeline {
 
      parameters {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
+        string(name: 'NEW_VERSION', defaultValue: '1.1.184', description: '新版本')
+        choice(name: 'GAME_ENV', choices: ['android', 'ios'], description: '遊戲環境')
+    }
+
+    environment {
+        REMOTE_CREDENTIALS ='remote4055_login'
     }
 
     stages {
 
         stage('Create Testing folder') {
             steps {
-                echo 'Starting build process...'
+                echo 'Create Testing folder'
+                withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
+                    def remote = getRemoteConfig("192.168.40.55", REMOTE_USER, REMOTE_PASSWORD)
+                    def create_folder_command = "pwd"
+                    sshCommand remote: remote, command: create_folder_command
+                }  
             }
         }
 
         stage('Fix targetversion') {
             steps {
-                echo 'Starting test process...'
+                echo 'Fix targetversion'
             }
         }
         stage('ReplaceBatchFlie') {
             steps {
-                echo 'Starting deployment process...'
+                echo 'ReplaceBatchFlie'
             }
         }
          stage('Move ffsBatch') {
             steps {
-                echo 'Starting deployment process...'
+                echo 'Move ffsBatch'
             }
         }
     }
@@ -39,4 +50,14 @@ pipeline {
             )
         }
     }
+}
+
+def getRemoteConfig(host, user, password) {
+    def remote = [:]
+    remote.name = user
+    remote.host = host
+    remote.user = user
+    remote.password = password
+    remote.allowAnyHosts = true
+    return remote
 }
