@@ -8,7 +8,6 @@ pipeline {
     }
 
     environment {
-        REMOTE4463_CREDENTIALS ='remote4463_login'
         REMOTE4055_CREDENTIALS ='remote4055_login'
     }
 
@@ -17,14 +16,10 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'REMOTE4463_CREDENTIALS', passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
-                        withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: 'REMOTE_PASSWORD4055', usernameVariable: 'REMOTE_USER4055')]) {
-                        
-                            //def 4463remote = getRemoteConfig('192.168.44.63', 4463REMOTE_USER, 4463REMOTE_PASSWORD)
-                            def remote4055 = getRemoteConfig('10.100.40.55', REMOTE_USER4055, REMOTE_PASSWORD4055)
-                            def ommand = "pwd"
-                            sshCommand remote: remote4055, command: ommand
-                        }
+                    withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: 'REMOTE_PASSWORD4055', usernameVariable: 'REMOTE_USER4055')]) {
+                        def remote4055 = getRemoteConfig('10.100.40.55', REMOTE_USER4055, REMOTE_PASSWORD4055)
+                        def ommand = "pwd"
+                        sshCommand remote: remote4055, command: ommand
                     }
                 }
             }
