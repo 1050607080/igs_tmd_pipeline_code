@@ -15,15 +15,27 @@ pipeline {
 
         stage('Create Testing folder') {
             steps {
-                script{
-                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
-                        def remote = getRemoteConfig("192.168.40.55", REMOTE_USER, REMOTE_PASSWORD)
-                        def create_folder_command = "pwd"
-                        sshCommand remote: remote, command: create_folder_command
-                    }  
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'REMOTE_CREDENTIALS', passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
+                        // 使用 SSH 跳板 (Jump) 来执行远程命令
+                        // 这里的命令是在 40.55 上执行 pwd，通过 44.63 作为跳板
+                        def jumpHost = "44.63"
+                        def targetHost = "192.168.40.55"
+                        def sshCommand = "pwd"  // 这里可以替换为您想在目标机器上执行的命令
+
+                        // 构建 SSH 跳转命令
+                        // 注意：这里假设跳板机和目标机器使用相同的凭证
+                        // 如果不是，请根据实际情况调整命令，可能需要在跳板机上配置免密登录到目标机器
+                        def command = "ssh -o StrictHostKeyChecking=no -J ${REMOTE_USER}@${jumpHost} ${REMOTE_USER}@${targetHost} '${sshCommand}'"
+
+                        // 执行 SSH 跳转命令
+                        // 使用 Jenkins 的 sh 步骤执行 shell 命令，并通过 withCredentials 注入凭证
+                        sh "echo ${REMOTE_PASSWORD} | ${command}"
+                    }
                 }
             }
         }
+
 
         stage('Fix targetversion') {
             steps {
