@@ -16,8 +16,8 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'REMOTE4463_CREDENTIALS', passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
-                        withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
+                    withCredentials([usernamePassword(credentialsId: REMOTE4463_CREDENTIALS, passwordVariable: '4463REMOTE_PASSWORD', usernameVariable: '4463REMOTE_USER')]) {
+                        withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
                             def jumpHostUser = "${4463REMOTE_USER}@192.168.44.63"
                             def targetHostUser = "${4055REMOTE_USER}@192.168.40.55"
                             def sshCommand = "pwd"  // 在目标机器上执行的命令
