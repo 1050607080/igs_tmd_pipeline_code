@@ -48,16 +48,18 @@ pipeline {
         stage('Resources GCP update') {
             steps {
                 script {
-                    if (params.UPDATE_TARGET == 'androidtesting') {
-                        echo "androidtesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/1_GCP更新Resource.bat"
-                        sshCommand remote: remote, command: command
-                    } else if (params.UPDATE_TARGET == 'iostesting') {
-                        echo "iostesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/1_GCP更新Resource.bat"
-                        sshCommand remote: remote, command: command
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            echo "androidtesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/1_GCP更新Resource.bat"
+                            sshCommand remote: remote, command: command
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            echo "iostesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/1_GCP更新Resource.bat"
+                            sshCommand remote: remote, command: command
+                        }
                     }
                 }
             }
@@ -66,16 +68,18 @@ pipeline {
         stage('Resources GCP purge 1') {
             steps {
                 script {
-                    if (params.UPDATE_TARGET == 'androidtesting') {
-                        echo "androidtesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/2_GCP清除快取資源.bat"
-                        sshCommand remote: remote, command: command
-                    } else if (params.UPDATE_TARGET == 'iostesting') {
-                        echo "iostesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/2_GCP清除快取資源.bat"
-                        sshCommand remote: remote, command: command
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            echo "androidtesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/2_GCP清除快取資源.bat"
+                            sshCommand remote: remote, command: command
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            echo "iostesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/2_GCP清除快取資源.bat"
+                            sshCommand remote: remote, command: command
+                        }
                     }
                 }
             }
@@ -84,16 +88,18 @@ pipeline {
         stage('Resources CDN update') {
             steps {
                 script {
-                    if (params.UPDATE_TARGET == 'androidtesting') {
-                        echo "androidtesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/3_CDN更新Resource.bat"
-                        sshCommand remote: remote, command: command
-                    } else if (params.UPDATE_TARGET == 'iostesting') {
-                        echo "iostesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/3_CDN更新Resource.bat"
-                        sshCommand remote: remote, command: command
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            echo "androidtesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/3_CDN更新Resource.bat"
+                            sshCommand remote: remote, command: command
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            echo "iostesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/3_CDN更新Resource.bat"
+                            sshCommand remote: remote, command: command
+                        }
                     }
                 }
             }
@@ -102,16 +108,18 @@ pipeline {
         stage('Resources version GCP update') {
             steps {
                 script {
-                    if (params.UPDATE_TARGET == 'androidtesting') {
-                        echo "androidtesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/5_GCP更新Version.bat"
-                        sshCommand remote: remote, command: command
-                    } else if (params.UPDATE_TARGET == 'iostesting') {
-                        echo "iostesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/5_GCP更新Version.bat"
-                        sshCommand remote: remote, command: command
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            echo "androidtesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/5_GCP更新Version.bat"
+                            sshCommand remote: remote, command: command
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            echo "iostesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/5_GCP更新Version.bat"
+                            sshCommand remote: remote, command: command
+                        }
                     }
                 }
             }
@@ -120,16 +128,18 @@ pipeline {
          stage('Resources GCP purge 2') {
             steps {
                 script {
-                    if (params.UPDATE_TARGET == 'androidtesting') {
-                        echo "androidtesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/6_GCP清除快取資源.bat"
-                        sshCommand remote: remote, command: command
-                    } else if (params.UPDATE_TARGET == 'iostesting') {
-                        echo "iostesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/6_GCP清除快取資源.bat"
-                        sshCommand remote: remote, command: command
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            echo "androidtesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/6_GCP清除快取資源.bat"
+                            sshCommand remote: remote, command: command
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            echo "iostesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/6_GCP清除快取資源.bat"
+                            sshCommand remote: remote, command: command
+                        }
                     }
                 }
             }
@@ -138,16 +148,18 @@ pipeline {
         stage('Resources version CDN update') {
             steps {
                 script {
-                    if (params.UPDATE_TARGET == 'androidtesting') {
-                        echo "androidtesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/7_CDN更新Version.bat"
-                        sshCommand remote: remote, command: command
-                    } else if (params.UPDATE_TARGET == 'iostesting') {
-                        echo "iostesting"
-                        def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
-                        def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/7_CDN更新Version.bat"
-                        sshCommand remote: remote, command: command
+                    withCredentials([usernamePassword(credentialsId: REMOTE_CREDENTIALS, passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                        if (params.UPDATE_TARGET == 'androidtesting') {
+                            echo "androidtesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/android/7_CDN更新Version.bat"
+                            sshCommand remote: remote, command: command
+                        } else if (params.UPDATE_TARGET == 'iostesting') {
+                            echo "iostesting"
+                            def remote = getRemoteConfig('192.168.44.102', USER, PASSWORD)
+                            def command = "C:/Users/Administrator/Desktop/TMD_Client/送審專用/jenkins_update_cdn_gcp/ios/7_CDN更新Version.bat"
+                            sshCommand remote: remote, command: command
+                        }
                     }
                 }
             }
