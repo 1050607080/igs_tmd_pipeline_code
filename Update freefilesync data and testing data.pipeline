@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-    environment {
-        Test = ''
+     parameters {
+        string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
     }
 
     stages {
