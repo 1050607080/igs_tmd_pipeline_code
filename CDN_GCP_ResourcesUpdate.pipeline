@@ -115,7 +115,7 @@ pipeline {
             }
         }
 
-        tage('testing Resources version CDN update') {
+        stage('testing Resources version CDN update') {
             steps {
                 script {
                     if (params.UPDATE_TARGET == 'androidtesting') {
