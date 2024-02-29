@@ -9,6 +9,7 @@ pipeline {
 
     environment {
         REMOTE4055_CREDENTIALS ='remote4055_login'
+        REMOTE4033_CREDENTIALS ='remote4033_login'
     }
 
     stages {
@@ -16,10 +17,20 @@ pipeline {
         stage('Create Testing folder') {
             steps {
                 script {
-                    sshagent([env.REMOTE4055_CREDENTIALS]) {
-                       sh '''
-                        ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 ssh -o StrictHostKeyChecking=no admin@10.100.40.55 "echo '成功连接到目标机器' && pwd"
-                        '''
+                    withCredentials([usernamePassword(credentialsId: REMOTE4033_CREDENTIALS, passwordVariable: 'REMOTE4033_PASSWORD', usernameVariable: 'REMOTE4033_USER')]) {
+                        def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
+                        withCredentials([usernamePassword(credentialsId: REMOTE4055_CREDENTIALS, passwordVariable: 'REMOTE4055_PASSWORD', usernameVariable: 'REMOTE4055_USER')]) {
+                            try {
+                                sh """
+                                sshpass -p '${REMOTE4033_PASSWORD}' ssh -o StrictHostKeyChecking=no ${REMOTE4033_USER}@192.168.44.63 \\
+                                sshpass -p '${REMOTE4055_PASSWORD}' ssh -o StrictHostKeyChecking=no ${REMOTE4055_USER}@10.100.40.55 \\
+                                'echo "成功连接到目标机器" && pwd'
+                                """
+                            } catch (Exception e) {
+                                echo "Caught an exception: ${e.getMessage()}"
+                                throw e
+                            }
+                        }
                     }
                 }
             }
