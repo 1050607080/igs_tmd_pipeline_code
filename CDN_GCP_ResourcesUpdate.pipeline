@@ -45,13 +45,82 @@ pipeline {
             }
         }
 
-        stage('testing Resources CDN & GCP update') {
+        stage('testing Resources GCP update') {
             steps {
                 script {
-                    echo "testing Resources CDN & GCP update"
                     if (params.UPDATE_TARGET == 'androidtesting') {
                         echo "androidtesting"
-                        
+
+                    } else if (params.UPDATE_TARGET == 'iostesting') {
+                        echo "iostesting"
+
+                    }
+                }
+            }
+        }
+
+        stage('testing Resources GCP purge') {
+            steps {
+                script {
+                    if (params.UPDATE_TARGET == 'androidtesting') {
+                        echo "androidtesting"
+
+                    } else if (params.UPDATE_TARGET == 'iostesting') {
+                        echo "iostesting"
+
+                    }
+                }
+            }
+        }
+
+        stage('testing Resources CDN update') {
+            steps {
+                script {
+                    if (params.UPDATE_TARGET == 'androidtesting') {
+                        echo "androidtesting"
+
+                    } else if (params.UPDATE_TARGET == 'iostesting') {
+                        echo "iostesting"
+
+                    }
+                }
+            }
+        }
+
+        stage('testing Resources version GCP update') {
+            steps {
+                script {
+                    if (params.UPDATE_TARGET == 'androidtesting') {
+                        echo "androidtesting"
+
+                    } else if (params.UPDATE_TARGET == 'iostesting') {
+                        echo "iostesting"
+
+                    }
+                }
+            }
+        }
+
+         stage('testing Resources GCP purge') {
+            steps {
+                script {
+                    if (params.UPDATE_TARGET == 'androidtesting') {
+                        echo "androidtesting"
+
+                    } else if (params.UPDATE_TARGET == 'iostesting') {
+                        echo "iostesting"
+
+                    }
+                }
+            }
+        }
+
+        tage('testing Resources version CDN update') {
+            steps {
+                script {
+                    if (params.UPDATE_TARGET == 'androidtesting') {
+                        echo "androidtesting"
+
                     } else if (params.UPDATE_TARGET == 'iostesting') {
                         echo "iostesting"
 
