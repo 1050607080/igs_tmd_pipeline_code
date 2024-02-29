@@ -17,8 +17,8 @@ pipeline {
             steps {
                 script {
                     sshagent([env.REMOTE4055_CREDENTIALS]) {
-                        sh '''
-                        ssh -o StrictHostKeyChecking=weitsunglin@192.168.44.63 ssh -o StrictHostKeyChecking=admin@10.100.40.55 "echo '成功连接到目标机器' && pwd"
+                       sh '''
+                        ssh -o StrictHostKeyChecking=no weitsunglin@192.168.44.63 ssh -o StrictHostKeyChecking=no admin@10.100.40.55 "echo '成功连接到目标机器' && pwd"
                         '''
                     }
                 }
