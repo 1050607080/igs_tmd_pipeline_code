@@ -21,9 +21,9 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'REMOTE4055_CREDENTIALS', passwordVariable: '4055REMOTE_PASSWORD', usernameVariable: '4055REMOTE_USER')]) {
                         
                             //def 4463remote = getRemoteConfig('192.168.44.63', 4463REMOTE_USER, 4463REMOTE_PASSWORD)
-                            def 4055remote = getRemoteConfig('10.100.40.55', 4055REMOTE_USER, 4055REMOTE_PASSWORD)
+                            def remote4055 = getRemoteConfig('10.100.40.55', 4055REMOTE_USER, 4055REMOTE_PASSWORD)
                             def ommand = "pwd"
-                            sshCommand remote: 4055remote, command: ommand
+                            sshCommand remote: remote4055, command: ommand
                         }
                     }
                 }
