@@ -103,7 +103,7 @@ for elem in tree.iterfind("game[@name]"):
     r.close()
     w = open(OUTPUT_NAME.format(targetDir), "w+")
     w.truncate(0)
-    if platform == ANDROID or platform == IOS or platform == WIN:
+    if platform == ANDROID or platform == IOS:
         # android同步ios
         if targetDir != INANNA:
             file_list = re.sub(r"<Left/>", r"<Left>D:\\TMD_PUBLIC\\TMD\\testing\\android\\{0}</Left>".format(targetDir), file_list, 1)
