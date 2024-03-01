@@ -12,7 +12,7 @@ pipeline {
         SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
         svnCommitMessage = ''
         filePath = ''
-
+       PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
     }
 
     stages {
@@ -53,7 +53,9 @@ pipeline {
             steps {
                 script{
                     echo 'SVN commit target version'
-                    svnCommit(filePath, 'jenkins 2412 auto commit target version')
+                    dir(PROJ_ANDROID_URL){
+                        svnCommit(filePath, 'jenkins 2412 auto commit target version')
+                    }
                 }
             }
         }
