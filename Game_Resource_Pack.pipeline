@@ -197,7 +197,8 @@ pipeline {
                 script {
                     if(params.MODE == "release" && GAMEVERSION == 'ios') {
                         echo "Move PackingData to ios Project"
-                        sh "cp -r /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/cocos /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/SouthPark_release/"
+                        sh "cp -r /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/cocos /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/test/"
+                        sh "cp -r /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/InannaResource /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/test/"
                         sh """
                         find /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/ -type d -name "*Lua*" | xargs -I {} cp -r {} /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/test/
                         """
