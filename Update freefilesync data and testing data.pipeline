@@ -10,10 +10,10 @@ pipeline {
     environment {
         REMOTE4463_CREDENTIALS ='remote4463_login'
         SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
-    }
+        svnCommitMessage = ''
+        filePath = ''
 
-    def filePath = ''
-    def svnCommitMessage = ''
+    }
 
     stages {
 
