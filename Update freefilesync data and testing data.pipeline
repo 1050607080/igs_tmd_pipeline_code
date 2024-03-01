@@ -12,12 +12,15 @@ pipeline {
         SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
     }
 
+    def filePath = ''
+    def svnCommitMessage = ''
+
     stages {
 
         stage('Update Version Info') {
             steps {
                 script {
-                    def filePath = '/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/targetVersion.json'
+                    filePath = '/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/targetVersion.json'
                     
                     def versionsFile = readFile filePath
                     def versions = readJSON text: versionsFile
@@ -34,14 +37,23 @@ pipeline {
                             echo "Updated versions: ${versions}"
 
                             // 进行 SVN 提交
-                            def svnCommitMessage = "Updated targetversion from 2412 jenkins ${platform} version to ${newVersion}"
-                            svnCommit(filePath, svnCommitMessage)
-                        } else {
+                            svnCommitMessage = "Updated targetversion from 2412 jenkins ${platform} version to ${newVersion}"
+                        } 
+                        else {
                             echo "Version $newVersion already exists for $platform, not adding it again."
                         }
                     } else {
                         echo "Platform $platform does not exist."
                     }
+                }
+            }
+        }
+
+        stage('SVN commit target version') {
+            steps {
+                script{
+                    echo 'SVN commit target version'
+                    svnCommit(filePath, 'jenkins 2412 auto commit target version')
                 }
             }
         }
@@ -53,6 +65,7 @@ pipeline {
                 }
             }
         }
+
         stage('Move ffsBatch') {
             steps {
                 script{
