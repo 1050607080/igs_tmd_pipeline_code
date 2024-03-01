@@ -44,9 +44,11 @@ pipeline {
                         } 
                         else {
                             echo "Version $newVersion already exists for $platform, not adding it again."
+                            versionsUpdated = false
                         }
                     } else {
                         echo "Platform $platform does not exist."
+                        versionsUpdated = false
                     }
                 }
             }
@@ -74,7 +76,7 @@ pipeline {
             steps {
                 script{
                     echo 'ReplaceBatchFlie'
-                    sh '/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/replace_jenkins.sh ${params.GAME_ENV}'
+                    sh "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/replace_jenkins.sh ${params.GAME_ENV}"
                 }
             }
         }
