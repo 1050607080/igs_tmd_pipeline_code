@@ -31,13 +31,15 @@ pipeline {
 
                         if (GAMEVERSION =='android') {
                            output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.ANDROID_RESOURCES}", returnStdout: true).trim()
+                           SVN_URLS = output.split('\n')
                         } 
                         else {
                            output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.IOS_RESOURCES}", returnStdout: true).trim()
+                           SVN_URLS = output.split('\n')
                         }
                         
                         echo "版本路徑撈取: ${output}"
-                        SVN_URLS = output.split('\n')
+                       
                     }
                 }
             }
