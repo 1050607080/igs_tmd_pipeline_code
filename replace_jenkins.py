@@ -38,7 +38,7 @@ with open(VERSION_FILE) as version_file:
     jdata = json.load(version_file, encoding = "utf8")
 
 # 版本數量
-def get_version_count(gameName):
+def get_version_count(gameName,platform):
     versionCount = 0
     if platform == ANDROID or platform == IOS:
         if gameName != INANNA:
@@ -92,7 +92,7 @@ for elem in tree.iterfind("game[@name]"):
                     copy_list.append(line)
                 elif "</Pair>" in line:
                     copy_list.append(line)
-                    for index in range(get_version_count(targetDir)):
+                    for index in range(get_version_count(targetDir,platform)):
                         for copy in copy_list:
                             on.write(copy)
                 else:
