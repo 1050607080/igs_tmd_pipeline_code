@@ -69,7 +69,6 @@ pipeline {
             }
         }
 
-        
        stage('Lua Encode Dat') {
             when {
                 expression { params.ENCODE == true }
@@ -179,7 +178,23 @@ pipeline {
             }
         }
 
-         stage('Clean Build CFG Original') {
+        stage('Move Packing Data to Project') {
+            steps {
+                script {
+                    echo "Move PackingData to Project"
+                    if(params.MODE == "release"){
+                        if (GAMEVERSION =='android') {
+                            echo "GAMEVERSION ANDROID"
+                        } 
+                        else {
+                           echo "GAMEVERSION IOS"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Clean Build CFG Original') {
             steps {
                 script {
                     for(url in SVN_URLS) {                        
