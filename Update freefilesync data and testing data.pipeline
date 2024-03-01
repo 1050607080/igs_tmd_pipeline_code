@@ -85,6 +85,15 @@ pipeline {
             steps {
                 script{
                     echo 'Move ffsBatch'
+                    
+                    def destinationFolder = params.GAME_ENV == 'Android' ? 'android' : 'ios'
+                    def sourceFolder = "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/Output"
+                    def remotePath = "D:/TMD_PUBLIC/TMD/testing/${destinationFolder}/"
+                    withCredentials([usernamePassword(credentialsId: env.REMOTE4463_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
+                        def copyCommand = "scp -r ${sourceFolder} ${REMOTE_USER}@192.168.44.63:${remotePath}"
+                        def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
+                        sh "sshpass -p ${REMOTE_PASSWORD} ${copyCommand}"
+                    }
                 }
             }
         }
