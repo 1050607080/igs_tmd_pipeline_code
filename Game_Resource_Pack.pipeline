@@ -179,29 +179,10 @@ pipeline {
             }
         }
 
-         stage('Clean Environment') {
+         stage('Clean Build CFG Original') {
             steps {
                 script {
-                    for(url in SVN_URLS) {
-                        def cleanedOutput = url.replaceAll("[\\[\\]' ]", "")
-                        def elements = cleanedOutput.split(",")
-                        def gameName = elements[0]
-                        def switch_url = "http://192.168.1.183/svn/"+gameName
-
-                        if (gameName == "Cocos2d-x") {
-                            switch_url = switch_url + "/3.17/trunk"
-                        } 
-                        else {
-                            switch_url = switch_url + "/trunk"
-                        }
-
-                        dir(TMD_RESOURCES_URL+gameName+"/") {
-                            withCredentials([usernamePassword(credentialsId: SVM_CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-                                echo "${gameName} 切回trunk"
-                                sh(script: "${SVN_INSTALL_PATH} switch ${switch_url} --username \$SVN_USER --password \$SVN_PASSWORD")
-                            }
-                        }
-                        
+                    for(url in SVN_URLS) {                        
                         dir(PROJ_ANDROID_URL) {
                         script {
                             def svnRevertCmd = "${SVN_INSTALL_PATH} revert ${PROJ_ANDROID_URL + "build-cfg-original.json"}"
