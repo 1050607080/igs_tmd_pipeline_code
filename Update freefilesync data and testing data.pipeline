@@ -34,7 +34,7 @@ pipeline {
                             echo "Updated versions: ${versions}"
 
                             // 进行 SVN 提交
-                            def svnCommitMessage = "Updated ${platform} version to ${newVersion}"
+                            def svnCommitMessage = "Updated targetversion from 2412 jenkins ${platform} version to ${newVersion}"
                             svnCommit(filePath, svnCommitMessage)
                         } else {
                             echo "Version $newVersion already exists for $platform, not adding it again."
