@@ -4,7 +4,7 @@ pipeline {
      parameters {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         string(name: 'NEW_VERSION', defaultValue: '1.1.175', description: '新版本')
-        choice(name: 'GAME_ENV', choices: ['android', 'ios'], description: '遊戲環境')
+        choice(name: 'GAME_ENV', choices: ['Android', 'iOS'], description: '遊戲環境')
     }
 
     environment {
