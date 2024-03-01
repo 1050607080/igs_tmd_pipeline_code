@@ -12,11 +12,10 @@ pipeline {
         SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
         svnCommitMessage = ''
         filePath = ''
-       PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
+        PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         SVM_CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
+        versionsUpdated = false
     }
-
-    def versionsUpdated = false
 
     stages {
 
