@@ -124,4 +124,4 @@ for elem in tree.iterfind("game[@name]"):
     w.write(file_list)
     w.close()
 
-print(unicode("{0}，工具執行完畢...".format(platform), "utf-8"))
+print("replace_jenkins end")
