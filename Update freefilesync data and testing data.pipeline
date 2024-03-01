@@ -13,18 +13,10 @@ pipeline {
     }
 
     stages {
-
         stage('Fix targetversion') {
             steps {
                 script{
                     echo 'Fix targetversion'
-
-                    //REMOTE
-                    withCredentials([usernamePassword(credentialsId: REMOTE4463_CREDENTIALS, passwordVariable: 'REMOTE_PASSWORD', usernameVariable: 'REMOTE_USER')]) {
-                        //def remote = getRemoteConfig("192.168.44.63", REMOTE_USER, REMOTE_PASSWORD)
-                        //def fix_targetversion = ''
-                        //sshCommand remote: remote, command: fix_targetversion
-                    }
                 }
             }
         }
