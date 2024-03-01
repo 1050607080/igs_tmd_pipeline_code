@@ -109,6 +109,7 @@ for elem in tree.iterfind("game[@name]"):
             file_list = re.sub(r"<Left/>", r"<Left>D:\\TMD_PUBLIC\\TMD\\testing\\android\\{0}</Left>".format(targetDir), file_list, 1)
             file_list = re.sub(r"<Right/>", r"<Right>D:\\TMD_PUBLIC\\TMD\\testing\\ios\\{0}</Right>".format(targetDir), file_list, 1)
             file_list = re.sub(r"<Left/>", r"<Left>D:\\TMD_PUBLIC\\TMD\\testing\\android\\{0}</Left>".format(targetDir), file_list, 1)
+            file_list = re.sub(r"<Right/>", r"<Right>D:\\TMD_PUBLIC\\TMD\\testing\\win\\{0}</Right>".format(targetDir), file_list, 1)
         # 同步二測
         for platform in jdata:
             for version in jdata[platform]:
