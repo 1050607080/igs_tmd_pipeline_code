@@ -76,7 +76,7 @@ pipeline {
             steps {
                 script{
                     echo 'ReplaceBatchFlie'
-                    //sh "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/replace_jenkins.sh ${params.GAME_ENV}"
+                    sh "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/replace_jenkins.sh ${params.GAME_ENV}"
                 }
             }
         }
@@ -85,8 +85,13 @@ pipeline {
             steps {
                 script{
                     echo 'Move ffsBatch'
-                    def plaform = params.GAME_ENV == 'Android' ? 'android' : 'ios'
-                    def destinationFolder = "/Volumes/TMD_PUBLIC/TMD/testing/${plaform}/"
+                     def destinationFolder = "/Volumes/TMD_PUBLIC/TMD/testing/${plaform}/"
+                        if (params.GAME_ENV =='Android') {
+                           destinationFolder= "/Volumes/TMD_PUBLIC/TMD/testing/android/"
+                        } 
+                        else {
+                            destinationFolder= "/Volumes/TMD_PUBLIC/TMD/testing/ios/"
+                        }
                     def sourceFolder = "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/Output/"
                     sh "cp -r ${sourceFolder}* ${destinationFolder}"
                 }
