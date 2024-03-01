@@ -85,7 +85,7 @@ pipeline {
             steps {
                 script{
                     echo 'Move ffsBatch'
-                     def destinationFolder = "/Volumes/TMD_PUBLIC/TMD/testing/${plaform}/"
+                     def destinationFolder = ""
                         if (params.GAME_ENV =='Android') {
                            destinationFolder= "/Volumes/TMD_PUBLIC/TMD/testing/android/"
                         } 
