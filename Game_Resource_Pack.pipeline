@@ -195,14 +195,16 @@ pipeline {
         stage('Move Packing Data to Project') {
             steps {
                 script {
-                    echo "Move PackingData to Project"
-                    if(params.MODE == "release"){
-                        if (GAMEVERSION =='android') {
-                            echo "GAMEVERSION ANDROID"
-                        } 
-                        else {
-                           echo "GAMEVERSION IOS"
-                        }
+                    if(params.MODE == "release" && GAMEVERSION == 'ios') {
+                        echo "Move PackingData to ios Project"
+                        sh "cp -r /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/cocos /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/SouthPark_release/"
+                        sh """
+                        find /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/ -type d -name "*Lua*" | xargs -I {} cp -r {} /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.ios_mac/SouthPark_release/
+                        """
+                    } 
+                    else {
+                        echo "Move PackingData to android Project"
+                        sh "cp -r /Users/tmd/Documents/tmd/SouthPark/ClientCocos/bin/release/tmp/* /Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/assets/"
                     }
                 }
             }
