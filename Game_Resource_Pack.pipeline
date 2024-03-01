@@ -5,7 +5,6 @@ pipeline {
 
     environment {
         SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
-        SVN_BASE_URL = 'http://192.168.1.183/svn/'
         SVM_CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
@@ -16,8 +15,8 @@ pipeline {
     parameters {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'GAME_VERSION', choices: ['android', 'ios'], description: '遊戲版本')
-        string(name: 'ANDROID_RESOURCES', defaultValue: 'Cocos2d-x Inanna', description: 'Android資源平台及Cocos')
-        string(name: 'IOS_RESOURCES', defaultValue: 'Cocos2d-x Inanna TrainingFish TrainingMJ TrainingSlot OceanTale EgyptSlot ManganDahen', description: 'IOS資源平台')       
+        string(name: 'ANDROID_RESOURCES', defaultValue: 'Cocos2d-x Inanna', description: 'Android資源')
+        string(name: 'IOS_RESOURCES', defaultValue: 'Cocos2d-x Inanna TrainingFish TrainingMJ TrainingSlot OceanTale EgyptSlot ManganDahen', description: 'IOS資源')       
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
         choice(name: 'MODE', choices: ['release','debug'], description: '打包模式')
     }
