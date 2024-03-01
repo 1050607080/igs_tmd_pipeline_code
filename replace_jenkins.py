@@ -9,7 +9,6 @@ import json
 
 # 确保有足够的命令行参数
 if len(sys.argv) < 2:
-    print("Usage: python replace.py <PLATFORM>")
     sys.exit(1)
 
 platform = sys.argv[1]  # 接受的第一个命令行参数：平台
