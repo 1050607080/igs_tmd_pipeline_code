@@ -8,11 +8,12 @@ pipeline {
     }
 
     environment {
-        REMOTE4055_CREDENTIALS ='remote4055_login'
         REMOTE4463_CREDENTIALS ='remote4463_login'
+        SVN_INSTALL_PATH = '/opt/homebrew/bin/svn'
     }
 
     stages {
+
         stage('Update Version Info') {
             steps {
                 script {
@@ -27,20 +28,24 @@ pipeline {
                     if (versions.containsKey(platform)) {
                         if (!versions[platform].contains(newVersion)) {
                             versions[platform].add(newVersion)
+                            def updatedVersions = writeJSON returnText: true, json: versions
+                            writeFile file: filePath, text: updatedVersions
+
+                            echo "Updated versions: ${versions}"
+
+                            // 进行 SVN 提交
+                            def svnCommitMessage = "Updated ${platform} version to ${newVersion}"
+                            svnCommit(filePath, svnCommitMessage)
                         } else {
                             echo "Version $newVersion already exists for $platform, not adding it again."
                         }
                     } else {
                         echo "Platform $platform does not exist."
                     }
-
-                    def updatedVersions = writeJSON returnText: true, json: versions
-                    writeFile file: filePath, text: updatedVersions
-
-                    echo "Updated versions: ${versions}"
                 }
             }
         }
+
         stage('ReplaceBatchFlie') {
             steps {
                 script{
@@ -76,4 +81,19 @@ def getRemoteConfig(host, user, password) {
     remote.password = password
     remote.allowAnyHosts = true
     return remote
+}
+
+// SVN 提交的函数
+def svnCommit(String filePath, String commitMessage) {
+    def svn = "${env.SVN_INSTALL_PATH}"
+
+    // SVN 更新以确保本地副本是最新的
+    sh "${svn} update --trust-server-cert --non-interactive ${filePath}"
+    
+    // 检查是否有文件变更并提交
+    sh """
+        ${svn} status ${filePath} | grep '^M' && \
+        ${svn} commit -m "${commitMessage}" --username your-username --password your-password ${filePath} || \
+        echo "No changes to commit for ${filePath}"
+    """
 }
