@@ -14,8 +14,9 @@ pipeline {
 
     parameters {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
-        choice(name: 'GAME_VERSION', choices: ['android', 'ios'], description: '遊戲版本')
-        string(name: 'GAME_NAME', defaultValue: 'Cocos2d-x Inanna', description: '遊戲名稱')
+        choice(name: 'GAME_VERSION', choices: ['android', 'ios'], description: '遊戲版本(選定版本後，↓只會跑該版本的資源名稱)')
+        string(name: 'ANDROID_RESOURCES', defaultValue: 'Cocos2d-x Inanna', description: 'Android資源名稱')
+        string(name: 'IOS_RESOURCES', defaultValue: 'Cocos2d-x Inanna TrainingFish TrainingMJ TrainingSlot OceanTale EgyptSlot ManganDahen', description: 'IOS資源名稱(送審遊戲自行補上)')       
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
         choice(name: 'MODE', choices: ['release','debug'], description: '打包模式')
     }
@@ -25,7 +26,16 @@ pipeline {
             steps {
                 script { 
                     dir( PROJ_ANDROID_URL ) {
-                        def output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.GAME_NAME}", returnStdout: true).trim()
+
+                        def output = ""
+
+                        if (params.GAME_VERSION =='android') {
+                           output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.ANDROID_RESOURCES}", returnStdout: true).trim()
+                        } 
+                        else {
+                           output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.IOS_RESOURCES}", returnStdout: true).trim()
+                        }
+                        
                         echo "版本路徑撈取: ${output}"
                         SVN_URLS = output.split('\n')
                     }
