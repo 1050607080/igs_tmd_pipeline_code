@@ -17,7 +17,7 @@ pipeline {
         string(name: 'BUILDER_NAME', defaultValue: 'weitsunglin', description: '你的名字')
         choice(name: 'GAME_VERSION', choices: ['android', 'ios'], description: '遊戲版本')
         string(name: 'ANDROID_RESOURCES', defaultValue: 'Cocos2d-x Inanna', description: 'Android資源平台及Cocos')
-        string(name: 'IOS_RESOURCES', defaultValue: 'Cocos2d-x Inanna TrainingFish TrainingMJ TrainingSlot OceanTale EgyptSlot ManganDahen', description: 'IOS資源平台及Cocos及基本6款遊戲及送審遊戲')       
+        string(name: 'IOS_RESOURCES', defaultValue: 'Cocos2d-x Inanna TrainingFish TrainingMJ TrainingSlot OceanTale EgyptSlot ManganDahen', description: 'IOS資源平台)       
         booleanParam(name: 'ENCODE', defaultValue: true, description: '加密Lua')
         choice(name: 'MODE', choices: ['release','debug'], description: '打包模式')
     }
