@@ -75,6 +75,7 @@ pipeline {
             steps {
                 script{
                     echo 'ReplaceBatchFlie'
+                    sh '/Users/tmd/Documents/tmd/SouthPark/proj.android/replace_jenkins.sh ${params.GAME_ENV}'
                 }
             }
         }
