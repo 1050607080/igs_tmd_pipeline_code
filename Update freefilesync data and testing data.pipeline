@@ -104,6 +104,6 @@ def svnCommit(String filePath, String commitMessage) {
     def svn = "${env.SVN_INSTALL_PATH}"
 
     withCredentials([usernamePassword(credentialsId: SVM_CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
-        sh" ${svn} commit -m "${commitMessage}" --username $SVN_USER  --password $SVN_PASSWORD ${filePath} "
+        sh "${svn} commit -m '${commitMessage}' --username ${SVN_USER} --password ${SVN_PASSWORD} ${filePath}"
     }
 }
