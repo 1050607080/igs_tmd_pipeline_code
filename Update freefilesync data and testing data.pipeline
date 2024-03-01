@@ -21,7 +21,7 @@ pipeline {
                     def versionsFile = readFile filePath
                     def versions = readJSON text: versionsFile
 
-                    String platform = params.GAME_ENV.capitalize()
+                    String platform = params.GAME_ENV
                     String newVersion = params.NEW_VERSION
 
                     if (versions.containsKey(platform)) {
