@@ -133,12 +133,12 @@ pipeline {
                         else if (gameName == "ManganDahen"){
                             resourcesArray.add("""
                             {
-                                "from": "../../../${gameName}/MDResource",
+                                "from": "../../../${gameName}/ClientCocos/MDResource",
                                 "to": "MDResource",
                                 "zip": true
                             },
                             {
-                                "from": "../../../${gameName}/MDLua",
+                                "from": "../../../${gameName}/ClientCocos/MDLua",
                                 "to": "MDLua",
                                 "zip": true
                             }
