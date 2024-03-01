@@ -130,6 +130,20 @@ pipeline {
                             }
                             """.trim())
                         }
+                        else if (gameName == "ManganDahen"){
+                            resourcesArray.add("""
+                            {
+                                "from": "../../../${gameName}/MDResource",
+                                "to": "MDResource",
+                                "zip": true
+                            },
+                            {
+                                "from": "../../../${gameName}/MDLua",
+                                "to": "MDLua",
+                                "zip": true
+                            }
+                            """.trim())
+                        }
                         else{
                             resourcesArray.add("""
                             {
