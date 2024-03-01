@@ -10,6 +10,7 @@ pipeline {
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         TMD_RESOURCES_URL = "/Users/tmd/Documents/tmd/"
         BUILD_SHELL_FILE = ""
+        GAMEVERSION = ''
     }
 
     parameters {
@@ -26,10 +27,10 @@ pipeline {
             steps {
                 script { 
                     dir( PROJ_ANDROID_URL ) {
-
+                        GAMEVERSION = params.GAME_VERSION
                         def output = ""
 
-                        if (params.GAME_VERSION =='android') {
+                        if (GAMEVERSION =='android') {
                            output = sh(script: "python3 read_google_sheet.py ${params.GAME_VERSION} ${params.ANDROID_RESOURCES}", returnStdout: true).trim()
                         } 
                         else {
