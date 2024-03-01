@@ -40,7 +40,6 @@ pipeline {
 
                             echo "Updated versions: ${versions}"
 
-                            // 进行 SVN 提交
                             svnCommitMessage = "Updated targetversion from 2412 jenkins ${platform} version to ${newVersion}"
                             versionsUpdated = true
                         } 
