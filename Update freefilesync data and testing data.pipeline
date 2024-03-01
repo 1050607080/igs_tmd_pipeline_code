@@ -13,10 +13,25 @@ pipeline {
     }
 
     stages {
-        stage('Fix targetversion') {
+        stage('Update Version Info') {
             steps {
-                script{
-                    echo 'Fix targetversion'
+                script {
+                    def filePath = '/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/targetVersion.json'
+                    
+                    def versionsFile = readFile filePath
+                    def versions = readJSON text: versionsFile
+
+                    String platform = params.GAME_ENV.capitalize()
+                    String newVersion = params.NEW_VERSION
+
+                    if (versions.containsKey(platform)) {
+                        versions[platform].add(newVersion)
+                    }
+
+                    def updatedVersions = writeJSON returnText: true, json: versions
+                    writeFile file: filePath, text: updatedVersions
+
+                    echo "Updated versions: ${versions}"
                 }
             }
         }
