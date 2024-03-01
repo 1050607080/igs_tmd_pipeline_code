@@ -13,6 +13,7 @@ pipeline {
         svnCommitMessage = ''
         filePath = ''
        PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
+        SVM_CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
     }
 
     stages {
@@ -102,13 +103,7 @@ def getRemoteConfig(host, user, password) {
 def svnCommit(String filePath, String commitMessage) {
     def svn = "${env.SVN_INSTALL_PATH}"
 
-    // SVN 更新以确保本地副本是最新的
-    sh "${svn} update --trust-server-cert --non-interactive ${filePath}"
-    
-    // 检查是否有文件变更并提交
-    sh """
-        ${svn} status ${filePath} | grep '^M' && \
-        ${svn} commit -m "${commitMessage}" --username your-username --password your-password ${filePath} || \
-        echo "No changes to commit for ${filePath}"
-    """
+    withCredentials([usernamePassword(credentialsId: SVM_CREDENTIALS_ID, usernameVariable: 'SVN_USER', passwordVariable: 'SVN_PASSWORD')]) {
+        sh" ${svn} commit -m "${commitMessage}" --username $SVN_USER  --password $SVN_PASSWORD ${filePath} "
+    }
 }
