@@ -16,6 +16,8 @@ pipeline {
         SVM_CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
     }
 
+    def versionsUpdated = false
+
     stages {
 
         stage('Update Version Info') {
@@ -39,6 +41,7 @@ pipeline {
 
                             // 进行 SVN 提交
                             svnCommitMessage = "Updated targetversion from 2412 jenkins ${platform} version to ${newVersion}"
+                            versionsUpdated = true
                         } 
                         else {
                             echo "Version $newVersion already exists for $platform, not adding it again."
@@ -55,7 +58,14 @@ pipeline {
                 script{
                     echo 'SVN commit target version'
                     dir(PROJ_ANDROID_URL){
-                        svnCommit(filePath, 'jenkins 2412 auto commit target version')
+                        if (versionsUpdated) {
+                            echo 'Proceeding with SVN commit...'
+                            def commitMessage = "jenkins 2412 auto commit target version"
+                            svnCommit(filePath, commitMessage)
+                        } 
+                        else {
+                            echo 'No version updates to commit.'
+                        }
                     }
                 }
             }
@@ -99,7 +109,6 @@ def getRemoteConfig(host, user, password) {
     return remote
 }
 
-// SVN 提交的函数
 def svnCommit(String filePath, String commitMessage) {
     def svn = "${env.SVN_INSTALL_PATH}"
 
