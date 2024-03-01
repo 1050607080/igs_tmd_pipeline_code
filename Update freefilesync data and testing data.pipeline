@@ -25,7 +25,13 @@ pipeline {
                     String newVersion = params.NEW_VERSION
 
                     if (versions.containsKey(platform)) {
-                        versions[platform].add(newVersion)
+                        if (!versions[platform].contains(newVersion)) {
+                            versions[platform].add(newVersion)
+                        } else {
+                            echo "Version $newVersion already exists for $platform, not adding it again."
+                        }
+                    } else {
+                        echo "Platform $platform does not exist."
                     }
 
                     def updatedVersions = writeJSON returnText: true, json: versions
