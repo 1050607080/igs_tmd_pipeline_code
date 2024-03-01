@@ -15,6 +15,7 @@ pipeline {
         PROJ_ANDROID_URL = "/Users/tmd/Documents/tmd/SouthPark/ClientCocos/proj.android/"
         SVM_CREDENTIALS_ID = '97731a4e-685d-4356-8c2b-d902c44ed6e9'
         versionsUpdated = false
+        GAMEENV = ''
     }
 
     stages {
@@ -26,8 +27,9 @@ pipeline {
                     
                     def versionsFile = readFile filePath
                     def versions = readJSON text: versionsFile
-
-                    String platform = params.GAME_ENV
+                    GAMEENV = params.GAME_ENV
+                    String platform = GAMEENV
+                   
                     String newVersion = params.NEW_VERSION
 
                     if (versions.containsKey(platform)) {
@@ -76,7 +78,7 @@ pipeline {
             steps {
                 script{
                     echo 'ReplaceBatchFlie'
-                    sh "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/replace_jenkins.sh ${params.GAME_ENV}"
+                    sh "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/replace_jenkins.sh ${GAMEENV}"
                 }
             }
         }
