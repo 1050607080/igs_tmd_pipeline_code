@@ -87,7 +87,7 @@ pipeline {
                     echo 'Move ffsBatch'
                     def plaform = params.GAME_ENV == 'Android' ? 'android' : 'ios'
                     def destinationFolder = '/Volumes/TMD_PUBLIC/TMD/testing/${plaform}/'
-                    def sourceFolder = "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/Output/*"
+                    def sourceFolder = "/Users/tmd/Documents/tmd/SouthPark/Jenkins/SyncFileTemp/Output/"
                     sh "cp -r ${sourceFolder} ${destinationFolder}"
                 }
             }
